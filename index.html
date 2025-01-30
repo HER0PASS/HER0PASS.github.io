@@ -1,609 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
+    <title>Her0Pass Twitch</title>
     <meta charset="utf-8">
-    <title>Datafy - Tu web de datos sobre música</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Favicon -->
-    <link href="img/icon/spotify.png" rel="icon">
+    <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Roboto:wght@500;700;900&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/templatemo.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
 
-    <!-- Icon Font Stylesheet -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="assets/css/fontawesome.min.css">
+<!--
+    
 
-    <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
-    <style>
-        ul {
-            list-style: none;
-        }
-    </style>
+-->
 </head>
 
 <body>
-    <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Cargando...</span>
-        </div>
-    </div>
-    <!-- Spinner End -->
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow">
+        <div class="container d-flex justify-content-between align-items-center">
 
+            <a class="navbar-brand text-success logo h1 align-self-center" href="index.html">
+                Her0Pass Twitch
+            </a>
 
-    <!-- Topbar Start -->
-    <div class="container-fluid bg-dark px-5">
-        <div class="row gx-4 d-none d-lg-flex">
-            <div class="col-lg-6 text-start">
-                <div class="h-100 d-inline-flex align-items-center py-3 me-4">
-                    <div class="btn-sm-square rounded-circle bg-primary me-2">
-                        <small class="fa fa-map-marker-alt text-white"></small>
-                    </div>
-                    <small>Calle Hermanos Noáin, Ansoain, Pamplona</small>
-                </div>
-                <div class="h-100 d-inline-flex align-items-center py-3">
-                    <div class="btn-sm-square rounded-circle bg-primary me-2">
-                        <small class="fa fa-envelope-open text-white"></small>
-                    </div>
-                    <small>munoz.138255@e.unavarra.es</small>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
+                <div class="flex-fill">
+                    <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="caso1.html">Caso1</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="caso2.html">Caso2</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="caso3.html">Caso3</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div class="col-lg-6 text-end">
-                <div class="h-100 d-inline-flex align-items-center py-3 me-4">
-                    <div class="btn-sm-square rounded-circle bg-primary me-2">
-                        <small class="fa fa-phone-alt text-white"></small>
-                    </div>
-                    <small>+012 345 6789</small>
-                </div>
-                <div class="h-100 d-inline-flex align-items-center py-3">
-                    <div class="btn-sm-square rounded-circle bg-primary me-2">
-                        <small class="far fa-clock text-white"></small>
-                    </div>
-                    <small>Mon - Fri : 9AM - 9PM</small>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Topbar End -->
 
-
-    <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 px-4 px-lg-5">
-        <a href="index.html" class="navbar-brand d-flex align-items-center">
-            <h2 class="m-0 text-primary">Datafy</h2>
-        </a>
-        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <div class="navbar-nav ms-auto py-4 py-lg-0">
-                <a href="index.html" class="nav-item nav-link active">Inicio</a>
-                <a href="/final/index.html#mas" class="nav-item nav-link">Más</a>
-                <a href="/final/index.html#servicios" class="nav-item nav-link">Servicios</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Páginas</a>
-                    <div class="dropdown-menu rounded-0 rounded-bottom m-0">
-                        <a href="/final/index.html#consulta" class="dropdown-item">Consultas</a>
-                        <a href="/final/index.html#equipo" class="dropdown-item">Equipo</a>
-                        <a href="testimonial.html" class="dropdown-item">Reseñas</a>
-                        <a href="404.html" class="dropdown-item">404 Page</a>
-                    </div>
-                </div>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Identificación</a>
-                    <div class="dropdown-menu rounded-0 rounded-bottom m-0 p-3">
-                        <form action="validarlogin.php" method="post" class="text-center">
-                            <div class="mb-3">
-                                <input id="usuario" placeholder="Usuario" class="form-control" type="text" required="" name="usuario">
-                            </div>
-                            <div class="mb-3">
-                                <input id="password" placeholder="Contraseña" class="form-control" type="password" required="" name="password">
-                            </div>
-                            <div>
-                                <input type="submit" class="btn btn-primary" value="Iniciar sesión"></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Registrarse</a>
-                    <div class="dropdown-menu rounded-0 rounded-bottom m-0 p-3">
-                        <form action="alta.php" method="post" class="text-center">
-                            <div class="mb-3">
-                                <input id="nom" placeholder="Usuario" class="form-control" type="text" required="" name="nom">
-                            </div>
-                            <div class="mb-3">
-                                <input id="passwd" placeholder="Contraseña" class="form-control" type="password" required="" name="passwd">
-                            </div>
-                            <div>
-                                <input type="submit" class="btn btn-primary" value="Registrarse"></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <a href="contact.html" class="nav-item nav-link">Contacto</a>
-            </div>
-            <div class="h-100 d-lg-inline-flex align-items-center d-none">
-                <a class="btn btn-square rounded-circle bg-light text-primary me-2" href=""><i class="fab fa-facebook-f"></i></a>
-                <a class="btn btn-square rounded-circle bg-light text-primary me-2" href=""><i class="fab fa-twitter"></i></a>
-                <a class="btn btn-square rounded-circle bg-light text-primary me-2" href=""><i class="fab fa-linkedin-in"></i></a>
-                <a class="btn btn-square rounded-circle bg-light text-primary me-0" href=""><i class="fab fa-instagram"></i></a>
-            </div>
         </div>
     </nav>
-    <!-- Navbar End -->
+    <!-- Close Header -->
 
-
-    <!-- Carousel Start -->
-    <div class="container-fluid p-0 pb-5">
-        <div class="owl-carousel header-carousel position-relative">
-            <div class="owl-carousel-item position-relative">
-                <img class="img-fluid" src="img/bckgrnd.jpg" alt="">
-                <div class="carousel-inner">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-12 col-lg-8 text-center">
-                                <h1 class="display-3 text-white animated slideInDown mb-4">Información y datos reales de música</h1>
-                                <p class="fs-5 text-white mb-4 pb-2">Búsca y explora a tus artistas favoritos y conoce sus números</p>
-                                <a href="/final/index.html#" class="btn btn-primary rounded-pill py-md-3 px-md-5 me-3 animated slideInLeft">Más información</a>
-                                <a href="/final/index.html#consulta" class="btn btn-light rounded-pill py-md-3 px-md-5 animated slideInRight">Consulta</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- Modal -->
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="owl-carousel-item position-relative">
-                <img class="img-fluid" src="img/background2.jpg" width="1920" length="1080" alt="">
-                <div class="carousel-inner">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-12 col-lg-8 text-center">
-                                <h1 class="display-3 text-white animated slideInDown mb-4">Busca los podcast y audolibros que mas te gusten</h1>
-                                <p class="fs-5 text-white mb-4 pb-2">Tienes para elegir entre mas de 1000 podcast y audiolibros, accede a Datafy y busca por los temas que más te gusten.</p>
-                                <a href="/final/index.html#servicios" class="btn btn-primary rounded-pill py-md-3 px-md-5 me-3 animated slideInLeft">Más información</a>
-                                <a href="/final/index.html#consulta" class="btn btn-light rounded-pill py-md-3 px-md-5 animated slideInRight">Consulta</a>
-                            </div>
-                        </div>
-                    </div>
+            <form action="" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
                 </div>
-            </div>
-            <div class="owl-carousel-item position-relative">
-                <img class="img-fluid" src="img/background3.jpg" width="1920" length="1080" alt="">
-                <div class="carousel-inner">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-12 col-lg-8 text-center">
-                                <h1 class="display-3 text-white animated slideInDown mb-4">Consulta tus playlist o las de tus amigos</h1>
-                                <p class="fs-5 fw-medium text-white mb-4 pb-2">Mira sus géneros, artistas y álbumes favoritos.</p>
-                                <a href="/final/index.html#servicios" class="btn btn-primary rounded-pill py-md-3 px-md-5 me-3 animated slideInLeft">Más información</a>
-                                <a href="/final/index.html#consulta" class="btn btn-light rounded-pill py-md-3 px-md-5 animated slideInRight">Consulta</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
-    <!-- Carousel End -->
-
-
-    <!-- Facts Start -->
-    <div class="container-xxl py-5">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.1s">
-                    <div class="h-100 bg-dark p-4 p-xl-5">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div class="btn-square rounded-circle" style="width: 64px; height: 64px; background: #000000;">
-                                <img class="img-fluid" src="img/icon/id.png" alt="Icon">
-                            </div>
-                            <h1 class="display-1 mb-0" style="color: #ffffff;">01</h1>
-                        </div>
-                        <h5 class="text-white">Identifícate</h5>
-                        <hr class="w-25">
-                        <span>Registrate o inicia sesión para poder comenzar.</span>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.3s">
-                    <div class="h-100 bg-dark p-4 p-xl-5">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div class="btn-square rounded-circle" style="width: 64px; height: 64px; background: #000000;">
-                                <img class="img-fluid" src="img/icon/icon-4.png" alt="Icon">
-                            </div>
-                            <h1 class="display-1 mb-0" style="color: #ffffff;">02</h1>
-                        </div>
-                        <h5 class="text-white">Escoge tu búsqueda</h5>
-                        <hr class="w-25">
-                        <span>Consulta nuestros servicios y escoge la que mas se ajuste a tu búsqueda.</span>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.5s">
-                    <div class="h-100 bg-dark p-4 p-xl-5">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div class="btn-square rounded-circle" style="width: 64px; height: 64px; background: #000000;">
-                                <img class="img-fluid" src="img/icon/mundo.png" alt="Icon">
-                            </div>
-                            <h1 class="display-1 mb-0" style="color: #ffffff;">03</h1>
-                        </div>
-                        <h5 class="text-white">Consulta tus datos.</h5>
-                        <hr class="w-25">
-                        <span>Observa los datos obtenidos y disfruta del contenido.</span>
-                    </div>
-                </div>
+    
+    <!-- Start Categories of The Month -->
+    <section class="container py-5">
+        <div class="row text-center pt-3">
+            <div class="col-lg-6 m-auto">
+                <h1 class="h1">Twitch Analytics</h1>
+                <p>
+                    Esta página permite obtener información detallada de un streamer por su ID, listar streams en vivo y consultar 
+                    los streams más vistos con datos enriquecidos como nombre y foto de perfil. Esto facilita el análisis de tendencias 
+                    y optimización de estrategias en Twitch.
+                </p>
             </div>
         </div>
-    </div>
-    <!-- Facts Start -->
-
-
-    <!-- About Start -->
-    <section id ="mas" class="py-5">
-        <div class="container-fluid bg-light overflow-hidden my-5 px-lg-0">
-            <div class="container about px-lg-0">
-                <div class="row g-0 mx-lg-0">
-                    <div class="col-lg-6 ps-lg-0" style="min-height: 400px;">
-                        <div class="position-relative h-100">
-                            <img class="position-absolute img-fluid w-100 h-100" src="img/sdata.jpeg" style="object-fit: scale-down;" alt="">
-                        </div>
-                    </div>
-                    <div class="col-lg-6 about-text py-5 wow fadeIn" data-wow-delay="0.5s">
-                        <div class="p-lg-5 pe-lg-0">
-                            <div class="bg-primary mb-3" style="width: 60px; height: 2px;"></div>
-                            <h1 class="display-5 mb-4">Sobre Datafy</h1>
-                            <p class="mb-4 pb-2">Tu app fiable para obtener datos actualizados e información musical.</p>
-                            <div class="row g-4 mb-4 pb-3">
-                                <div class="col-sm-6 wow fadeIn" data-wow-delay="0.1s">
-                                    <div class="d-flex align-items-center">
-                                        <div class="btn-square bg-white rounded-circle" style="width: 64px; height: 64px;">
-                                            <img class="img-fluid" src="img/icon/icon-1.png" alt="Icon">
-                                        </div>
-                                        <div class="ms-4">
-                                            <h2 class="mb-1" data-toggle="counter-up">+1000</h2>
-                                            <p class="fw-medium text-primary mb-0">Artistas</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 wow fadeIn" data-wow-delay="0.3s">
-                                    <div class="d-flex align-items-center">
-                                        <div class="btn-square bg-white rounded-circle" style="width: 64px; height: 64px;">
-                                            <img class="img-fluid" src="img/icon/nota.png" alt="Icon">
-                                        </div>
-                                        <div class="ms-4">
-                                            <h2 class="mb-1" data-toggle="counter-up">+1000</h2>
-                                            <p class="fw-medium text-primary mb-0">Canciones</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="" class="btn btn-primary rounded-pill py-3 px-5">Obtén más información</a>
-                        </div>
-                    </div>
-                </div>
+        <div class="row text-center">
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="./assets/img/morado.png" class="rounded-circle img-fluid border"></a>
+                <h5 class="text-center mt-3 mb-3"></h5>
+                <p class="text-center"><a class="btn btn-primary" style="background-color: #6441a5; border-color: #6441a5;"href="caso1.html">Caso 1</a></p>
+            </div>
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="./assets/img/morado.png" class="rounded-circle img-fluid border"></a>
+                <h5 class="text-center mt-3 mb-3"></h5>
+                <p class="text-center"><a class="btn btn-primary" style="background-color: #6441a5; border-color: #6441a5;" href="caso2.html"">Caso 2</a></p>
+            </div>
+            <div class="col-12 col-md-4 p-5 mt-3">
+                <a href="#"><img src="./assets/img/morado.png" class="rounded-circle img-fluid border"></a>
+                <h5 class="text-center mt-3 mb-3"></h5>
+                <p class="text-center"><a class="btn btn-primary" style="background-color: #6441a5; border-color: #6441a5;" href="caso3.html">Caso 3</a></p>
             </div>
         </div>
     </section>
-    <!-- About End -->
+    <!-- End Categories of The Month -->
 
-
-    <!-- Service Start -->
-    <section id="servicios" class="py-5">
-        <div class="container-xxl py-5">
-            <div class="container">
-                <div class="text-center">
-                    <div class="bg-primary mb-3 mx-auto" style="width: 60px; height: 2px;"></div>
-                    <h1 class="display-5 mb-5">Nuestros servicios</h1>
-                </div>
-                <div class="row g-0 service-row">
-                    <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.1s">
-                        <div class="service-item border h-100 p-5">
-                            <div class="btn-square bg-light rounded-circle mb-4" style="width: 64px; height: 64px;">
-                                <img class="img-fluid" src="img/icon/vinilo.png" alt="Icon">
-                            </div>
-                            <h4 class="mb-3">Artistas y álbumes</h4>
-                            <p class="mb-4">Búsca artistas y álbumes por su nombre, género, nacionalidad, popularidad...</p>
-                            <a class="btn mt-auto" href=""><i class="fa fa-arrow-right text-white me-3"></i>Read More</a>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.3s">
-                        <div class="service-item border h-100 p-5">
-                            <div class="btn-square bg-light rounded-circle mb-4" style="width: 64px; height: 64px;">
-                                <img class="img-fluid" src="img/icon/libro.png" alt="Icon">
-                            </div>
-                            <h4 class="mb-3">Podcast y audiolibros</h4>
-                            <p class="mb-4">Busca por autores o temas que te gusten y descubre nuevo contenido.</p>
-                            <a class="btn" href=""><i class="fa fa-arrow-right text-white me-3"></i>Read More</a>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.5s">
-                        <div class="service-item border h-100 p-5">
-                            <div class="btn-square bg-light rounded-circle mb-4" style="width: 64px; height: 64px;">
-                                <img class="img-fluid" src="img/icon/playlist.png" alt="Icon">
-                            </div>
-                            <h4 class="mb-3">Playlists</h4>
-                            <p class="mb-4">Consulta tus playlists o las de tus amigos.</p>
-                            <a class="btn" href=""><i class="fa fa-arrow-right text-white me-3"></i>Read More</a>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.7s">
-                        <div class="service-item border h-100 p-5">
-                            <div class="btn-square bg-light rounded-circle mb-4" style="width: 64px; height: 64px;">
-                                <img class="img-fluid" src="img/icon/usuario.png" alt="Icon">
-                            </div>
-                            <h4 class="mb-3">Usuarios</h4>
-                            <p class="mb-4">Búsca otros usuarios compatibles con tu perfil para descubrir música nueva.</p>
-                            <a class="btn" href=""><i class="fa fa-arrow-right text-white me-3"></i>Read More</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Service End -->
-    <!-- Projects End -->
-
-
-    <!-- Quote Start -->
-    <section id="consulta" class="py-5">
-        <div class="container-fluid bg-light overflow-hidden my-5 px-lg-0">
-            <div class="container quote px-lg-0">
-                <div class="row g-0 mx-lg-0">
-                    <div class="col-lg-6 ps-lg-0" style="min-height: 400px;">
-                        <div class="position-relative h-100">
-                            <img class="position-absolute img-fluid w-100 h-100" src="img/busqueda.jpg" style="object-fit: cover;" alt="">
-                        </div>
-                    </div>
-                    <div class="col-lg-6 quote-text py-5 wow fadeIn" data-wow-delay="0.5s">
-                        <div class="p-lg-5 pe-lg-0">
-                            <div class="bg-primary mb-3" style="width: 60px; height: 2px;"></div>
-                            <h1 class="display-5 mb-5">Búsquedas</h1>
-                            <p class="mb-4 pb-2">Selecciona tu búsqueda y obtén la información que quieras</p>
-                            <form>
-                                <div class="row g-3">
-                                    <div class="col-12 col-sm-6">
-                                        <input type="text" class="form-control border-0" placeholder="Usuario" style="height: 55px;">
-                                    </div>
-                                    <div class="col-12 col-sm-6">
-                                        <input type="password" class="form-control border-0" placeholder="Contraseña" style="height: 55px;">
-                                    </div>
-                                    <div class="col-12 col-sm-12">
-                                        <select class="form-select border-0 w-100" style="height: 55px;">
-                                            <option selected>Escoge tu búsqueda</option>
-                                            <option value="1">Artista</option>
-                                            <option value="2">Álbum</option>
-                                            <option value="3">Podcast</option>
-                                            <option value="3">Géneros</option>
-                                            <option value="3">Audiolibro</option>
-                                            <option value="3">Playlist</option>
-                                            <option value="3">Usuarios</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12">
-                                        <textarea class="form-control border-0" placeholder="Tu búsqueda"></textarea>
-                                    </div>
-                                    <div class="col-12">
-                                        <button class="btn btn-primary w-100 py-3" type="submit">Buscar</button>
-                                    </div>
-                                    <div>
-                                        <form action="wrapped.html" method="post">
-                                            <button class="btn btn-primary w-100 py-3" type="submit">Buscar</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Quote End -->
-
-
-    <!-- Team Start -->
-    <section id="equipo" class="py-5">
-        <div class="container-xxl py-5">
-            <div class="container">
-                <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="bg-primary mb-3 mx-auto" style="width: 60px; height: 2px;"></div>
-                    <h1 class="display-5 mb-5">Staff de Datafy</h1>
-                </div>
-                <div class="row g-4">
-                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="team-item">
-                            <div class="overflow-hidden position-relative">
-                                <img class="img-fluid" src="img/melendez.jpeg" alt="">
-                                <div class="team-social">
-                                    <a class="btn btn-square btn-dark rounded-circle m-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-square btn-dark rounded-circle m-1" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-square btn-dark rounded-circle m-1" href=""><i class="fab fa-instagram"></i></a>
-                                </div>
-                            </div>
-                            <div class="text-center p-4">
-                                <h5 class="mb-0">Alejandro Meléndez Uriz</h5>
-                                <span class="text-primary">Becario de cafés</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="team-item">
-                            <div class="overflow-hidden position-relative">
-                                <img class="img-fluid" src="img/monre.jpg" alt="">
-                                <div class="team-social">
-                                    <a class="btn btn-square btn-dark rounded-circle m-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-square btn-dark rounded-circle m-1" href="https://www.linkedin.com/in/ander-monreal-ayanz-485794291/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                                    <a class="btn btn-square btn-dark rounded-circle m-1" href="https://www.instagram.com/andeermonnreal/" target="_blank"><i class="fab fa-instagram"></i></a>
-                                </div>
-                            </div>
-                            <div class="text-center p-4">
-                                <h5 class="mb-0">Ander Monreal Ayanz</h5>
-                                <span class="text-primary">CEO de la ventilación por tos en la oficina</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                        <div class="team-item">
-                            <div class="overflow-hidden position-relative">
-                                <img class="img-fluid" src="img/ceci.jpg" alt="">
-                                <div class="team-social">
-                                    <a class="btn btn-square btn-dark rounded-circle m-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-square btn-dark rounded-circle m-1" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-square btn-dark rounded-circle m-1" href=""><i class="fab fa-instagram"></i></a>
-                                </div>
-                            </div>
-                            <div class="text-center p-4">
-                                <h5 class="mb-0">Cecilio G</h5>
-                                <span class="text-primary">Se encargaba de animar los miércoles</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
-                        <div class="team-item">
-                            <div class="overflow-hidden position-relative">
-                                <img class="img-fluid" src="img/belli.png" alt="">
-                                <div class="team-social">
-                                    <a class="btn btn-square btn-dark rounded-circle m-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-square btn-dark rounded-circle m-1" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-square btn-dark rounded-circle m-1" href="https://www.instagram.com/zandueta8pau/" target="_blank"><i class="fab fa-instagram"></i></a>
-                                </div>
-                            </div>
-                            <div class="text-center p-4">
-                                <h5 class="mb-0">Zandu Bellingol</h5>
-                                <span class="text-primary">Saco en añonuevo de la rule el dinero necesario para la startup.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Team End -->
-
-
-    <!-- Testimonial Start -->
-    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
-        <div class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <div class="bg-primary mb-3 mx-auto" style="width: 60px; height: 2px;"></div>
-                <h1 class="display-5 mb-5">Testimonial</h1>
-            </div>
-            <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.1s">
-                <div class="testimonial-item text-center" data-dot="<img class='img-fluid' src='img/testimonial-1.jpg' alt=''>">
-                    <p class="fs-5">Clita clita tempor justo dolor ipsum amet kasd amet duo justo duo duo labore sed sed. Magna ut diam sit et amet stet eos sed clita erat magna elitr erat sit sit erat at rebum justo sea clita.</p>
-                    <h4>Client Name</h4>
-                    <span class="text-primary">Profession</span>
-                </div>
-                <div class="testimonial-item text-center" data-dot="<img class='img-fluid' src='img/testimonial-2.jpg' alt=''>">
-                    <p class="fs-5">Clita clita tempor justo dolor ipsum amet kasd amet duo justo duo duo labore sed sed. Magna ut diam sit et amet stet eos sed clita erat magna elitr erat sit sit erat at rebum justo sea clita.</p>
-                    <h4>Client Name</h4>
-                    <span class="text-primary">Profession</span>
-                </div>
-                <div class="testimonial-item text-center" data-dot="<img class='img-fluid' src='img/testimonial-3.jpg' alt=''>">
-                    <p class="fs-5">Clita clita tempor justo dolor ipsum amet kasd amet duo justo duo duo labore sed sed. Magna ut diam sit et amet stet eos sed clita erat magna elitr erat sit sit erat at rebum justo sea clita.</p>
-                    <h4>Client Name</h4>
-                    <span class="text-primary">Profession</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Testimonial End -->
-
-
-    <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-secondary footer mt-5 py-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container py-5">
-            <div class="row g-5">
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="text-light mb-4">Address</h5>
-                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Calle Hermanos Noáin, Ansoain, Pamplona</p>
-                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>munoz.138255</p>
-                    <div class="d-flex pt-2">
-                        <a class="btn btn-square btn-outline-secondary rounded-circle me-2" href=""><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-square btn-outline-secondary rounded-circle me-2" href=""><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-square btn-outline-secondary rounded-circle me-2" href=""><i class="fab fa-youtube"></i></a>
-                        <a class="btn btn-square btn-outline-secondary rounded-circle me-2" href=""><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="text-light mb-4">Services</h5>
-                    <a class="btn btn-link" href="">Business Security</a>
-                    <a class="btn btn-link" href="">Fire Detection</a>
-                    <a class="btn btn-link" href="">Alarm Systems</a>
-                    <a class="btn btn-link" href="">CCTV & Video</a>
-                    <a class="btn btn-link" href="">Smart Home</a>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="text-light mb-4">Quick Links</h5>
-                    <a class="btn btn-link" href="">About Us</a>
-                    <a class="btn btn-link" href="">Contact Us</a>
-                    <a class="btn btn-link" href="">Our Services</a>
-                    <a class="btn btn-link" href="">Terms & Condition</a>
-                    <a class="btn btn-link" href="">Support</a>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="text-light mb-4">Newsletter</h5>
-                    <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
-                    <div class="position-relative w-100">
-                        <input class="form-control bg-transparent border-secondary w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Footer End -->
-
-
-    <!-- Copyright Start -->
-    <div class="container-fluid py-4" style="background: #000000;">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                    &copy; <a class="border-bottom" href="#">Datafy</a>, All Right Reserved.
-                </div>
-                <div class="col-md-6 text-center text-md-end">
-                    <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                    Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Copyright End -->
-
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
-
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/counterup/counterup.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/isotope/isotope.pkgd.min.js"></script>
-    <script src="lib/lightbox/js/lightbox.min.js"></script>
-
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <!-- Start Script -->
+    <script src="assets/js/jquery-1.11.0.min.js"></script>
+    <script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/templatemo.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <!-- End Script -->
 </body>
 
 </html>
