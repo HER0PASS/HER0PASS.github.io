@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streams en Vivo - Twitch</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">10 Streams Epañoles con más Espectadores</h1>
+        <div id="streams" class="row"></div>
+    </div>
+
+    <script>
+        async function fetchStreams() {
+            try {
+                // Solicitar los datos al servidor PHP
+                const response = await fetch("https://her0pass.github.io/analytics/streams.php");
+                const data = await response.json();
+
+                if (data.error) {
+                    document.getElementById("streams").innerHTML = `<p class='text-danger'>${data.error}</p>`;
+                    return;
+                }
+
+                // Generar el HTML con los streams
+                let html = "";
+                data.forEach(stream => {
+                    html += `
+                        <div class="col-md-4">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <p class="card-text"><strong>Streamer:</strong> ${stream.nombre}</p>
+                                    <p class="card-text"><strong>Título:</strong> ${stream.title}</p>
+                                    <p class="card-text"><strong>Espectadores:</strong> ${stream.espectadores}</p>
+                                </div>
+                            </div>
+                            <hr>
+                        </div> `;
+                });
+
+                // Insertar el contenido generado en el div de streams
+                document.getElementById("streams").innerHTML = html;
+            } catch (error) {
+                // Mostrar error si ocurre algún problema con la petición
+                document.getElementById("streams").innerHTML = "<p class='text-danger'>Error al cargar los streams.</p>";
+            }
+        }
+
+        // Llamada a la función para obtener los datos cuando se carga la página
+        fetchStreams();
+    </script>
+</body>
+</html>

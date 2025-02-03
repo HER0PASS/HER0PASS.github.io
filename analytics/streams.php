@@ -1,19 +1,20 @@
 <?php
-// Configuración de la API de Twitch
+header("Access-Control-Allow-Origin: *"); // Permitir peticiones desde cualquier dominio
+header("Content-Type: application/json");
+
 $client_id = "ynbfszlhhuo6irowc6zuqlzu8g0f2t"; 
 $access_token = "32tleomygkitibffxh0l0xc1ag2dmw"; 
+$api_url = "https://api.twitch.tv/helix/streams?first=10";
 
-// URL de la API de Twitch para obtener streams en vivo en español
-$url = "https://api.twitch.tv/helix/streams?type=live&first=10&language=es";
+$headers = [
+    "Client-ID: $client_id",
+    "Authorization: Bearer $access_token"
+];
 
-// Configurar la solicitud HTTP con cURL
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    "Authorization: Bearer $access_token",
-    "Client-Id: $client_id"
-]);
-
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $api_url);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 $response = curl_exec($ch);
 $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
