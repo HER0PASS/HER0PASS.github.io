@@ -16,9 +16,17 @@
         async function fetchStreams() {
             try {
                 // Solicitar los datos al servidor PHP
-                const response = await fetch("https://her0pass.github.io/analytics/streams.php");
+                const response = await fetch("http://her0pass.github.io/analytics/streams.php");
+                
+                // Verificar si la respuesta es exitosa (status 200)
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+
+                // Convertir la respuesta en formato JSON
                 const data = await response.json();
 
+                // Verificar si hay un error en los datos (como 'error' en el JSON)
                 if (data.error) {
                     document.getElementById("streams").innerHTML = `<p class='text-danger'>${data.error}</p>`;
                     return;
@@ -37,14 +45,15 @@
                                 </div>
                             </div>
                             <hr>
-                        </div> `;
+                        </div>`;
                 });
 
                 // Insertar el contenido generado en el div de streams
                 document.getElementById("streams").innerHTML = html;
+                
             } catch (error) {
-                // Mostrar error si ocurre algún problema con la petición
-                document.getElementById("streams").innerHTML = "<p class='text-danger'>Error al cargar los streams.</p>";
+                // Si ocurre algún error, lo mostramos en la página
+                document.getElementById("streams").innerHTML = `<p class='text-danger'>Error al cargar los streams. ${error.message}</p>`;
             }
         }
 
