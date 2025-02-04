@@ -1,63 +1,39 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+    <title>Detalles del Streamer</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultar Streamer</title>
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1 class="text-center">Consulta de Streamers en Twitch</h1>
-        <div class="form-group">
-            <label for="streamer_id">ID del Streamer:</label>
-            <input type="text" id="streamer_id" class="form-control" placeholder="Introduce el ID del streamer">
-        </div>
-        <button class="btn btn-primary mt-2" onclick="fetchStreamer()">Buscar</button>
-
-        <div id="streamer_info" class="mt-4"></div>
-    </div>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script>
-        async function fetchStreamer() {
-            const streamerId = document.getElementById("streamer_id").value.trim();
+        document.addEventListener("DOMContentLoaded", function () {
+            let params = new URLSearchParams(window.location.search);
+            let nombre = params.get("nombre");
+            let titulo = params.get("titulo");
+            let juego = params.get("juego");
+            let idioma = params.get("idioma");
 
-            if (!streamerId) {
-                document.getElementById("streamer_info").innerHTML = `<p class='text-danger'>Por favor, introduce un ID de usuario válido.</p>`;
+            if (!nombre) {
+                document.getElementById("info").innerHTML = "<p>Error: No se encontraron datos del streamer.</p>";
                 return;
             }
 
-            try {
-                const response = await fetch(`streamer.php?id=${streamerId}`);
-                
-                if (!response.ok) {
-                    throw new Error(`Error HTTP: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (data.error) {
-                    document.getElementById("streamer_info").innerHTML = `<p class='text-danger'>${data.error}</p>`;
-                    return;
-                }
-
-                // Mostrar información del streamer
-                document.getElementById("streamer_info").innerHTML = `
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title">${data.display_name} (${data.login})</h3>
-                            <img src="${data.profile_image_url}" class="img-fluid rounded-circle mb-3" width="100">
-                            <p><strong>Tipo:</strong> ${data.broadcaster_type || "No especificado"}</p>
-                            <p><strong>Descripción:</strong> ${data.description || "Sin descripción"}</p>
-                            <p><strong>Seguidores:</strong> ${data.view_count}</p>
-                            <p><strong>Creado en:</strong> ${new Date(data.created_at).toLocaleDateString()}</p>
-                        </div>
-                    </div>
-                `;
-            } catch (error) {
-                document.getElementById("streamer_info").innerHTML = `<p class='text-danger'>Error al cargar la información. ${error.message}</p>`;
-            }
-        }
+            document.getElementById("streamer-name").textContent = nombre;
+            document.getElementById("stream-title").textContent = titulo;
+            document.getElementById("stream-game").textContent = juego;
+            document.getElementById("stream-lang").textContent = idioma;
+        });
     </script>
+</head>
+
+<body>
+    <h1>Información del Streamer</h1>
+    <div id="info">
+        <p><strong>Nombre:</strong> <span id="streamer-name"></span></p>
+        <p><strong>Título:</strong> <span id="stream-title"></span></p>
+        <p><strong>Juego:</strong> <span id="stream-game"></span></p>
+        <p><strong>Idioma:</strong> <span id="stream-lang"></span></p>
+    </div>
 </body>
+
 </html>
