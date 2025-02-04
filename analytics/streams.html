@@ -1,14 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Streams en Vivo - Twitch</title>
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <title>Her0Pass Twitch</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="../assets/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../assets/img/favicon.ico">
+
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/templatemo.css">
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="../assets/css/fontawesome.min.css">
 </head>
 <body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <a class="navbar-brand text-success logo h1 align-self-center" href="../index.html">
+                Her0Pass Twitch
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
+                <div class="flex-fill">
+                    <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../index.html">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../pedirStreamer.html">Caso1</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="streams.html">Caso2</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Caso3</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+    <!-- Close Header -->
+
     <div class="container mt-5">
-        <h1 class="text-center">10 Streams Epañoles con más Espectadores</h1>
+        <h1 class="text-center">10 Streams Españoles con más Espectadores</h1>
         <div id="streams" class="row"></div>
     </div>
 
@@ -60,5 +105,12 @@
         // Llamada a la función para obtener los datos cuando se carga la página
         fetchStreams();
     </script>
+
+    <!-- Bootstrap JS -->
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    <!-- Templatemo JS -->
+    <script src="../assets/js/templatemo.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/custom.js"></script>
 </body>
 </html>
