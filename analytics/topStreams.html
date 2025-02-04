@@ -54,14 +54,18 @@
 
     <div class="container mt-5">
         <h1 class="text-center">10 Streams Españoles con más Espectadores</h1>
+        <div class="text-center mb-4">
+            <button class="btn btn-primary" onclick="fetchStreams('asc')">Ordenar Ascendente</button>
+            <button class="btn btn-primary" onclick="fetchStreams('desc')">Ordenar Descendente</button>
+        </div>
         <div id="streams" class="row"></div>
     </div>
 
     <script>
-        async function fetchStreams() {
+        async function fetchStreams(order = 'asc') { //ascendente por defecto
             try {
                 // Solicitar los datos al servidor PHP
-                const response = await fetch("http://www.her0pass.wuaze.com/analytics/streams.php");
+                const response = await fetch(`http://www.her0pass.wuaze.com/analytics/topStreams.php?order=${order}`);
                 
                 // Verificar si la respuesta es exitosa (status 200)
                 if (!response.ok) {
