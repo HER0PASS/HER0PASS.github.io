@@ -55,32 +55,34 @@
     <div class="container mt-5">
         <h1 class="text-center">10 Streams Españoles con más Espectadores</h1>
         <div class="text-center mb-4">
+            <input type="number" id="limit" class="form-control d-inline-block w-auto" placeholder="Número de streams" min="1" max ="10" value="10">
             <button class="btn btn-primary" onclick="fetchStreams('asc')">Ordenar Ascendente</button>
             <button class="btn btn-primary" onclick="fetchStreams('desc')">Ordenar Descendente</button>
         </div>
         <div id="streams" class="row"></div>
     </div>
-
+    
     <script>
-        async function fetchStreams(order = 'asc') { //ascendente por defecto
+        async function fetchStreams(order = 'asc') {
+            const limit = document.getElementById('limit').value || 10; // Obtener el valor del límite del input
             try {
                 // Solicitar los datos al servidor PHP
-                const response = await fetch(`http://www.her0pass.wuaze.com/analytics/topStreams.php?order=${order}`);
+                const response = await fetch(`http://www.her0pass.wuaze.com/analytics/topStreams.php?order=${order}&limit=${limit}`);
                 
                 // Verificar si la respuesta es exitosa (status 200)
                 if (!response.ok) {
                     throw new Error(`Error HTTP: ${response.status}`);
                 }
-
+    
                 // Convertir la respuesta en formato JSON
                 const data = await response.json();
-
+    
                 // Verificar si hay un error en los datos (como 'error' en el JSON)
                 if (data.error) {
                     document.getElementById("streams").innerHTML = `<p class='text-danger'>${data.error}</p>`;
                     return;
                 }
-
+    
                 // Generar el HTML con los streams
                 let html = "";
                 data.forEach(stream => {
@@ -96,7 +98,7 @@
                             <hr>
                         </div>`;
                 });
-
+    
                 // Insertar el contenido generado en el div de streams
                 document.getElementById("streams").innerHTML = html;
                 
@@ -105,7 +107,7 @@
                 document.getElementById("streams").innerHTML = `<p class='text-danger'>Error al cargar los streams. ${error.message}</p>`;
             }
         }
-
+    
         // Llamada a la función para obtener los datos cuando se carga la página
         fetchStreams();
     </script>

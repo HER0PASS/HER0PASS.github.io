@@ -48,9 +48,17 @@ if ($http_code == 200) {
         }
     });
 
+    // Seleccionar los primeros N streams
+    $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
+    $streams_filtrados = array_slice($streams_filtrados, 0, $limit);
+
     // Mostrar datos en formato JSON
     header("Content-Type: application/json");
     echo json_encode($streams_filtrados, JSON_PRETTY_PRINT);
+} elseif ($http_code == 400) {
+    // Si la respuesta es 400, solicitud incorrecta
+    header("Content-Type: application/json");
+    echo json_encode(["error" => "RESPONSE 400: Bad Request"]);
 } elseif ($http_code == 401) {
     // Si la respuesta es 401, token inválido o expirado
     header("Content-Type: application/json");
