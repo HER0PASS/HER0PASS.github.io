@@ -67,7 +67,7 @@
             const limit = document.getElementById('limit').value || 10; // Obtener el valor del límite del input
             try {
                 // Solicitar los datos al servidor PHP
-                const response = await fetch(`http://www.her0pass.wuaze.com/analytics/topStreams.php?order=${order}&limit=${limit}`);
+                const response = await fetch(`http://heropass.es/analytics/topStreams.php?order=${order}&limit=${limit}`);
                 
                 // Verificar si la respuesta es exitosa (status 200)
                 if (!response.ok) {
