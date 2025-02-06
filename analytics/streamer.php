@@ -39,6 +39,7 @@ if ($http_code == 200) {
 
     // Filtrar la información relevante del streamer
     $streamer = $data["data"][0];
+
     $resultado = [
         "id" => $streamer["id"],
         "login" => $streamer["login"],
@@ -51,6 +52,8 @@ if ($http_code == 200) {
     ];
 
     echo json_encode($resultado, JSON_PRETTY_PRINT);
+} elseif ($http_code == 400) {
+    echo json_encode(["error" => "Invalid or missing 'id' parameter."]);
 } elseif ($http_code == 401) {
     echo json_encode(["error" => "Unauthorized. Twitch access token is invalid or has expired."]);
 } elseif ($http_code == 404) {
