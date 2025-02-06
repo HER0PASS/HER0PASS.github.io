@@ -39,19 +39,15 @@ if ($http_code == 200) {
     }, $data["data"]);
 
     // Mostrar datos en formato JSON
-    header("Content-Type: application/json");
     echo json_encode($streams_filtrados, JSON_PRETTY_PRINT);
 } elseif ($http_code == 401) {
     // Si la respuesta es 401, token inválido o expirado
-    header("Content-Type: application/json");
     echo json_encode(["error" => "RESPONSE 401: Unauthorized. Twitch access token is invalid or has expired."]);
 } elseif ($http_code == 500) {
     // Si la respuesta es 500, error interno del servidor
-    header("Content-Type: application/json");
     echo json_encode(["error" => "RESPONSE 500: Internal Server Error"]);
 } else {
     // Manejo de otros códigos de error
-    header("Content-Type: application/json");
     echo json_encode(["error" => "Unexpected error", "status" => $http_code]);
 }
 ?>
