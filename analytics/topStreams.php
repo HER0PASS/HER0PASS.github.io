@@ -32,15 +32,43 @@ if ($http_code == 200) {
     // Filtramos los campos deseados
     $streams_filtrados = array_map(function ($stream) {
         return [
-            "nombre" => $stream["user_name"],
+            "user_id" => $stream["user_id"],
             "title" => $stream["title"],
             "espectadores" => $stream["viewer_count"]
         ];
     }, $data["data"]);
 
+    // Obtener información adicional del usuario
+    $user_ids = array_column($streams_filtrados, 'user_id');
+    $user_ids_str = implode('&id=', $user_ids);
+    $user_api_url = "https://api.twitch.tv/helix/users?id=" . $user_ids_str;
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $user_api_url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $user_response = curl_exec($ch);
+    curl_close($ch);
+
+    $user_data = json_decode($user_response, true);
+
+    // Crear un array asociativo con la información del usuario
+    $user_info = [];
+    foreach ($user_data['data'] as $user) {
+        $user_info[$user['id']] = [
+            'display_name' => $user['display_name'],
+            'profile_image_url' => $user['profile_image_url']
+        ];
+    }
+
+    // Enriquecer los streams con la información del usuario
+    $streams_enriquecidos = array_map(function ($stream) use ($user_info) {
+        return array_merge($stream, $user_info[$stream['user_id']]);
+    }, $streams_filtrados);
+
     // Ordenar los streams según el número de espectadores
     $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
-    usort($streams_filtrados, function ($a, $b) use ($order) {
+    usort($streams_enriquecidos, function ($a, $b) use ($order) {
         if ($order == 'asc') {
             return $a['espectadores'] <=> $b['espectadores'];
         } else {
@@ -50,11 +78,11 @@ if ($http_code == 200) {
 
     // Seleccionar los primeros N streams
     $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
-    $streams_filtrados = array_slice($streams_filtrados, 0, $limit);
+    $streams_enriquecidos = array_slice($streams_enriquecidos, 0, $limit);
 
     // Mostrar datos en formato JSON
     header("Content-Type: application/json");
-    echo json_encode($streams_filtrados, JSON_PRETTY_PRINT);
+    echo json_encode($streams_enriquecidos, JSON_PRETTY_PRINT);
 } elseif ($http_code == 400) {
     // Si la respuesta es 400, solicitud incorrecta
     header("Content-Type: application/json");

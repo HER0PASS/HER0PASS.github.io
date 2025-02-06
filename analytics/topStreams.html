@@ -53,9 +53,9 @@
     <!-- Close Header -->
 
     <div class="container mt-5">
-        <h1 class="text-center">10 Streams Españoles con más Espectadores</h1>
+        <h1 class="text-center">10 Streams con más Espectadores</h1>
         <div class="text-center mb-4">
-            <input type="number" id="limit" class="form-control d-inline-block w-auto" placeholder="Número de streams" min="1" max ="10" value="10">
+            <input type="number" id="limit" class="form-control d-inline-block w-auto" placeholder="Número de streams" min="1" max="10" value="10">
             <button class="btn btn-primary" onclick="fetchStreams('asc')">Ordenar Ascendente</button>
             <button class="btn btn-primary" onclick="fetchStreams('desc')">Ordenar Descendente</button>
         </div>
@@ -89,8 +89,9 @@
                     html += `
                         <div class="col-md-4">
                             <div class="card mb-4">
+                                <img src="${stream.profile_image_url}" class="card-img-top" alt="${stream.display_name}">
                                 <div class="card-body">
-                                    <p class="card-text"><strong>Streamer:</strong> ${stream.nombre}</p>
+                                    <h5 class="card-title">${stream.display_name}</h5>
                                     <p class="card-text"><strong>Título:</strong> ${stream.title}</p>
                                     <p class="card-text"><strong>Espectadores:</strong> ${stream.espectadores}</p>
                                 </div>
