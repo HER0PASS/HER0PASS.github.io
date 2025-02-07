@@ -18,7 +18,7 @@
     $api_url = "https://api.twitch.tv/helix/streams?first=$limit";
 
     $headers = [
-        "Client-ID: error",
+        "Client-ID: $client_id",
         "Authorization: Bearer $access_token"
     ];
 
