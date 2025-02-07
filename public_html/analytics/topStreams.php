@@ -12,13 +12,13 @@
         echo json_encode(["error" => "Failed to obtain access token", "details" => $credentials]);
         exit;
     }
-
+    $limit = $_GET['limit'];
     $client_id = $credentials['client_id'];
     $access_token = $credentials['access_token'];
-    $api_url = "https://api.twitch.tv/helix/streams?first=10";
+    $api_url = "https://api.twitch.tv/helix/streams?first=$limit";
 
     $headers = [
-        "Client-ID: $client_id",
+        "Client-ID: error",
         "Authorization: Bearer $access_token"
     ];
 
@@ -86,10 +86,6 @@
                 return $b['espectadores'] <=> $a['espectadores'];
             }
         });
-
-        // Seleccionar los primeros N streams
-        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
-        $streams_enriquecidos = array_slice($streams_enriquecidos, 0, $limit);
 
         // Mostrar datos en formato JSON
         echo json_encode($streams_enriquecidos, JSON_PRETTY_PRINT);

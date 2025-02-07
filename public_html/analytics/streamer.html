@@ -71,7 +71,7 @@
                 return;
             }
             try {
-                const response = await fetch(`streamer.php?id=${streamerId}`);
+                const response = await fetch(`/analytics/streamer/${streamerId}`);
                 
                 if (!response.ok) {
                     throw new Error(`Error HTTP: ${response.status}`);
