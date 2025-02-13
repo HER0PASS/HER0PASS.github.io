@@ -1,12 +1,17 @@
 <?php
 
 require '../api/crearToken.php';
-
+include '../bbdd/conexion.php';
 header("Access-Control-Allow-Origin: *"); // Permitir peticiones desde cualquier dominio
 header("Content-Type: application/json");
 
 // Obtener el parámetro 'since' de la solicitud
-$since = isset($_GET['since']) ? (int)$_GET['since'] : null;
+if(!isset($_GET['since'])){
+    $since = 600;
+}
+else{
+    $since = (int)$_GET['since'];
+}
 
 // Obtener el token
 $credentials = obtenerToken();
@@ -20,24 +25,11 @@ if (isset($credentials['error'])) {
 $client_id = $credentials['client_id'];
 $access_token = $credentials['access_token'];
 
-// Conectar a la base de datos (ejemplo usando PDO)
-$host = 'db5017192845.hosting-data.io';
-$db = 'dbs13808414';
-$user = 'dbu2750275';
-$pass = 'HeroPassPass1'; // Deja esto en blanco si no configuraste una contraseña para root
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo json_encode(["error" => "Error en la conexión: " . $e->getMessage()]);
-    exit;
-}
-
 // Verificar si hay datos en caché
-$query = $pdo->prepare("SELECT * FROM cache WHERE endpoint = 'topsofthetops' ORDER BY timestamp DESC LIMIT 1");
+$query = $conn->prepare("SELECT * FROM cache WHERE endpoint = 'topsofthetops' ORDER BY timestamp DESC LIMIT 1");
 $query->execute();
-$cache = $query->fetch(PDO::FETCH_ASSOC);
+$result = $query->get_result();
+$cache = $result->fetch_assoc();
 
 $use_cache = false;
 if ($cache) {
@@ -53,6 +45,10 @@ if ($use_cache) {
     // Devolver datos en caché
     echo $cache['data'];
 } else {
+    // Borrar todos los datos de la caché
+    $query = $conn->prepare("DELETE FROM cache");
+    $query->execute();
+
     // Realizar una nueva consulta a la API de Twitch
     $api_url = "https://api.twitch.tv/helix/games/top?first=3";
     $headers = [
@@ -145,8 +141,9 @@ if ($use_cache) {
 
         // Almacenar los datos en caché
         $cache_data = json_encode($resultados, JSON_PRETTY_PRINT);
-        $query = $pdo->prepare("INSERT INTO cache (endpoint, data, timestamp) VALUES ('topsofthetops', :data, NOW())");
-        $query->execute(['data' => $cache_data]);
+        $query = $conn->prepare("INSERT INTO cache (endpoint, data, timestamp) VALUES ('topsofthetops', ?, NOW())");
+        $query->bind_param('s', $cache_data);
+        $query->execute();
 
         // Devolver los datos
         echo $cache_data;
@@ -161,4 +158,5 @@ if ($use_cache) {
         }
     }
 }
+$conn->close();
 ?>
