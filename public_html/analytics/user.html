@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <title>Her0Pass Twitch</title>
-    <meta charset="utf-8" />
+    <title>Consultar streamer</title>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link rel="apple-touch-icon" href="../assets/img/apple-icon.png" />
@@ -23,6 +23,7 @@
     />
     <link rel="stylesheet" href="../assets/css/fontawesome.min.css" />
   </head>
+
   <body>
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-light shadow">
@@ -58,7 +59,7 @@
                 <a class="nav-link" href="../index.html">Inicio</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="./streamer.html">Caso1</a>
+                <a class="nav-link" href="./user.html">Caso1</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="./streams.html">Caso2</a>
@@ -74,67 +75,75 @@
     <!-- Close Header -->
 
     <div class="container mt-5">
-      <h1 class="text-center">10 Streams con más Espectadores</h1>
-      <div id="streams" class="row"></div>
+      <h1 class="text-center">Consulta de Streamers en Twitch</h1>
+      <div class="form-group">
+        <label for="streamer_id">ID del Streamer:</label>
+        <input
+          type="text"
+          id="streamer_id"
+          class="form-control"
+          placeholder="Introduce el ID del streamer"
+        />
+      </div>
+      <button class="btn btn-primary mt-2" onclick="fetchStreamer()">
+        Buscar
+      </button>
+      <div id="streamer_info" class="mt-4"></div>
     </div>
-
     <script>
-      async function fetchStreams() {
+      async function fetchStreamer() {
+        const streamerId = document.getElementById("streamer_id").value.trim();
+        if (!streamerId) {
+          document.getElementById(
+            "streamer_info"
+          ).innerHTML = `<p class='text-danger'>Por favor, introduce un ID de usuario válido.</p>`;
+          return;
+        }
         try {
-          // Solicitar los datos al servidor PHP
-          const response = await fetch("streams.php");
+          const response = await fetch(`/analytics/user/${streamerId}`);
 
-          // Verificar si la respuesta es exitosa (status 200)
           if (!response.ok) {
             throw new Error(`Error HTTP: ${response.status}`);
           }
-
-          // Convertir la respuesta en formato JSON
           const data = await response.json();
-
-          // Verificar si hay un error en los datos (como 'error' en el JSON)
           if (data.error) {
             document.getElementById(
-              "streams"
+              "streamer_info"
             ).innerHTML = `<p class='text-danger'>${data.error}</p>`;
             return;
           }
-
-          // Generar el HTML con los streams
-          let html = "";
-          data.forEach((stream) => {
-            html += `
-                        <div class="col-md-4">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <p class="card-text"><strong>Streamer:</strong> ${stream.nombre}</p>
-                                    <p class="card-text"><strong>Título:</strong> ${stream.title}</p>
-                                    <p class="card-text"><strong>Espectadores:</strong> ${stream.espectadores}</p>
-                                </div>
-                            </div>
-                            <hr>
-                        </div>`;
-          });
-
-          // Insertar el contenido generado en el div de streams
-          document.getElementById("streams").innerHTML = html;
+          // Mostrar información del streamer
+          document.getElementById("streamer_info").innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">${data.display_name} (${
+            data.login
+          })</h3>
+                            <img src="${
+                              data.profile_image_url
+                            }" class="img-fluid rounded-circle mb-3" width="100">
+                            <p><strong>ID:</strong> ${data.id}</p>
+                            <p><strong>Tipo:</strong> ${
+                              data.broadcaster_type || "No especificado"
+                            }</p>
+                            <p><strong>Descripción:</strong> ${
+                              data.description || "Sin descripción"
+                            }</p>
+                            <p><strong>View_count (obsoleto):</strong> ${
+                              data.view_count
+                            }</p>
+                            <p><strong>Creado en:</strong> ${new Date(
+                              data.created_at
+                            ).toLocaleDateString()}</p>
+                        </div>
+                    </div>
+                `;
         } catch (error) {
-          // Si ocurre algún error, lo mostramos en la página
           document.getElementById(
-            "streams"
-          ).innerHTML = `<p class='text-danger'>Error al cargar los streams. ${error.message}</p>`;
+            "streamer_info"
+          ).innerHTML = `<p class='text-danger'>Error al cargar la información. ${error.message}</p>`;
         }
       }
-
-      // Llamada a la función para obtener los datos cuando se carga la página
-      fetchStreams();
     </script>
-
-    <!-- Bootstrap JS -->
-    <script src="../assets/js/bootstrap.bundle.min.js"></script>
-    <!-- Templatemo JS -->
-    <script src="../assets/js/templatemo.js"></script>
-    <!-- Custom JS -->
-    <script src="../assets/js/custom.js"></script>
   </body>
 </html>
