@@ -1,4 +1,3 @@
-
 # TWITCH ANALYTICS
 
 Primera entrega de la asignatura Verificación y Validación del Software.  
@@ -34,6 +33,54 @@ Este caso de uso realiza un filtrado y enriquecimiento del listado de Streams en
 
 ```bash
   http://heropass.es/analytics/streams/enriched?limit=3
+```
+
+### Nuevos Endpoints
+
+#### REGISTRO DE USUARIOS
+Este endpoint permite registrar un nuevo usuario y obtener una API Key única.
+```bash
+  POST http://heropass.es/api/register
+```
+Ejemplo de Request:
+```json
+{
+  "email": "usuario@example.com"
+}
+```
+Ejemplo de Respuesta:
+```json
+{
+  "api_key": "abcd1234efgh5678"
+}
+```
+
+#### OBTENCIÓN DE TOKEN DE SESIÓN
+Este endpoint permite obtener un token de sesión válido por 3 días utilizando una API Key.
+```bash
+  POST http://heropass.es/api/token
+```
+Ejemplo de Request:
+```json
+{
+  "email": "usuario@example.com",
+  "api_key": "abcd1234efgh5678"
+}
+```
+Ejemplo de Respuesta:
+```json
+{
+  "token": "generated_token"
+}
+```
+
+#### AUTENTICACIÓN
+Todos los endpoints requieren autenticación mediante un token válido. El token debe ser enviado en el encabezado Authorization en cada petición.
+Ejemplo de petición autenticada:
+```bash
+  GET /analytics/topsofthetops
+  Host: miserver.com
+  Authorization: Bearer generated_token
 ```
 
 

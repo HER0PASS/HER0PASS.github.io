@@ -12,3 +12,9 @@ RewriteRule ^analytics/streams/enriched/?$ analytics/streams/enriched.php [QSA,L
 
 # Redirigir /analytics/topsofthetops?since=X a /analytics/topsofthetops.php (manteniendo los parámetros)
 RewriteRule ^analytics/topsofthetops/?$ analytics/topsofthetops.php [QSA,L]
+
+# Redirigir /register a /register.php
+RewriteRule ^register/?$ register.php [L]
+
+# Redirigir /token a /token.php
+RewriteRule ^token/?$ token.php [L]
