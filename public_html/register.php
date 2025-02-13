@@ -49,4 +49,6 @@ try {
 }
 
 echo json_encode(["api_key" => $api_key]);
+// cerrar la conexión
+$conn->close();
 ?>
