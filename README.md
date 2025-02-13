@@ -15,13 +15,13 @@ Alumnos: Asier Muñoz, Iñigo Aznárez, Miguel Vallés y Alejandro Molina
 Este endpoint permite a los clientes consultar la información de un streamer de Twitch mediante su ID.  
 Ejemplo con el id de usuario de ibai: 83232866
 ```bash
-  http://heropass.es/analytics/streamer.php?id=83232866
+  http://heropass.es/analytics/user?id=83232866
 ```
 
 #### CASO DE USO 2: CONSULTAR STREAMS EN VIVO  
 Este endpoint permite a los clientes obtener una lista de los 10  streams con más espectadores que están actualmente en vivo en Twitch.
 ```bash
-  http://heropass.es/analytics/streams.php
+  http://heropass.es/analytics/streams
 ```
 
 #### CASO DE USO 3: CONSULTAR “TOP STREAMS ENRIQUECIDOS”  
@@ -33,31 +33,7 @@ Este caso de uso realiza un filtrado y enriquecimiento del listado de Streams en
 5. Devolver al cliente un listado combinado.
 
 ```bash
-  http://heropass.es/analytics/topStreams.php?limit=2
+  http://heropass.es/analytics/streams/enriched?limit=3
 ```
-
-### Localmente
-
-Para ejecutar el proyecto localmente hemos utilizado la herramienta XAMPP, mediante la cual levantábamos el servicio web en local. Las direcciones para ejecutar los casos son las siguientes:
-
-#### CASO DE USO 1: CONSULTAR INFORMACIÓN DE UN STREAMER DE TWITCH  
-```bash
-  http://localhost/.../HER0PASS.github.io/public_html/analytics/streamer.php?id=1234
-```
-Aclaración: los 3 puntos (...) se refieren a la localización en local del proyecto  
-
-#### CASO DE USO 2: CONSULTAR STREAMS EN VIVO  
-```bash
-  http://localhost/.../HER0PASS.github.io/public_html/analytics/streams.php
-```
-
-#### CASO DE USO 3: CONSULTAR “TOP STREAMS ENRIQUECIDOS”  
-```bash
-  http://localhost/.../HER0PASS.github.io/public_html/analytics/topStreams.php?limit=2
-```
-
-## Extra
-A pesar de que no se pidiese en la entrega, realizamos una página web en html que permite interaccionar con la API
- - [Página heropass HTML](http://heropass.es/)
 
 
