@@ -1,5 +1,5 @@
 <?php
-  	require '../api/crearToken.php';
+  	require '../../api/crearToken.php';
 
     header("Access-Control-Allow-Origin: *"); // Permitir peticiones desde cualquier dominio
     header("Content-Type: application/json");

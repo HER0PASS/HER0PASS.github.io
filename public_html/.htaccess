@@ -1,10 +1,11 @@
 RewriteEngine On
+RewriteBase /
 
-# Redirección para enriched.php con parámetro "limit"
-RewriteCond %{QUERY_STRING} ^limit=([0-9]+)$
-RewriteRule ^analytics/enrich\.php$ /analytics/enriched.php?limit=%1 [L,QSA]
+# Redirigir /analytics/streams a /analytics/streams.php
+RewriteRule ^analytics/streams/?$ analytics/streams.php [L]
 
-# Evitar bucles de redirección en user.php
-RewriteCond %{REQUEST_URI} !^/analytics/user\.php$
-RewriteCond %{QUERY_STRING} ^id=([0-9]+)$
-RewriteRule ^analytics/user\.php$ /analytics/user.php?id=%1 [L,QSA]
+# Redirigir /analytics/user?id=X a /analytics/user.php (manteniendo los parámetros)
+RewriteRule ^analytics/user/?$ analytics/user.php [QSA,L]
+
+# Redirigir /analytics/streams/enriched?limit=X a /analytics/streams/enriched.php
+RewriteRule ^analytics/streams/enriched/?$ analytics/streams/enriched.php [QSA,L]
