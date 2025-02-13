@@ -19,14 +19,11 @@ if (!isset($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)
 $email = $data['email'];
 $api_key = bin2hex(random_bytes(16));
 
-// Guardar email en la bbdd
-$host = 'db5017192845.hosting-data.io';
-$db = 'dbs13808414';
-$user = 'dbu2750275';
-$pass = 'HeroPassPass1';
+// Incluir el archivo de conexión
+require_once 'bbdd/conexion.php';
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+    $pdo = new PDO("mysql:host=$host;dbname=$database", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Verificar si el email ya existe
