@@ -19,8 +19,11 @@
     $email = $data['email'];
     $api_key = bin2hex(random_bytes(16));
 
-    // Incluir el archivo de conexión
-    require_once 'bbdd/conexion.php';
+    // Conectarse a bbdd ONLINE
+    //require_once 'bbdd/conexion.php';
+    // Conectarse a bbdd LOCAL
+    require_once 'bbdd/conexionLocal.php';
+
 
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$database", $user, $password);
