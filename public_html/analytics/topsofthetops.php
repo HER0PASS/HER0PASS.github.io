@@ -2,9 +2,31 @@
 
     require '../api/crearToken.php';
     include '../bbdd/conexion.php';
+    require '../token.php';
     header("Access-Control-Allow-Origin: *"); // Permitir peticiones desde cualquier dominio
     header("Content-Type: application/json");
 
+    // Verificar el token de autenticación
+    $headers = apache_request_headers();
+    if (!isset($headers['Authorization'])) {
+        http_response_code(401);
+        echo json_encode(["error" => "Authorization header missing"]);
+        exit;
+    }
+
+    list($type, $token) = explode(" ", $headers['Authorization'], 2);
+    if ($type !== 'Bearer' || !$token) {
+        http_response_code(401);
+        echo json_encode(["error" => "Invalid token format"]);
+        exit;
+    }
+
+    $user_id = verificarToken($token);
+    if (!$user_id) {
+        http_response_code(401);
+        echo json_encode(["error" => "Invalid or expired token"]);
+        exit;
+    }
     // Obtener el parámetro 'since' de la solicitud
     if(!isset($_GET['since'])){
         $since = 600;
