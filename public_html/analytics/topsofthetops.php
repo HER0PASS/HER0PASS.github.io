@@ -2,11 +2,13 @@
 
     require '../api/crearToken.php';
     include '../bbdd/conexion.php';
-    require '../token.php';
+    require '../api/verificarToken.php';
+    
     header("Access-Control-Allow-Origin: *"); // Permitir peticiones desde cualquier dominio
     header("Content-Type: application/json");
 
     // Verificar el token de autenticación
+    
     $headers = apache_request_headers();
     if (!isset($headers['Authorization'])) {
         http_response_code(401);
