@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /
+#RewriteBase /
 
 # Redirigir /analytics/streams a /analytics/streams.php
 RewriteRule ^analytics/streams/?$ analytics/streams.php [L]
