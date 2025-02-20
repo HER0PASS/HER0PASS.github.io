@@ -46,7 +46,7 @@ http://heropass.es/analytics/streams/enriched?limit=3
 
 ## **ENTREGA 2: Nuevos Endpoints**
 
-### **REGISTRO DE USUARIOS**
+### **CASO DE USO 1: REGISTRO DE USUARIOS**  
 Este endpoint permite registrar un nuevo usuario y obtener una API Key única.
 ```bash
 POST http://heropass.es/register
@@ -64,7 +64,7 @@ Ejemplo de Respuesta:
 }
 ```
 
-### **OBTENCIÓN DE TOKEN DE SESIÓN**
+### **CASO DE USO 2: OBTENCIÓN DE TOKEN DE SESIÓN**
 Este endpoint permite obtener un token de sesión válido por 3 días utilizando una API Key.
 ```bash
 POST http://heropass.es/token
@@ -83,12 +83,21 @@ Ejemplo de Respuesta:
 }
 ```
 
-### **AUTENTICACIÓN**
-Todos los endpoints requieren autenticación mediante un token válido. El token debe ser enviado en el encabezado `Authorization` en cada petición.
+### **CASO DE USO 3: TOPS OF THE TOPS**
+Este endpoints requieren autenticación mediante un token válido. El token debe ser enviado en el encabezado `X-Auth-Token` en cada petición.
+Este endpoint proporcionará información sobre los 40 videos más visualizados de cada uno de los tres juegos más populares en Twitch.
 
 Ejemplo de petición autenticada:
 ```bash
 GET /analytics/topsofthetops
 Host: heropass.es
-Authorization: Bearer generated_token
+X-Auth-Token: generated_token
+```
+
+Este endopoint permite el parámetro since con el cual se fuerza a la actualización de la base de datos. Se indica en segundos
+Ejemplo de petición autenticada con el parámetro sice:
+```bash
+GET /analytics/topsofthetops?since=300
+Host: heropass.es
+X-Auth-Token: generated_token
 ```
