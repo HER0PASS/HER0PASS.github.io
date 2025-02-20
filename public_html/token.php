@@ -25,10 +25,9 @@
     $email = $data['email'];
     $api_key = $data['api_key'];
 
-    // Conectarse a bbdd ONLINE
-    //require_once 'bbdd/conexion.php';
-    // Conectarse a bbdd LOCAL
-    require_once 'bbdd/conexionLocal.php';
+    // Conectarse a bbdd
+    require_once 'bbdd/conexion.php';
+
 
 
     try {
