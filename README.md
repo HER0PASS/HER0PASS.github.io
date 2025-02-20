@@ -6,30 +6,25 @@ API pública programada en PHP, capaz de hacer consultas a la API de Twitch para
 **Alumnos:** Asier Muñoz, Iñigo Aznárez, Miguel Vallés y Alejandro Molina
 
 ## Índice
-
 - [Ejecutar el proyecto](#ejecutar-el-proyecto)
   - [En línea](#en-línea)
   - [Localmente](#localmente)
 - [ENTREGA 1: Endpoints iniciales](#entrega-1-endpoints-iniciales)
-  - [CASO DE USO 1: CONSULTAR INFORMACIÓN DE UN STREAMER DE TWITCH](#caso-de-uso-1-consultar-información-de-un-streamer-de-twitch)
-  - [CASO DE USO 2: CONSULTAR STREAMS EN VIVO](#caso-de-uso-2-consultar-streams-en-vivo)
-  - [CASO DE USO 3: CONSULTAR “TOP STREAMS ENRIQUECIDOS”](#caso-de-uso-3-consultar-top-streams-enriquecidos)
+  - [En línea](#en-línea-1)
+  - [Localmente](#localmente-1)
 - [ENTREGA 2: Nuevos Endpoints](#entrega-2-nuevos-endpoints)
-  - [CASO DE USO 1: REGISTRO DE USUARIOS](#caso-de-uso-1-registro-de-usuarios)
-  - [CASO DE USO 2: OBTENCIÓN DE TOKEN DE SESIÓN](#caso-de-uso-2-obtención-de-token-de-sesión)
-  - [CASO DE USO 3: TOPS OF THE TOPS](#caso-de-uso-3-tops-of-the-tops)
+  - [En línea](#en-línea-2)
+  - [Localmente](#localmente-2)
 
 ---
 
-## Ejecutar el proyecto:
+## **ENTREGA 1: Endpoints iniciales**
 
 ### En línea
 
 #### ACLARACIÓN: PETICIONES POSTMAN DETALLADAS EN EL ARCHIVO `Entrega1.pdf`
 
 ---
-
-## **ENTREGA 1: Endpoints iniciales**
 
 ### **CASO DE USO 1: CONSULTAR INFORMACIÓN DE UN STREAMER DE TWITCH**  
 Este endpoint permite consultar la información de un streamer de Twitch mediante su ID.  
@@ -79,9 +74,7 @@ Aclaración: los 3 puntos (...) se refieren a la localización en local del proy
 ---
 ## **ENTREGA 2: Nuevos Endpoints**
 
-## Ejecutar el proyecto:
-
-### En línea
+### En línea 2
 
 #### ACLARACIÓN: PETICIONES POSTMAN DETALLADAS EN EL ARCHIVO `Entrega2.pdf`
 
@@ -144,7 +137,7 @@ X-Auth-Token: generated_token
 ```
 
 
-### Localmente
+### Localmente 2
 
 Para ejecutar el proyecto localmente hemos utilizado la herramienta XAMPP, mediante la cual levantábamos el servicio web y la base de datos en local. Las direcciones para ejecutar los casos son las siguientes:
 
