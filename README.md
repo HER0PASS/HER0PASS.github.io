@@ -5,6 +5,20 @@ API pública programada en PHP, capaz de hacer consultas a la API de Twitch para
 
 **Alumnos:** Asier Muñoz, Iñigo Aznárez, Miguel Vallés y Alejandro Molina
 
+## Índice
+
+- [Ejecutar el proyecto](#ejecutar-el-proyecto)
+  - [En línea](#en-línea)
+  - [Localmente](#localmente)
+- [ENTREGA 1: Endpoints iniciales](#entrega-1-endpoints-iniciales)
+  - [CASO DE USO 1: CONSULTAR INFORMACIÓN DE UN STREAMER DE TWITCH](#caso-de-uso-1-consultar-información-de-un-streamer-de-twitch)
+  - [CASO DE USO 2: CONSULTAR STREAMS EN VIVO](#caso-de-uso-2-consultar-streams-en-vivo)
+  - [CASO DE USO 3: CONSULTAR “TOP STREAMS ENRIQUECIDOS”](#caso-de-uso-3-consultar-top-streams-enriquecidos)
+- [ENTREGA 2: Nuevos Endpoints](#entrega-2-nuevos-endpoints)
+  - [CASO DE USO 1: REGISTRO DE USUARIOS](#caso-de-uso-1-registro-de-usuarios)
+  - [CASO DE USO 2: OBTENCIÓN DE TOKEN DE SESIÓN](#caso-de-uso-2-obtención-de-token-de-sesión)
+  - [CASO DE USO 3: TOPS OF THE TOPS](#caso-de-uso-3-tops-of-the-tops)
+
 ---
 
 ## Ejecutar el proyecto:
@@ -42,9 +56,36 @@ Este caso de uso realiza un filtrado y enriquecimiento del listado de Streams en
 http://heropass.es/analytics/streams/enriched?limit=3
 ```
 
----
+### Localmente
 
+Para ejecutar el proyecto localmente hemos utilizado la herramienta XAMPP, mediante la cual levantábamos el servicio web en local. Las direcciones para ejecutar los casos son las siguientes:
+
+#### CASO DE USO 1: CONSULTAR INFORMACIÓN DE UN STREAMER DE TWITCH  
+```bash
+  http://localhost/.../HER0PASS.github.io/public_html/analytics/user?id=83232866
+```
+Aclaración: los 3 puntos (...) se refieren a la localización en local del proyecto  
+
+#### CASO DE USO 2: CONSULTAR STREAMS EN VIVO  
+```bash
+  http://localhost/.../HER0PASS.github.io/public_html/analytics/streams
+```
+
+#### CASO DE USO 3: CONSULTAR “TOP STREAMS ENRIQUECIDOS”  
+```bash
+  http://localhost/.../HER0PASS.github.io/public_html/analytics/streams/enriched?limit=3
+```
+
+---
 ## **ENTREGA 2: Nuevos Endpoints**
+
+## Ejecutar el proyecto:
+
+### En línea
+
+#### ACLARACIÓN: PETICIONES POSTMAN DETALLADAS EN EL ARCHIVO `Entrega2.pdf`
+
+---
 
 ### **CASO DE USO 1: REGISTRO DE USUARIOS**  
 Este endpoint permite registrar un nuevo usuario y obtener una API Key única.
@@ -101,3 +142,59 @@ GET /analytics/topsofthetops?since=300
 Host: heropass.es
 X-Auth-Token: generated_token
 ```
+
+
+### Localmente
+
+Para ejecutar el proyecto localmente hemos utilizado la herramienta XAMPP, mediante la cual levantábamos el servicio web y la base de datos en local. Las direcciones para ejecutar los casos son las siguientes:
+
+
+### **CASO DE USO 1: REGISTRO DE USUARIOS**  
+Este endpoint permite registrar un nuevo usuario y obtener una API Key única.
+```bash
+POST http://localhost/.../HER0PASS.github.io/public_html/register
+```
+Ejemplo de Request:
+```json
+{
+  "email": "usuario@example.com"
+}
+```
+Ejemplo de Respuesta:
+```json
+{
+  "api_key": "abcd1234efgh5678"
+}
+```
+
+### **CASO DE USO 2: OBTENCIÓN DE TOKEN DE SESIÓN**
+Este endpoint permite obtener un token de sesión válido por 3 días utilizando una API Key.
+```bash
+POST http://localhost/.../HER0PASS.github.io/public_html/token
+```
+Ejemplo de Request:
+```json
+{
+  "email": "usuario@example.com",
+  "api_key": "abcd1234efgh5678"
+}
+```
+Ejemplo de Respuesta:
+```json
+{
+  "token": "generated_token"
+}
+```
+
+### **CASO DE USO 3: TOPS OF THE TOPS**
+Este endpoints requieren autenticación mediante un token válido. El token debe ser enviado en el encabezado `X-Auth-Token` en cada petición.
+Este endpoint proporcionará información sobre los 40 videos más visualizados de cada uno de los tres juegos más populares en Twitch.
+
+```bash
+GET http://localhost/.../HER0PASS.github.io/public_html/analytics/topsofthetops
+```
+
+
+```bash
+GET http://localhost/.../HER0PASS.github.io/public_html/analytics/topsofthetops?since=300
+
