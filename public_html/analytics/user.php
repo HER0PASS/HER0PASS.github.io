@@ -60,8 +60,29 @@
           "created_at" => $streamer["created_at"]
       ];
 
-      echo json_encode($resultado, JSON_PRETTY_PRINT);
+      require '../bbdd/conexion.php';
+      
+    // Verificar si el usuario ya existe en la base de datos comparando con la columna idUser
+    $sql = "SELECT * FROM TwitchUsers WHERE idUser = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $streamer["id"]);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 0) {
+        // Si el usuario no existe, guardarlo en la base de datos
+        $data_json = json_encode($resultado);
+        $insert_sql = "INSERT INTO TwitchUsers (idUser, data) VALUES (?, ?)";
+        $insert_stmt = $conn->prepare($insert_sql);
+        $insert_stmt->bind_param("ss", $streamer["id"], $data_json);
+        $insert_stmt->execute();
+    }
+
+    // Cerrar la conexión
+    $conn->close();
+
+    echo json_encode($resultado, JSON_PRETTY_PRINT);
   } else {
-      echo json_encode(["error" => "Unexpected error", "status" => $http_code, "response" => json_decode($response, true)]);
+    echo json_encode(["error" => "Unexpected error", "status" => $http_code, "response" => json_decode($response, true)]);
   }
 ?>

@@ -105,6 +105,25 @@ INSERT INTO `users` (`id`, `email`, `api_key`) VALUES
 (9, 'prueba1@prueba1.com', 'fa1c94f969a98d3bf2bd1113963f6bdc'),
 (10, 'prueba2@prueba2.com', '0ce0ec097bbbbb5b97b9e4e8ccfcba4a');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `TwitchUsers`
+--
+
+CREATE TABLE `TwitchUsers` (
+  `idUser` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `data` text COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`idUser`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Volcado de datos para la tabla `TwitchUsers`
+--
+
+INSERT INTO `TwitchUsers` (`idUser`, `data`) VALUES
+('509658', '{"id": "509658", "login": "KaiCenat", "display_name": "KaiCenat", "broadcaster_type": "partner", "description": "Si lees esto que sepas que te aprecio", "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/574228be-01ef-4eab-bc0e-a4f6b68bedba-profile_image-300x300.png", "view_count": 0, "created_at": "2015-02-20T16:47:56Z"}'),
+('21779', '{"id": "21779", "login": "Riot Games", "display_name": "Riot Games", "broadcaster_type": "partner", "description": "Si lees esto que sepas que te aprecio", "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/574228be-01ef-4eab-bc0e-a4f6b68bedba-profile_image-300x300.png", "view_count": 0, "created_at": "2015-02-20T16:47:56Z"}'),
+('32399', '{"id": "32399", "login": "ESLCS", "display_name": "ESLCS", "broadcaster_type": "partner", "description": "Si lees esto que sepas que te aprecio", "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/574228be-01ef-4eab-bc0e-a4f6b68bedba-profile_image-300x300.png", "view_count": 0, "created_at": "2015-02-20T16:47:56Z"}');
 --
 -- Índices para tablas volcadas
 --
