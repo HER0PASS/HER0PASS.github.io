@@ -1,0 +1,10 @@
+{
+    "require-dev": {
+        "phpro/grumphp-shim": "^2.11"
+    },
+    "config": {
+        "allow-plugins": {
+            "phpro/grumphp-shim": true
+        }
+    }
+}
