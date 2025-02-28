@@ -1,6 +1,8 @@
 {
     "require-dev": {
-        "phpro/grumphp-shim": "^2.11"
+        "phpro/grumphp-shim": "^2.11",
+        "squizlabs/php_codesniffer": "^3.11",
+        "phpmd/phpmd": "^2.15"
     },
     "config": {
         "allow-plugins": {
