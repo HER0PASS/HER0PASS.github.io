@@ -1,5 +1,7 @@
 <?php
-function obtenerToken() {
+
+function obtenerToken()
+{
     $client_id = "ynbfszlhhuo6irowc6zuqlzu8g0f2t";
     $client_secret = "lgxp7ucxdggpaxqderwieugkxumhld";
     $grant_type = "client_credentials";
@@ -36,4 +38,3 @@ function obtenerToken() {
 
     return ["client_id" => $client_id, "access_token" => $response_data['access_token']];
 }
-?>
