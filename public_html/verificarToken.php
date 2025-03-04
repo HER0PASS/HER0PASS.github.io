@@ -1,5 +1,7 @@
 <?php
-function verificarToken($token) {
+
+function verificarToken($token)
+{
     require 'bbdd/conexion.php';
 
     try {
@@ -20,4 +22,3 @@ function verificarToken($token) {
         return false;
     }
 }
-?>

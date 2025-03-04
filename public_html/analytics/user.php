@@ -1,4 +1,5 @@
 <?php
+
 require '../api/crearToken.php';
 
 header("Access-Control-Allow-Origin: *");
@@ -40,7 +41,7 @@ if ($result->num_rows > 0) {
 }
 
 // SI EL USUARIO NO EXISTE, CONSULTAMOS LA API Y LO GUARDAMOS EN LA BDD
-else{
+else {
     $client_id = $credentials['client_id'];
     $access_token = $credentials['access_token'];
 
@@ -108,4 +109,3 @@ else{
     // Cerrar la conexión
     $conn->close();
 }
-?>
