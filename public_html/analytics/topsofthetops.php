@@ -1,55 +1,50 @@
 <?php
 
-require '../api/crearToken.php';
-include '../bbdd/conexion.php';
-require '../verificarToken.php';
+    require '../api/crearToken.php';
+    include '../bbdd/conexion.php';
+    require '../verificarToken.php';
 
-header("Access-Control-Allow-Origin: *"); // Permitir peticiones desde cualquier dominio
-header("Content-Type: application/json");
+    header("Access-Control-Allow-Origin: *");
+    header("Content-Type: application/json");
 
-// Verificar el token de autenticación
 
-$headers = apache_request_headers();
+    $headers = apache_request_headers();
 if (!isset($headers['X-Auth-Token'])) {
     http_response_code(401);
     echo json_encode(["error" => "X-Auth-Token header missing"]);
     exit;
 }
 
-$token = $headers['X-Auth-Token'];
-$user_id = verificarToken($token);
+    $token = $headers['X-Auth-Token'];
+    $user_id = verificarToken($token);
 if (!$user_id) {
     http_response_code(401);
     echo json_encode(["error" => "Invalid or expired token"]);
     exit;
 }
 
-// Obtener el parámetro 'since' de la solicitud
 if (!isset($_GET['since'])) {
     $since = 600;
 } else {
     $since = (int)$_GET['since'];
 }
 
-// Obtener el token para la petición a la API de Twitch
-$credentials = obtenerToken();
+    $credentials = obtenerToken();
 
-// Manejo de errores si no se obtuvo el token
 if (isset($credentials['error'])) {
     echo json_encode(["error" => "Failed to obtain access token for Twitch", "details" => $credentials]);
     exit;
 }
 
-$client_id = $credentials['client_id'];
-$access_token = $credentials['access_token'];
+    $client_id = $credentials['client_id'];
+    $access_token = $credentials['access_token'];
 
-// Verificar si hay datos en caché
-$query = $conn->prepare("SELECT * FROM cache WHERE endpoint = 'topsofthetops' ORDER BY timestamp DESC LIMIT 1");
-$query->execute();
-$result = $query->get_result();
-$cache = $result->fetch_assoc();
+    $query = $conn->prepare("SELECT * FROM cache WHERE endpoint = 'topsofthetops' ORDER BY timestamp DESC LIMIT 1");
+    $query->execute();
+    $result = $query->get_result();
+    $cache = $result->fetch_assoc();
 
-$use_cache = false;
+    $use_cache = false;
 if ($cache) {
     $cache_age = time() - strtotime($cache['timestamp']);
     if ($since === null && $cache_age < 600) {
@@ -60,14 +55,11 @@ if ($cache) {
 }
 
 if ($use_cache) {
-    // Devolver datos en caché
     echo $cache['data'];
 } else {
-    // Borrar todos los datos de la caché
     $query = $conn->prepare("DELETE FROM cache");
     $query->execute();
 
-    // Realizar una nueva consulta a la API de Twitch
     $api_url = "https://api.twitch.tv/helix/games/top?first=3";
     $headers = [
         "Client-ID: $client_id",
@@ -90,7 +82,6 @@ if ($use_cache) {
             exit;
         }
 
-        // Procesar y almacenar los datos en caché
         $juegos_filtrados = array_map(function ($game) {
             return [
                 "id" => $game["id"] ?? null,
@@ -135,7 +126,10 @@ if ($use_cache) {
                         }
 
                         $top_user = array_reduce(array_keys($usuarios), function ($carry, $user_name) use ($usuarios) {
-                            if (!$carry || $usuarios[$user_name]["most_viewed"]["view_count"] > $usuarios[$carry]["most_viewed"]["view_count"]) {
+                            if (
+                                !$carry || $usuarios[$user_name]["most_viewed"]["view_count"] >
+                                $usuarios[$carry]["most_viewed"]["view_count"]
+                            ) {
                                 return $user_name;
                             }
                             return $carry;
@@ -157,16 +151,13 @@ if ($use_cache) {
             }
         }
 
-        // Almacenar los datos en caché
         $cache_data = json_encode($resultados, JSON_PRETTY_PRINT);
         $query = $conn->prepare("INSERT INTO cache (endpoint, data, timestamp) VALUES ('topsofthetops', ?, NOW())");
         $query->bind_param('s', $cache_data);
         $query->execute();
 
-        // Devolver los datos
         echo $cache_data;
     } else {
-        // Manejo de errores
         if ($http_code == 401) {
             echo json_encode(["error" => "RESPONSE 401: Unauthorized. Twitch access token is invalid or has expired."]);
         } elseif ($http_code == 500) {
@@ -176,4 +167,4 @@ if ($use_cache) {
         }
     }
 }
-$conn->close();
+    $conn->close();
