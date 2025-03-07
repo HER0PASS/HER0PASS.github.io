@@ -1,22 +1,22 @@
 <?php
 
-    require '../api/crearToken.php';
-    include '../bbdd/conexion.php';
-    require '../verificarToken.php';
+require '../api/crearToken.php';
+include '../bbdd/conexion.php';
+require '../verificarToken.php';
 
-    header("Access-Control-Allow-Origin: *");
-    header("Content-Type: application/json");
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json");
 
 
-    $headers = apache_request_headers();
+$headers = apache_request_headers();
 if (!isset($headers['X-Auth-Token'])) {
     http_response_code(401);
     echo json_encode(["error" => "X-Auth-Token header missing"]);
     exit;
 }
 
-    $token = $headers['X-Auth-Token'];
-    $user_id = verificarToken($token);
+$token = $headers['X-Auth-Token'];
+$user_id = verificarToken($token);
 if (!$user_id) {
     http_response_code(401);
     echo json_encode(["error" => "Invalid or expired token"]);
@@ -28,9 +28,9 @@ if (empty($_GET['id'])) {
     exit;
 }
 
-    $credentials = obtenerToken();
+$credentials = obtenerToken();
 
-    $user_id = $_GET['id'];
+$user_id = $_GET['id'];
 
 if (isset($credentials['error'])) {
     echo json_encode(["error" => "Failed to obtain access token", "details" => $credentials]);
@@ -38,11 +38,11 @@ if (isset($credentials['error'])) {
 }
 
 
-    $sql = "SELECT * FROM twitchusers WHERE idUser = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
+$sql = "SELECT * FROM twitchusers WHERE idUser = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $user_data = $result->fetch_assoc();

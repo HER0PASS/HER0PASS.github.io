@@ -1,13 +1,14 @@
 {
     "require-dev": {
-        "phpro/grumphp-shim": "^2.11",
         "squizlabs/php_codesniffer": "^3.11",
         "phpmd/phpmd": "^2.15",
-        "friendsofphp/php-cs-fixer": "^3.70"
+        "friendsofphp/php-cs-fixer": "^3.70",
+        "php-cs-fixer/shim": "^3.9",
+        "phpro/grumphp": "^2.11"
     },
     "config": {
         "allow-plugins": {
-            "phpro/grumphp-shim": true
+            "phpro/grumphp": true
         }
     }
 }

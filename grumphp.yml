@@ -8,6 +8,7 @@ grumphp:
             max_subject_width: 100
             matchers:
                 Must follow commit format: /\[#\d+\] - .+/
+
         phpmd:
             whitelist_patterns: []
             exclude: []
@@ -32,12 +33,12 @@ grumphp:
             show_sniffs_error_path: true
             parallel: null
 
-#        phpcsfixer:
-#            allow_risky: true
-#            cache_file: ~
-#            config: 'vendor/bin/php-cs-fixer.php'
-#            using_cache: ~
-#            config_contains_finder: true
-#            verbose: true
-#            diff: true
-#            triggered_by: [ 'php' ]
+        phpcsfixer:
+            config: .php-cs-fixer.php
+            allow_risky: false
+            verbose: true
+            diff: true
+            triggered_by: [ 'php' ]
+
+
+

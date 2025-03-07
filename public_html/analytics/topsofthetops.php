@@ -1,22 +1,22 @@
 <?php
 
-    require '../api/crearToken.php';
-    include '../bbdd/conexion.php';
-    require '../verificarToken.php';
+require '../api/crearToken.php';
+include '../bbdd/conexion.php';
+require '../verificarToken.php';
 
-    header("Access-Control-Allow-Origin: *");
-    header("Content-Type: application/json");
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json");
 
 
-    $headers = apache_request_headers();
+$headers = apache_request_headers();
 if (!isset($headers['X-Auth-Token'])) {
     http_response_code(401);
     echo json_encode(["error" => "X-Auth-Token header missing"]);
     exit;
 }
 
-    $token = $headers['X-Auth-Token'];
-    $user_id = verificarToken($token);
+$token = $headers['X-Auth-Token'];
+$user_id = verificarToken($token);
 if (!$user_id) {
     http_response_code(401);
     echo json_encode(["error" => "Invalid or expired token"]);
@@ -29,22 +29,22 @@ if (!isset($_GET['since'])) {
     $since = (int)$_GET['since'];
 }
 
-    $credentials = obtenerToken();
+$credentials = obtenerToken();
 
 if (isset($credentials['error'])) {
     echo json_encode(["error" => "Failed to obtain access token for Twitch", "details" => $credentials]);
     exit;
 }
 
-    $client_id = $credentials['client_id'];
-    $access_token = $credentials['access_token'];
+$client_id = $credentials['client_id'];
+$access_token = $credentials['access_token'];
 
-    $query = $conn->prepare("SELECT * FROM cache WHERE endpoint = 'topsofthetops' ORDER BY timestamp DESC LIMIT 1");
-    $query->execute();
-    $result = $query->get_result();
-    $cache = $result->fetch_assoc();
+$query = $conn->prepare("SELECT * FROM cache WHERE endpoint = 'topsofthetops' ORDER BY timestamp DESC LIMIT 1");
+$query->execute();
+$result = $query->get_result();
+$cache = $result->fetch_assoc();
 
-    $use_cache = false;
+$use_cache = false;
 if ($cache) {
     $cache_age = time() - strtotime($cache['timestamp']);
     if ($since === null && $cache_age < 600) {
@@ -167,4 +167,4 @@ if ($use_cache) {
         }
     }
 }
-    $conn->close();
+$conn->close();
