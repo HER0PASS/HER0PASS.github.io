@@ -7,38 +7,21 @@ grumphp:
             case_insensitive: false
             max_subject_width: 100
             matchers:
-                Must follow commit format: /\[#\d+\] - .+/
+                Must follow format [#1234] - Description or [#1234][#2345] - Description: '/^(\[#[0-9]*\])?\[#[0-9]*\] - [A-Z][a-zA-Z\s]*/'
 
         phpmd:
-            whitelist_patterns: []
-            exclude: []
             report_format: text
             ruleset: ['cleancode', 'codesize', 'naming']
-            triggered_by: ['php']
+            triggered_by: [php]
 
         phpcs:
             standard: PSR12
-            severity: ~
-            error_severity: ~
-            warning_severity: ~
-            tab_width: ~
-            report: full
-            report_width: ~
-            whitelist_patterns: []
-            encoding: ~
-            ignore_patterns: []
-            sniffs: []
-            triggered_by: [php]
-            exclude: []
+            report_width: 140
+            triggered_by: [ php ]
             show_sniffs_error_path: true
-            parallel: null
 
         phpcsfixer:
             config: .php-cs-fixer.php
             allow_risky: false
             verbose: true
             diff: true
-            triggered_by: [ 'php' ]
-
-
-
