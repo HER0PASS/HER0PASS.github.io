@@ -15,8 +15,7 @@ grumphp:
             triggered_by: [php]
 
         phpcs:
-            standard: PSR12
-            report_width: 140
+            standard: ['phpcs.xml']
             triggered_by: [ php ]
             show_sniffs_error_path: true
 
