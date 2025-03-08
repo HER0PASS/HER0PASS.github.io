@@ -45,7 +45,7 @@ function handleRequest()
     header("Content-Type: application/json");
     $email = $data['email'];
     $api_key = $data['api_key'];
-    require_once 'bbdd/conexion.php';
+    require 'bbdd/conexion.php';
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$database", $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
