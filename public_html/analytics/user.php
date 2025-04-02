@@ -84,6 +84,7 @@ if ($result->num_rows > 0) {
             "broadcaster_type" => $streamer["broadcaster_type"],
             "description" => $streamer["description"],
             "profile_image_url" => $streamer["profile_image_url"],
+            "offline_image_url" => $streamer["offline_image_url"],
             "view_count" => $streamer["view_count"],
             "created_at" => $streamer["created_at"]
         ];
