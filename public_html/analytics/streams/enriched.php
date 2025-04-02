@@ -56,9 +56,11 @@ if ($http_code == 200) {
 
     $streams_filtrados = array_map(function ($stream) {
         return [
+            "stream_id" => $stream["id"],
             "user_id" => $stream["user_id"],
-            "title" => $stream["title"],
-            "espectadores" => $stream["viewer_count"]
+            "user_name" => $stream["user_login"],
+            "viewer_count" => $stream["viewer_count"],
+            "title" => $stream["title"]
         ];
     }, $data["data"]);
 
@@ -78,7 +80,7 @@ if ($http_code == 200) {
     $user_info = [];
     foreach ($user_data['data'] as $user) {
         $user_info[$user['id']] = [
-            'display_name' => $user['display_name'],
+            'user_display_name' => $user['display_name'],
             'profile_image_url' => $user['profile_image_url']
         ];
     }
@@ -97,12 +99,11 @@ if ($http_code == 200) {
     });
 
     echo json_encode($streams_enriquecidos, JSON_PRETTY_PRINT);
-} elseif ($http_code == 400) {
-    echo json_encode(["error" => "RESPONSE 400: Bad Request"]);
-} elseif ($http_code == 401) {
-    echo json_encode(["error" => "RESPONSE 401: Unauthorized. Twitch access token is invalid or has expired."]);
-} elseif ($http_code == 500) {
-    echo json_encode(["error" => "RESPONSE 500: Internal Server Error"]);
 } else {
-    echo json_encode(["error" => "Unexpected error", "status" => $http_code]);
+    $errors = [
+        400 => "Bad Request",
+        401 => "Unauthorized. Twitch access token is invalid or has expired.",
+        500 => "Internal Server Error"
+    ];
+    echo json_encode(["error" => "RESPONSE $http_code: " . ($errors[$http_code] ?? "Unexpected error")]);
 }
