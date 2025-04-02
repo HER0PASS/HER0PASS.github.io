@@ -57,9 +57,8 @@ if ($http_code == 200) {
 
     $streams_filtrados = array_map(function ($stream) {
         return [
-            "nombre" => $stream["user_name"],
-            "title" => $stream["title"],
-            "espectadores" => $stream["viewer_count"]
+            "title" => $stream["title"],ç
+            "user_name" => $stream["user_name"],
         ];
     }, $data["data"]);
 
