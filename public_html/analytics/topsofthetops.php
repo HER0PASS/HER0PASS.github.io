@@ -158,13 +158,13 @@ if ($use_cache) {
 
         echo $cache_data;
     } elseif ($http_code == 401) {
-        http_response_code(401);
+        http_response_code($http_code);
         echo json_encode(["error" => "RESPONSE 401: Unauthorized. Twitch access token is invalid or has expired."]);
     } elseif ($http_code == 500) {
-        http_response_code(500);
+        http_response_code($http_code);
         echo json_encode(["error" => "RESPONSE 500: Internal Server Error"]);
     } else {
-        http_response_code(500);
+        http_response_code($http_code);
         echo json_encode(["error" => "Unexpected error", "status" => $http_code]);
     }
 

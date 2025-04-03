@@ -109,14 +109,15 @@ if ($http_code == 200) {
 
     echo json_encode($streams_enriquecidos, JSON_PRETTY_PRINT);
 } elseif ($http_code == 400) {
-    http_response_code(400);
+    http_response_code($http_code);
     echo json_encode(["error" => "Invalid or missing 'limmit' parameter."]);
 } elseif ($http_code == 401) {
-    http_response_code(401);
+    http_response_code($http_code);
     echo json_encode(["error" => "Unauthorized. Twitch access token is invalid or has expired."]);
 } elseif ($http_code == 500) {
-    http_response_code(500);
+    http_response_code($http_code);
     echo json_encode(["error" => "Internal Server Error"]);
 } else {
+    http_response_code($http_code);
     echo json_encode(["error" => "Unexpected error", "status" => $http_code]);
 }
