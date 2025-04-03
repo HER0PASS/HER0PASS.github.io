@@ -25,6 +25,7 @@ if (!$user_id) {
 }
 
 if (empty($_GET['id'])) {
+    http_response_code(400);
     echo json_encode(["error" => "Invalid or missing 'id' parameter."]);
     exit;
 }
@@ -98,12 +99,16 @@ if ($result->num_rows > 0) {
 
         echo json_encode($resultado, JSON_PRETTY_PRINT);
     } elseif ($http_code == 400) {
+        http_response_code(400);
         echo json_encode(["error" => "RESPONSE 400: Invalid or missing 'id' parameter."]);
     } elseif ($http_code == 401) {
+        http_response_code(401);
         echo json_encode(["error" => "RESPONSE 401: Unauthorized. Twitch access token is invalid or has expired."]);
     } elseif ($http_code == 404) {
+        http_response_code(404);
         echo json_encode(["error" => "RESPONSE 404: User not found."]);
     } elseif ($http_code == 500) {
+        http_response_code(500);
         echo json_encode(["error" => "RESPONSE 500: Internal Server Error"]);
     } else {
         echo json_encode(["error" => "Unexpected error", "status" => $http_code]);

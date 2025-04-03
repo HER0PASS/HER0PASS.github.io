@@ -23,8 +23,6 @@ $api_key = bin2hex(random_bytes(16));
 // Conectarse a bbdd
 require_once 'bbdd/conexion.php';
 
-
-
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$database", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

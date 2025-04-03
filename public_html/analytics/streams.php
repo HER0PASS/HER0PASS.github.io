@@ -26,6 +26,7 @@ if (!$user_id) {
 $credentials = obtenerToken();
 
 if (isset($credentials['error'])) {
+    http_response_code(401);
     echo json_encode(["error" => "Failed to obtain access token", "details" => $credentials]);
     exit;
 }
@@ -65,8 +66,10 @@ if ($http_code == 200) {
 
     echo json_encode($streams_filtrados, JSON_PRETTY_PRINT);
 } elseif ($http_code == 401) {
+    http_response_code(401);
     echo json_encode(["error" => "RESPONSE 401: Unauthorized. Twitch access token is invalid or has expired."]);
 } elseif ($http_code == 500) {
+    http_response_code(500);
     echo json_encode(["error" => "RESPONSE 500: Internal Server Error"]);
 } else {
     echo json_encode(["error" => "Unexpected error", "status" => $http_code]);
