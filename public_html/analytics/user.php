@@ -74,6 +74,7 @@ if ($result->num_rows > 0) {
     if ($http_code == 200) {
         $data = json_decode($response, true);
         if (!isset($data["data"][0])) {
+            http_response_code(404);
             echo json_encode(["error" => "User not found."]);
             exit;
         }
