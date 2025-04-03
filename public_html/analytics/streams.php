@@ -8,13 +8,14 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
 $headers = apache_request_headers();
-if (!isset($headers['X-Auth-Token'])) {
+if (!isset($headers['Authorization']) || !preg_match('/Bearer\s(\S+)/',
+        $headers['Authorization'], $matches)) {
     http_response_code(401);
-    echo json_encode(["error" => "X-Auth-Token header missing"]);
+    echo json_encode(["error" => "Authorization header missing or invalid"]);
     exit;
 }
 
-$token = $headers['X-Auth-Token'];
+$token = $matches[1];
 $user_id = verificarToken($token);
 if (!$user_id) {
     http_response_code(401);
@@ -57,7 +58,7 @@ if ($http_code == 200) {
 
     $streams_filtrados = array_map(function ($stream) {
         return [
-            "title" => $stream["title"],ç
+            "title" => $stream["title"],
             "user_name" => $stream["user_name"],
         ];
     }, $data["data"]);
