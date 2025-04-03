@@ -101,16 +101,16 @@ if ($http_code == 200) {
     $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
     usort($streams_enriquecidos, function ($a, $b) use ($order) {
         if ($order == 'asc') {
-            return $a['espectadores'] <=> $b['espectadores'];
+            return $a['viewer_count'] <=> $b['viewer_count'];
         } else {
-            return $b['espectadores'] <=> $a['espectadores'];
+            return $b['viewer_count'] <=> $a['viewer_count'];
         }
     });
 
     echo json_encode($streams_enriquecidos, JSON_PRETTY_PRINT);
 } elseif ($http_code == 400) {
     http_response_code($http_code);
-    echo json_encode(["error" => "Invalid or missing 'limmit' parameter."]);
+    echo json_encode(["error" => "Invalid or missing 'limit' parameter."]);
 } elseif ($http_code == 401) {
     http_response_code($http_code);
     echo json_encode(["error" => "Unauthorized. Twitch access token is invalid or has expired."]);
