@@ -11,7 +11,7 @@ $headers = apache_request_headers();
 if (!isset($headers['Authorization']) || !preg_match('/Bearer\s(\S+)/',
         $headers['Authorization'], $matches)) {
     http_response_code(401);
-    echo json_encode(["error" => "Authorization header missing or invalid"]);
+    echo json_encode(["error" => "Unauthorized. Twitch access token is invalid or has expired."]);
     exit;
 }
 
@@ -19,7 +19,7 @@ $token = $matches[1];
 $user_id = verificarToken($token);
 if (!$user_id) {
     http_response_code(401);
-    echo json_encode(["error" => "Invalid or expired token"]);
+    echo json_encode(["error" => "Unauthorized. Twitch access token is invalid or has expired."]);
     exit;
 }
 
