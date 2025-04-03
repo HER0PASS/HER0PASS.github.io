@@ -26,9 +26,17 @@ if (!$user_id) {
 $credentials = obtenerToken();
 
 if (isset($credentials['error'])) {
+    http_response_code(401);
     echo json_encode(["error" => "Failed to obtain access token", "details" => $credentials]);
     exit;
 }
+
+if (!isset($_GET['limit']) || !is_numeric($_GET['limit']) || $_GET['limit'] <= 0) {
+    http_response_code(400);
+    echo json_encode(["error" => "Invalid or missing 'limit' parameter."]);
+    exit;
+}
+
 $limit = $_GET['limit'];
 $client_id = $credentials['client_id'];
 $access_token = $credentials['access_token'];
@@ -100,11 +108,16 @@ if ($http_code == 200) {
     });
 
     echo json_encode($streams_enriquecidos, JSON_PRETTY_PRINT);
+} elseif ($http_code == 400) {
+    http_response_code($http_code);
+    echo json_encode(["error" => "Invalid or missing 'limmit' parameter."]);
+} elseif ($http_code == 401) {
+    http_response_code($http_code);
+    echo json_encode(["error" => "Unauthorized. Twitch access token is invalid or has expired."]);
+} elseif ($http_code == 500) {
+    http_response_code($http_code);
+    echo json_encode(["error" => "Internal Server Error"]);
 } else {
-    $errors = [
-        400 => "Bad Request",
-        401 => "Unauthorized. Twitch access token is invalid or has expired.",
-        500 => "Internal Server Error"
-    ];
-    echo json_encode(["error" => "RESPONSE $http_code: " . ($errors[$http_code] ?? "Unexpected error")]);
+    http_response_code($http_code);
+    echo json_encode(["error" => "Unexpected error", "status" => $http_code]);
 }
