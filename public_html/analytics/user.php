@@ -83,6 +83,7 @@ if ($result->num_rows > 0) {
             "id" => $streamer["id"],
             "login" => $streamer["login"],
             "display_name" => $streamer["display_name"],
+            "type" => $streamer["type"],
             "broadcaster_type" => $streamer["broadcaster_type"],
             "description" => $streamer["description"],
             "profile_image_url" => $streamer["profile_image_url"],
