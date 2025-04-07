@@ -11,7 +11,7 @@ $headers = apache_request_headers();
 if (!isset($headers['Authorization']) || !preg_match('/Bearer\s(\S+)/',
         $headers['Authorization'], $matches)) {
     http_response_code(401);
-    echo json_encode(["error" => "Authorization header missing or invalid"]);
+    echo json_encode(["error" => "Unauthorized. Token is invalid or expired."]);
     exit;
 }
 
@@ -19,7 +19,7 @@ $token = $matches[1];
 $user_id = verificarToken($token);
 if (!$user_id) {
     http_response_code(401);
-    echo json_encode(["error" => "Invalid or expired token"]);
+    echo json_encode(["error" => "Unauthorized. API access token is invalid."]);
     exit;
 }
 
@@ -159,10 +159,10 @@ if ($use_cache) {
         echo $cache_data;
     } elseif ($http_code == 401) {
         http_response_code($http_code);
-        echo json_encode(["error" => "RESPONSE 401: Unauthorized. Twitch access token is invalid or has expired."]);
+        echo json_encode(["error" => "Unauthorized. API access token is invalid."]);
     } elseif ($http_code == 500) {
         http_response_code($http_code);
-        echo json_encode(["error" => "RESPONSE 500: Internal Server Error"]);
+        echo json_encode(["error" => "Internal Server Error"]);
     } else {
         http_response_code($http_code);
         echo json_encode(["error" => "Unexpected error", "status" => $http_code]);
