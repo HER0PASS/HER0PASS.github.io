@@ -23,7 +23,6 @@ if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-
 $email = $data['email'];
 $api_key = bin2hex(random_bytes(16));
 
