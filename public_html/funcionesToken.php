@@ -29,7 +29,14 @@ function handleRequest()
     }
 
     $data = json_decode(file_get_contents('php://input'), true);
-    if (!isset($data['email']) || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+
+    if (!isset($data['email']) || empty($data['email'])) {
+        http_response_code(400);
+        echo json_encode(["error" => "The email is mandatory"]);
+        exit;
+    }
+
+    if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
         http_response_code(400);
         echo json_encode(["error" => "The email must be a valid email address"]);
         exit;
@@ -58,7 +65,7 @@ function handleRequest()
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$user) {
             http_response_code(401);
-            echo json_encode(["error" => "Invalid email or api_key"]);
+            echo json_encode(["error" => "Unauthorized. API access token is invalid."]);
             exit;
         }
 
@@ -75,7 +82,7 @@ function handleRequest()
         echo json_encode(["token" => $token]);
     } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(["error" => "Database error: " . $e->getMessage()]);
+        echo json_encode(["error" => "Internal server error"]);
         exit;
     }
 
