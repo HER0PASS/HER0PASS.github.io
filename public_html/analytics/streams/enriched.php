@@ -39,7 +39,7 @@ if (isset($credentials['error'])) {
 
 if (!isset($_GET['limit']) || !is_numeric($_GET['limit']) || $_GET['limit'] <= 0) {
     http_response_code(400);
-    echo json_encode(["error" => "Invalid or missing 'limit' parameter."]);
+    echo json_encode(["error" => "Invalid 'limit' parameter."]);
     exit;
 }
 
@@ -116,7 +116,7 @@ if ($http_code == 200) {
     echo json_encode($streams_enriquecidos, JSON_PRETTY_PRINT);
 } elseif ($http_code == 400) {
     http_response_code($http_code);
-    echo json_encode(["error" => "Invalid or 'limit' parameter."]);
+    echo json_encode(["error" => "Invalid 'limit' parameter."]);
 } elseif ($http_code == 401) {
     http_response_code($http_code);
     echo json_encode(["error" => "Unauthorized. Twitch access token is invalid or has expired."]);
