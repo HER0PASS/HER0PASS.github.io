@@ -20,6 +20,51 @@ function verificarToken($token)
     }
 }
 
+function gestionarTokenUsuario($user_id)
+{
+    require 'bbdd/conexion.php';
+    try {
+        $pdo = new PDO("mysql:host=$host;dbname=$database", $user, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $session_stmt = $pdo->prepare("SELECT token, expires_at FROM sessions WHERE user_id = :user_id");
+        $session_stmt->bindParam(':user_id', $user_id);
+        $session_stmt->execute();
+        $session = $session_stmt->fetch(PDO::FETCH_ASSOC);
+
+        $now = date('Y-m-d H:i:s');
+        if ($session) {
+            if ($session['expires_at'] > $now) {
+                return $session['token'];
+            } else {
+                $token = bin2hex(random_bytes(16));
+                $expiration = date('Y-m-d H:i:s', time() + (3 * 24 * 60 * 60));
+
+                $update_stmt = $pdo->prepare("UPDATE sessions SET token = :token, expires_at = :expires_at WHERE user_id = :user_id");
+                $update_stmt->bindParam(':token', $token);
+                $update_stmt->bindParam(':expires_at', $expiration);
+                $update_stmt->bindParam(':user_id', $user_id);
+                $update_stmt->execute();
+
+                return $token;
+            }
+        } else {
+            $token = bin2hex(random_bytes(16));
+            $expiration = date('Y-m-d H:i:s', time() + (3 * 24 * 60 * 60));
+
+            $insert_stmt = $pdo->prepare("INSERT INTO sessions (user_id, token, expires_at) VALUES (:user_id, :token, :expires_at)");
+            $insert_stmt->bindParam(':user_id', $user_id);
+            $insert_stmt->bindParam(':token', $token);
+            $insert_stmt->bindParam(':expires_at', $expiration);
+            $insert_stmt->execute();
+
+            return $token;
+        }
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
 function handleRequest()
 {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -69,17 +114,13 @@ function handleRequest()
             exit;
         }
 
-        $token = bin2hex(random_bytes(16));
-        $expiration = date('Y-m-d H:i:s', time() + (3 * 24 * 60 * 60));
-
-        $save_stmt = $pdo->prepare(
-            "INSERT INTO sessions (user_id, token, expires_at) VALUES (:user_id, :token, :expires_at)"
-        );
-        $save_stmt->bindParam(':user_id', $user['id']);
-        $save_stmt->bindParam(':token', $token);
-        $save_stmt->bindParam(':expires_at', $expiration);
-        $save_stmt->execute();
-        echo json_encode(["token" => $token]);
+        $token = gestionarTokenUsuario($user['id']);
+        if ($token) {
+            echo json_encode(["token" => $token]);
+        } else {
+            http_response_code(500);
+            echo json_encode(["error" => "Internal server error"]);
+        }
     } catch (PDOException $e) {
         http_response_code(500);
         echo json_encode(["error" => "Internal server error"]);
