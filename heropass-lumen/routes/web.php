@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 /*
@@ -13,6 +16,29 @@
 |
 */
 
+/*
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+*/
+
+$router->get('/', function () {
+    return 'Lumen funcionando 🎉';
+});
+
+$router->get('/hello', function () {
+    return response()->json(['message' => 'Hola desde Lumen']);
+});
+
+$router->get('/register', 'Controller@register');
+
+$router->get('/token', 'Controller@token');
+
+$router->get('/analytics/topsofthetops', 'Controller@topsofthetops');
+
+$router->get('/analytics/user', 'Controller@user');
+
+$router->get('/analytics/streams', 'Controller@streams');
+
+$router->get('/analytics/streams/enriched', 'Controller@streamsEnriched');
