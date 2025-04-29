@@ -1,0 +1,34 @@
+FROM php:8.1-fpm
+
+# Instala dependencias del sistema
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    libonig-dev \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    vim unzip git curl
+
+# Instala extensiones de PHP necesarias
+RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
+
+# Instala Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Establece directorio de trabajo
+WORKDIR /var/www
+
+# Copia archivos
+COPY . .
+
+# Instala dependencias
+RUN composer install --no-dev --optimize-autoloader
+
+# Da permisos adecuados
+RUN chown -R www-data:www-data /var/www
+
+EXPOSE 9000
+CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
