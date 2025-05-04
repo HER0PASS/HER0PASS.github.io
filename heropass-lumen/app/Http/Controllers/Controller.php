@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
@@ -38,5 +38,4 @@ class Controller extends BaseController
         $limit = $request->input('limit');
         return 'Este es el endpoint de streams enriquecidos para el limit ' . $limit . ' desde el controlador';
     }
-
 }
