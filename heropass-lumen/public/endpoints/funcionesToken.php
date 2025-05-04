@@ -2,7 +2,7 @@
 
 function verificarToken($token)
 {
-    require 'bbdd/conexion.php';
+    require __DIR__ . '/bbdd/conexion.php';
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$database", $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -22,7 +22,7 @@ function verificarToken($token)
 
 function gestionarTokenUsuario($user_id)
 {
-    require 'bbdd/conexion.php';
+    require __DIR__ . '/bbdd/conexion.php';
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$database", $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -97,7 +97,7 @@ function handleRequest()
     header("Content-Type: application/json");
     $email = $data['email'];
     $api_key = $data['api_key'];
-    require 'bbdd/conexion.php';
+    require __DIR__ . '/bbdd/conexion.php';
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$database", $user, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

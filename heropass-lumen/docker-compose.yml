@@ -12,7 +12,7 @@ services:
     volumes:
       - .:/var/www
     ports:
-      - "8000:9000"
+      - "8000:8000"
     depends_on:
       - mysql
 
@@ -26,9 +26,10 @@ services:
       MYSQL_USER: lumen
       MYSQL_PASSWORD: lumen
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
+      - ./docker/mysql-init:/docker-entrypoint-initdb.d
 
 volumes:
   db_data:

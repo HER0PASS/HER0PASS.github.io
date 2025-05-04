@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 # Instala dependencias del sistema
 RUN apt-get update && apt-get install -y \
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     vim unzip git curl
 
 # Instala extensiones de PHP necesarias
-RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install mysqli pdo pdo_mysql mbstring exif pcntl bcmath gd
 
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -23,6 +23,9 @@ WORKDIR /var/www
 
 # Copia archivos
 COPY . .
+
+# Copia .env si no existe
+RUN sh -c '[ -f .env ] || cp .env.example .env'
 
 # Instala dependencias
 RUN composer install --no-dev --optimize-autoloader

@@ -1,8 +1,8 @@
 <?php
 
-require '../api/crearToken.php';
-include '../bbdd/conexion.php';
-require '../verificarToken.php';
+require __DIR__ . '/../api/crearToken.php';
+include __DIR__ . '/../bbdd/conexion.php';
+require __DIR__ . '/../verificarToken.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
@@ -49,7 +49,7 @@ if (isset($credentials['error'])) {
     exit;
 }
 
-$sql = "SELECT * FROM twitchusers WHERE idUser = ?";
+$sql = "SELECT * FROM TwitchUsers WHERE idUser = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $user_id);
 $stmt->execute();
@@ -103,7 +103,7 @@ if ($result->num_rows > 0) {
         ];
 
         $data_json = json_encode($resultado);
-        $insert_sql = "INSERT INTO twitchusers (idUser, data) VALUES (?, ?)";
+        $insert_sql = "INSERT INTO TwitchUsers (idUser, data) VALUES (?, ?)";
         $insert_stmt = $conn->prepare($insert_sql);
         $insert_stmt->bind_param("ss", $streamer["id"], $data_json);
         $insert_stmt->execute();

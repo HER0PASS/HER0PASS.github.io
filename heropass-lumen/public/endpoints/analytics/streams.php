@@ -1,8 +1,8 @@
 <?php
 
-require '../api/crearToken.php';
-include '../bbdd/conexion.php';
-require '../verificarToken.php';
+require __DIR__ . '/../api/crearToken.php';
+include __DIR__ . '/../bbdd/conexion.php';
+require __DIR__ . '/../verificarToken.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");

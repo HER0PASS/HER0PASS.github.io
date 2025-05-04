@@ -2,7 +2,7 @@
 
 function verificarToken($token)
 {
-    require 'bbdd/conexion.php';
+    require __DIR__ . '/bbdd/conexion.php';
 
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$database", $user, $password);

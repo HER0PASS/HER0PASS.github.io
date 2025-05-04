@@ -31,14 +31,26 @@ $router->get('/hello', function () {
     return response()->json(['message' => 'Hola desde Lumen']);
 });
 
-$router->get('/register', 'Controller@register');
+$router->post('/register', function () {
+    require __DIR__ . '/../public/endpoints/register.php';
+});
 
-$router->get('/token', 'Controller@token');
+$router->post('/token', function () {
+    require __DIR__ . '/../public/endpoints/token.php';
+});
 
-$router->get('/analytics/topsofthetops', 'Controller@topsofthetops');
+$router->get('/analytics/topsofthetops', function () {
+    require __DIR__ . '/../public/endpoints/analytics/topsofthetops.php';
+});
 
-$router->get('/analytics/user', 'Controller@user');
+$router->get('/analytics/user', function () {
+    require __DIR__ . '/../public/endpoints/analytics/user.php';
+});
 
-$router->get('/analytics/streams', 'Controller@streams');
+$router->get('/analytics/streams', function () {
+    require __DIR__ . '/../public/endpoints/analytics/streams.php';
+});
 
-$router->get('/analytics/streams/enriched', 'Controller@streamsEnriched');
+$router->get('/analytics/streams/enriched', function () {
+    require __DIR__ . '/../public/endpoints/analytics/streams/enriched.php';
+});
