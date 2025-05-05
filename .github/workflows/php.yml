@@ -1,4 +1,4 @@
-name: PHP Composer
+name: Code Quality
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  quality-check:
+  code-quality:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,18 +17,18 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.2'
           extensions: mbstring, xml
           tools: composer, phpmd, phpcs, php-cs-fixer
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer install --prefer-dist --no-progress
 
       - name: Run PHPMD
-        run: phpmd src text cleancode,codesize,naming
+        run: vendor/bin/phpmd src text cleancode,codesize,naming
 
       - name: Run PHPCS
-        run: phpcs --standard=phpcs.xml src
+        run: vendor/bin/phpcs --standard=phpcs.xml
 
-      - name: Run PHP CS Fixer (dry-run)
-        run: php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --diff
+      - name: Run PHP-CS-Fixer
+        run: vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --diff
