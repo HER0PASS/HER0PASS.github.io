@@ -7,4 +7,5 @@
             <property name="absoluteLineLimit" value="0"/>
         </properties>
     </rule>
+    <exclude-pattern>*/public_html/assets/*</exclude-pattern>
 </ruleset>
