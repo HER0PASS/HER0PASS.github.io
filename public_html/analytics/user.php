@@ -14,8 +14,13 @@ set_error_handler(function ($errno, $errstr, $errfile, $errline) {
 });
 
 $headers = apache_request_headers();
-if (!isset($headers['Authorization']) || !preg_match('/Bearer\s(\S+)/',
-        $headers['Authorization'], $matches)) {
+if (
+    !isset($headers['Authorization']) || !preg_match(
+        '/Bearer\s(\S+)/',
+        $headers['Authorization'],
+        $matches
+    )
+) {
     http_response_code(401);
     echo json_encode(["error" => "Unauthorized. Twitch access token is invalid or has expired."]);
     exit;

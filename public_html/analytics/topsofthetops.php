@@ -8,8 +8,13 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
 $headers = apache_request_headers();
-if (!isset($headers['Authorization']) || !preg_match('/Bearer\s(\S+)/',
-        $headers['Authorization'], $matches)) {
+if (
+    !isset($headers['Authorization']) || !preg_match(
+        '/Bearer\s(\S+)/',
+        $headers['Authorization'],
+        $matches
+    )
+) {
     http_response_code(401);
     echo json_encode(["error" => "Unauthorized. Token is invalid or expired."]);
     exit;
@@ -167,6 +172,5 @@ if ($use_cache) {
         http_response_code($http_code);
         echo json_encode(["error" => "Unexpected error", "status" => $http_code]);
     }
-
 }
 $conn->close();
