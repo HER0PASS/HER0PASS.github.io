@@ -1,9 +1,11 @@
 {
+    "name": "her0pass/twitch-analytics",
+    "description": "Herramienta de análisis de datos de Twitch para proyectos internos",
+    "license": "proprietary",
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.11",
         "phpmd/phpmd": "^2.15",
         "friendsofphp/php-cs-fixer": "^3.70",
-        "php-cs-fixer/shim": "^3.9",
         "phpro/grumphp": "^2.11"
     },
     "config": {
