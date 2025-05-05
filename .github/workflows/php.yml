@@ -34,5 +34,4 @@ jobs:
         run: phpcs --standard=phpcs.xml .
 
       - name: Run PHP-CS-Fixer
-        run: |
-          ./vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run
+        run: php-cs-fixer fix --config=.php-cs-fixer.php
