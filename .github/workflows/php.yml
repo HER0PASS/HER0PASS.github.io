@@ -29,5 +29,11 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
+      - name: Install GrumPHP
+        run: composer require --dev phpro/grumphp
+
+      - name: Configure GrumPHP
+        run: vendor/bin/grumphp configure
+
       - name: Run GrumPHP
         run: vendor/bin/grumphp run
