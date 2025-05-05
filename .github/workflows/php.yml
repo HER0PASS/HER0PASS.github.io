@@ -8,7 +8,6 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -21,21 +20,20 @@ jobs:
         run: composer validate --strict
 
       - name: Cache Composer packages
-        id: composer-cache
         uses: actions/cache@v3
         with:
-          path: vendor
+          path: |
+            ~/.composer/cache
+            vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+        run: composer install --prefer-dist --no-progress --no-scripts
 
-      - name: Fetch the GIT diff
-        id: fetch-diff
-        run: |
-          DIFF=$(git -c diff.mnemonicprefix=false -c diff.noprefix=false --no-pager diff -r -p -m -M --full-index --no-color --staged | cat)
-          export GRUMPHP_GIT_WORKING_DIR="$(git rev-parse --show-toplevel)"
-          (cd "./" && printf "%s\n" "${DIFF}" | exec vendor/bin/grumphp.bat git:pre-commit '--skip-success-output')
-        shell: bash
+      - name: Run PHP CS Fixer
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
+      - name: Run GrumPHP
+        run: vendor/bin/grumphp run --no-interaction
