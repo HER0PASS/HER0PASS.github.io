@@ -28,11 +28,10 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-suggest
 
       - name: Run PHPMD
-        run: phpmd src text cleancode,codesize,naming
+        run: phpmd . text cleancode,codesize,naming
 
       - name: Run PHPCS
-        run: phpcs --standard=phpcs.xml src
+        run: phpcs --standard=phpcs.xml .
 
       - name: Run PHP CS Fixer (dry-run)
         run: php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --diff
-
