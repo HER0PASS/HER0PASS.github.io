@@ -1,42 +1,32 @@
-name: PHP Composer
+name: PR'S VALIDATION
 
 on:
   pull_request:
-
-permissions:
-  contents: read
+    branches:
+      - main
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Descargar Código
+        uses: actions/checkout@v2
 
-      - name: Composer update
-        run: composer update --no-progress
-
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
-
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v3
+      - name: Instalar PHP
+        uses: shivammathur/setup-php@v2
         with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
+          php-version: '8.1'
+          extensions: zip
 
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+      - name: Instalar Composer
+        run: |
+          composer install
 
-      - name: Install GrumPHP
-        run: composer require --dev phpro/grumphp
-
-      - name: Configure GrumPHP
-        run: vendor/bin/grumphp configure
-
-      - name: Run GrumPHP
-        run: vendor/bin/grumphp run --no-interaction
+      - name: Fetch the GIT diff
+        id: fetch-diff
+        run: |
+          DIFF=$(git -c diff.mnemonicprefix=false -c diff.noprefix=false --no-pager diff -r -p -m -M --full-index --no-color --staged | cat)
+          export GRUMPHP_GIT_WORKING_DIR="$(git rev-parse --show-toplevel)"
+          (cd "./" && printf "%s\n" "${DIFF}" | exec vendor/bin/grumphp.bat git:pre-commit '--skip-success-output')
+        shell: bash
