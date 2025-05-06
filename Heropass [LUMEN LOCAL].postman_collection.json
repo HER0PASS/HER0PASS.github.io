@@ -1,0 +1,1129 @@
+{
+	"info": {
+		"_postman_id": "6796c29f-4123-4250-8a42-0ef8db02c639",
+		"name": "Heropass [LUMEN LOCAL]",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44664310"
+	},
+	"item": [
+		{
+			"name": "POST /register",
+			"item": [
+				{
+					"name": "200 - Get api_key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains api_key\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(json).to.have.property(\"api_key\");\r",
+									"    pm.expect(json.api_key).to.be.a(\"string\");\r",
+									"    pm.collectionVariables.set(\"api_key\", json.api_key);\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.request.body.raw = JSON.stringify({\r",
+									"    email: pm.collectionVariables.get(\"testEmail\")\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 -  Invalid email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 for invalid email\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message is for invalid email\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.error).to.equal(\"The email must be a valid email address\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.request.body.raw = JSON.stringify({\r",
+									"    email: pm.collectionVariables.get(\"testBadEmail\")\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 - Missing email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 for missing email\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message is for missing email\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.error).to.equal(\"The email is mandatory\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST /token",
+			"item": [
+				{
+					"name": "200 - Get token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains token\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(json).to.have.property(\"token\");\r",
+									"    pm.expect(json.token).to.be.a(\"string\");\r",
+									"    pm.collectionVariables.set(\"token\", json.token);\r",
+									"\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.request.body.raw = JSON.stringify({\r",
+									"    email: pm.collectionVariables.get(\"testEmail\"),\r",
+									"    api_key: pm.collectionVariables.get(\"api_key\")\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/token",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 - Invalid email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 for invalid email\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message is for invalid email\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.error).to.equal(\"The email must be a valid email address\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.request.body.raw = JSON.stringify({\r",
+									"    email: pm.collectionVariables.get(\"testBadEmail\")\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/token",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 - Missing email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 for missing email\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message is for missing email\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.error).to.equal(\"The email is mandatory\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/token",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 - Missing api_key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 for missing api_key\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message is for missing api_key\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.error).to.equal(\"The api_key is mandatory\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"iaznarez@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/token",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 - Invalid api_key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 for invalid api_key\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message is for invalid api_key\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.error).to.equal(\"Unauthorized. API access token is invalid.\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.request.body.raw = JSON.stringify({\r",
+									"    email: pm.collectionVariables.get(\"testEmail\") ,\r",
+									"    api_key: pm.collectionVariables.get(\"testBadApiKey\")\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"iaznarez@gmail.com\",\r\n    \"api_key\": \"badapi_key\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/token",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET /analytics/topsofthetops",
+			"item": [
+				{
+					"name": "200 - Get topsofthetops",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has all required fields\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    const expectedFields = [\r",
+									"        \"game_id\", \"game_name\", \"user_name\", \"total_videos\", \"total_views\", \"most_viewed_title\", \"most_viewed_views\", \"most_viewed_duration\", \"most_viewed_created_at\"\r",
+									"    ];\r",
+									"\r",
+									"    json.forEach(top => {\r",
+									"        expectedFields.forEach(field => {\r",
+									"            pm.expect(top).to.have.property(field);\r",
+									"        });\r",
+									"    });\r",
+									"\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//pm.request.auth."
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/analytics/topsofthetops",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"topsofthetops"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 -  Invalid token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 for invalid or expired token\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message is for invalid or expired token\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.error).to.equal(\"Unauthorized. Token is invalid or expired.\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/analytics/topsofthetops",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"topsofthetops"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET /analytics/user",
+			"item": [
+				{
+					"name": "200 - Get valid user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has all required user fields\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    const expectedFields = [\r",
+									"        \"id\", \"login\", \"display_name\", \"type\", \"broadcaster_type\", \"description\", \"profile_image_url\", \"offline_image_url\", \"view_count\", \"created_at\"\r",
+									"    ];\r",
+									"\r",
+									"    expectedFields.forEach(field => {\r",
+									"        pm.expect(json).to.have.property(field);\r",
+									"    });\r",
+									"\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/analytics/user?id=22",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"user"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "22"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 - Missing id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 for missing or invalid id\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message is for missing or invalid id\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.error).to.equal(\"Invalid or missing 'id' parameter.\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/analytics/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 - Invalid token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 for invalid or expired token\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message is for invalid or expired token\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.error).to.equal(\"Unauthorized. Twitch access token is invalid or has expired.\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/analytics/user?id=22",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"user"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "22"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404 - User not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 for user not found\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message is for user not found\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.error).to.equal(\"User not found.\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/analytics/user?id=999999",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"user"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "999999"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "GET /analytics/streams",
+			"item": [
+				{
+					"name": "200 - Get streams",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has all required stream fields\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    const expectedFields = [\r",
+									"        \"title\", \"user_name\"\r",
+									"    ];\r",
+									"\r",
+									"    json.forEach(stream => {\r",
+									"        expectedFields.forEach(field => {\r",
+									"            pm.expect(stream).to.have.property(field);\r",
+									"        });\r",
+									"    });\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/analytics/streams",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"streams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 - Invalid token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 for invalid or expired token\", function () {\r",
+									"\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message is for invalid or expired token\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.error).to.equal(\"Unauthorized. Twitch access token is invalid or has expired.\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/analytics/streams",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"streams"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET /analytics/streams/enriched",
+			"item": [
+				{
+					"name": "200 - Valid limit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has all required enriched fields\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    const expectedFields = [\r",
+									"        \"stream_id\", \"user_id\", \"user_name\", \"viewer_count\", \"title\", \"user_display_name\", \"profile_image_url\"\r",
+									"    ];\r",
+									"\r",
+									"    json.forEach(stream => {\r",
+									"        expectedFields.forEach(field => {\r",
+									"            pm.expect(stream).to.have.property(field);\r",
+									"        });\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains at most the number of elements defined by 'limit'\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"\r",
+									"    const limit = parseInt(pm.request.url.query.find(q => q.key === \"limit\").value);\r",
+									"\r",
+									"    pm.expect(json.length).to.be.at.most(limit);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/analytics/streams/enriched?limit=3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"streams",
+								"enriched"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "400 - Invalid limit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 for invalid 'limit' parameter\", function () {\r",
+									"\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message is for invalid or 'limit' parameter\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.error).to.equal(\"Invalid 'limit' parameter.\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/analytics/streams/enriched?limit=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"streams",
+								"enriched"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "401 - Invalid token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 for invalid or expired token\", function () {\r",
+									"\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message is for invalid or expired token\", function () {\r",
+									"    const json = pm.response.json();\r",
+									"    pm.expect(json.error).to.equal(\"Unauthorized. Twitch access token is invalid or has expired.\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/analytics/streams/enriched?limit=3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"analytics",
+								"streams",
+								"enriched"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "api_key",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "testEmail",
+			"value": "heropass@gmail.com",
+			"type": "string"
+		},
+		{
+			"key": "testBadEmail",
+			"value": "badEmail",
+			"type": "string"
+		},
+		{
+			"key": "testBadApiKey",
+			"value": "1234",
+			"type": "string"
+		}
+	]
+}
