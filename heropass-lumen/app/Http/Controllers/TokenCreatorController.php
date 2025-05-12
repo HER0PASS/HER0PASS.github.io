@@ -28,7 +28,12 @@ class TokenCreatorController
             $email = $this->validator->validateEmail($request->input('email'));
             $apiKey = $this->validator->validateApiKey($request->input('api_key'));
 
-            return new JsonResponse(['email' => $email, 'api_key' => $apiKey], 200);
+            return new JsonResponse(
+                [
+                    'email' => $email,
+                    'api_key' => $apiKey],
+                200
+            );/*Aqui vamos a implementar en la siguiente integracion la llamada al service*/
         } catch (EmptyEmailException | InvalidEmailAddressException | EmptyApiKeyException | InvalidApiKeyException $e) {
             return new JsonResponse([
                 'error' =>  $e->getMessage(),

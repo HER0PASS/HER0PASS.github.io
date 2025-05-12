@@ -69,4 +69,22 @@ class TokenCreatorControllerTest extends TestCase
             'error' => 'Invalid API key format',
         ]);
     }
+
+    /** Test */
+    public function testGets200AndReturnJsonFormatWhenApiKeyAndEmailGivenIsValid(): void
+    {
+        $response = $this->call(
+            'POST',
+            '/token',
+            [
+                'email' => 'test@example.com',
+                'api_key' => 'correctApiKeyFormat'
+            ]
+        );
+        $response->assertStatus(200);
+        $response->assertJson([
+            'email' => 'test@example.com',
+            'api_key' => 'correctApiKeyFormat'
+        ]);
+    }
 }
