@@ -3,14 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\EmptyEmailException;
+use App\Exceptions\InvalidEmailAddressException;
 
 class GetApiKeyByEmailValidator
 {
     public function validate(?string $email): string
     {
-        if (!isset($email)) {
-            throw new EmptyEmailException('Invalid parameter, email is required');
+        if (empty($email)) {
+            throw new EmptyEmailException();
         }
-        return $email;
+        $sanitizedEmail = filter_var($email, FILTER_SANITIZE_EMAIL);
+        if(!filter_var($sanitizedEmail, FILTER_VALIDATE_EMAIL)){
+            throw new InvalidEmailAddressException();
+        }
+        return $sanitizedEmail;
     }
 }
