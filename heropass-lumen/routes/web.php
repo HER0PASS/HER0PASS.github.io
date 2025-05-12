@@ -31,9 +31,7 @@ $router->get('/hello', function () {
     return response()->json(['message' => 'Hola desde Lumen']);
 });
 
-$router->post('/register', function () {
-    require __DIR__ . '/../public/endpoints/register.php';
-});
+$router->post('/register', 'GetApiKeyByEmailController@getApiKeyData');
 
 $router->post('/token', function () {
     require __DIR__ . '/../public/endpoints/token.php';
