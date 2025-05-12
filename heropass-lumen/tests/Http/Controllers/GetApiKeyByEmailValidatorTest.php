@@ -10,7 +10,8 @@ use PHPUnit\Framework\TestCase;
 class GetApiKeyByEmailValidatorTest extends TestCase
 {
     /** Test */
-    public function testValidateGivenNoEmailThrowsException(): void{
+    public function testValidateGivenNoEmailThrowsException(): void
+    {
         $validator = new GetApiKeyByEmailValidator();
 
         $this->expectException(EmptyEmailException::class);
@@ -27,7 +28,6 @@ class GetApiKeyByEmailValidatorTest extends TestCase
         $this->expectExceptionMessage('The email given must be a valid address');
 
         $validator->validate('testNotValid');
-
     }
 
     public function testGivenNotSanitazedMailReturnsSanitazedEmail(): void
@@ -35,6 +35,5 @@ class GetApiKeyByEmailValidatorTest extends TestCase
         $validator = new GetApiKeyByEmailValidator();
         $response = $validator->validate('(notSanitazed@mail.com)');
         $this->assertEquals('notSanitazed@mail.com', $response);
-
     }
 }

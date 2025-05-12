@@ -6,10 +6,10 @@ use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidEmailAddressException;
 use App\Services\GetApiKeyService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Js;
 use Laravel\Lumen\Routing\Controller as BaseController;
-use Illuminate\Http\Request;
 use PharIo\Manifest\InvalidEmailException;
 
 class GetApiKeyByEmailController extends BaseController
@@ -20,7 +20,7 @@ class GetApiKeyByEmailController extends BaseController
     public function __construct(
         GetApiKeyByEmailValidator $validator,
         GetApiKeyService $service,
-    ){
+    ) {
         $this->validator = $validator;
         $this->service = $service;
     }
@@ -30,8 +30,6 @@ class GetApiKeyByEmailController extends BaseController
             $email = $this->validator->validate($request->input('email'));
 
             return new JsonResponse(['email' => $email], 200);/*Ahora hariamos el service*/
-
-
         } catch (EmptyEmailException | InvalidEmailAddressException $e) {
             return new JsonResponse([
                 'error' =>  $e->getMessage(),

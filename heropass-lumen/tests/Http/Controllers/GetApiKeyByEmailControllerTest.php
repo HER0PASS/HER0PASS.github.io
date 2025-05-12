@@ -2,15 +2,13 @@
 
 namespace Tests\Http\Controllers;
 
+use App\Exceptions\InvalidEmailAddressException;
 use App\Http\Controllers\GetApiKeyByEmailController;
 use Illuminate\Http\JsonResponse;
-use App\Exceptions\InvalidEmailAddressException;
-
 use Tests\TestCase;
 
 class GetApiKeyByEmailControllerTest extends TestCase
 {
-
     /**
      * @test
      */
@@ -19,7 +17,8 @@ class GetApiKeyByEmailControllerTest extends TestCase
         $response = $this->call(
             'POST',
             '/register',
-            []);
+            []
+        );
         $response->assertStatus(400);
         $response->assertJson([
             'error' => 'Invalid parameter, email is required',
@@ -35,7 +34,8 @@ class GetApiKeyByEmailControllerTest extends TestCase
             '/register',
             [
                 'email' => 'notValidMail.com',
-            ]);
+            ]
+        );
         $response->assertStatus(400);
         $response->assertJson([
             'error' => 'The email given must be a valid address',
@@ -51,7 +51,8 @@ class GetApiKeyByEmailControllerTest extends TestCase
             '/register',
             [
                 'email' => '(notSanitazed@mail.com)',
-            ]);
+            ]
+        );
         $response->assertStatus(200);
         $response->assertJson([
             'email' => 'notSanitazed@mail.com',

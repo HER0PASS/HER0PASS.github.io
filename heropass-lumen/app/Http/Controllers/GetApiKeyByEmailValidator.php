@@ -13,7 +13,7 @@ class GetApiKeyByEmailValidator
             throw new EmptyEmailException();
         }
         $sanitizedEmail = filter_var($email, FILTER_SANITIZE_EMAIL);
-        if(!filter_var($sanitizedEmail, FILTER_VALIDATE_EMAIL)){
+        if (!filter_var($sanitizedEmail, FILTER_VALIDATE_EMAIL)) {
             throw new InvalidEmailAddressException();
         }
         return $sanitizedEmail;
