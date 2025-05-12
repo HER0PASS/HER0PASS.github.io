@@ -33,9 +33,7 @@ $router->get('/hello', function () {
 
 $router->post('/register', 'GetApiKeyByEmailController@getApiKeyData');
 
-$router->post('/token', function () {
-    require __DIR__ . '/../public/endpoints/token.php';
-});
+$router->post('/token', 'TokenCreatorController@CreateToken');
 
 $router->get('/analytics/topsofthetops', function () {
     require __DIR__ . '/../public/endpoints/analytics/topsofthetops.php';
