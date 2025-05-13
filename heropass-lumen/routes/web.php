@@ -35,6 +35,10 @@ $router->post('/register', function () {
     require __DIR__ . '/../public/endpoints/register.php';
 });
 
+$router->post('/token', function () {
+    require __DIR__ . '/../public/endpoints/token.php';
+});
+
 $router->post('/registerRefactor', 'RegisterController@getApiKeyData');
 
 $router->post('/tokenRefactor', 'TokenController@CreateToken');
