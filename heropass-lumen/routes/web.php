@@ -37,6 +37,10 @@ $router->post('/token', function () {
     require __DIR__ . '/../public/endpoints/token.php';
 });
 
+$router->post('/registerRefactor', 'RegisterController@getApiKeyData');
+
+$router->post('/tokenRefactor', 'TokenController@CreateToken');
+
 $router->get('/analytics/topsofthetops', function () {
     require __DIR__ . '/../public/endpoints/analytics/topsofthetops.php';
 });
