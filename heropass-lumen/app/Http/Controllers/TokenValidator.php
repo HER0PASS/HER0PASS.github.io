@@ -8,7 +8,7 @@ use App\Exceptions\InvalidApiKeyException;
 use App\Exceptions\InvalidEmailAddressException;
 use Illuminate\Http\JsonResponse;
 
-class TokenCreatorValidator
+class TokenValidator
 {
     public function validateEmail(?string $email): string
     {

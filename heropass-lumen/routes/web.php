@@ -31,9 +31,13 @@ $router->get('/hello', function () {
     return response()->json(['message' => 'Hola desde Lumen']);
 });
 
-$router->post('/register', 'GetApiKeyByEmailController@getApiKeyData');
+$router->post('/register', function () {
+    require __DIR__ . '/../public/endpoints/register.php';
+});
 
-$router->post('/token', 'TokenCreatorController@CreateToken');
+$router->post('/registerRefactor', 'RegisterController@getApiKeyData');
+
+$router->post('/tokenRefactor', 'TokenController@CreateToken');
 
 $router->get('/analytics/topsofthetops', function () {
     require __DIR__ . '/../public/endpoints/analytics/topsofthetops.php';

@@ -10,13 +10,13 @@ use App\Services\GetApiKeyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class TokenCreatorController
+class TokenController
 {
-    private TokenCreatorValidator $validator;
+    private TokenValidator $validator;
     private GetApiKeyService $service;
 
     public function __construct(
-        TokenCreatorValidator $validator,
+        TokenValidator   $validator,
         GetApiKeyService $service,
     ) {
         $this->validator = $validator;

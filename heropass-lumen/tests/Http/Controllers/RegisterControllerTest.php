@@ -3,11 +3,11 @@
 namespace Tests\Http\Controllers;
 
 use App\Exceptions\InvalidEmailAddressException;
-use App\Http\Controllers\GetApiKeyByEmailController;
+use App\Http\Controllers\RegisterController;
 use Illuminate\Http\JsonResponse;
 use Tests\TestCase;
 
-class GetApiKeyByEmailControllerTest extends TestCase
+class RegisterControllerTest extends TestCase
 {
     /**
      * @test
@@ -16,7 +16,7 @@ class GetApiKeyByEmailControllerTest extends TestCase
     {
         $response = $this->call(
             'POST',
-            '/register',
+            '/registerRefactor',
             []
         );
         $response->assertStatus(400);
@@ -31,7 +31,7 @@ class GetApiKeyByEmailControllerTest extends TestCase
     {
         $response = $this->call(
             'POST',
-            '/register',
+            '/registerRefactor',
             [
                 'email' => 'notValidMail.com',
             ]
@@ -48,7 +48,7 @@ class GetApiKeyByEmailControllerTest extends TestCase
     {
         $response = $this->call(
             'POST',
-            '/register',
+            '/registerRefactor',
             [
                 'email' => '(notSanitazed@mail.com)',
             ]

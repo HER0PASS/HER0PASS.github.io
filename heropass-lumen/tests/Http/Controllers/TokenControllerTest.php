@@ -4,14 +4,14 @@ namespace Tests\Http\Controllers;
 
 use Tests\TestCase;
 
-class TokenCreatorControllerTest extends TestCase
+class TokenControllerTest extends TestCase
 {
     /** Test */
     public function testGets400WhenEmailIsMissing(): void
     {
         $response = $this->call(
             'POST',
-            '/token',
+            '/tokenRefactor',
             [
                 'api_key' => 'validApiKey',
             ]
@@ -27,7 +27,7 @@ class TokenCreatorControllerTest extends TestCase
     {
         $response = $this->call(
             'POST',
-            '/token',
+            '/tokenRefactor',
             [
                 'email' => 'invalidEmail'
             ]
@@ -43,7 +43,7 @@ class TokenCreatorControllerTest extends TestCase
     {
         $response = $this->call(
             'POST',
-            '/token',
+            '/tokenRefactor',
             [
                 'email' => 'test@example.com'
             ]
@@ -58,7 +58,7 @@ class TokenCreatorControllerTest extends TestCase
     {
         $response = $this->call(
             'POST',
-            '/token',
+            '/tokenRefactor',
             [
                 'email' => 'test@example.com',
                 'api_key' => '__invalid|ApiKey__'
@@ -75,7 +75,7 @@ class TokenCreatorControllerTest extends TestCase
     {
         $response = $this->call(
             'POST',
-            '/token',
+            '/tokenRefactor',
             [
                 'email' => 'test@example.com',
                 'api_key' => 'correctApiKeyFormat'

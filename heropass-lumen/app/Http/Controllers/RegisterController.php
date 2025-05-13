@@ -12,14 +12,14 @@ use Illuminate\Support\Js;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use PharIo\Manifest\InvalidEmailException;
 
-class GetApiKeyByEmailController extends BaseController
+class RegisterController extends BaseController
 {
-    private GetApiKeyByEmailValidator $validator;
+    private RegisterValidator $validator;
     private GetApiKeyService $service;
 
     public function __construct(
-        GetApiKeyByEmailValidator $validator,
-        GetApiKeyService $service,
+        RegisterValidator $validator,
+        GetApiKeyService  $service,
     ) {
         $this->validator = $validator;
         $this->service = $service;

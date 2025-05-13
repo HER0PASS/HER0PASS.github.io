@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidEmailAddressException;
 
-class GetApiKeyByEmailValidator
+class RegisterValidator
 {
     public function validate(?string $email): string
     {
