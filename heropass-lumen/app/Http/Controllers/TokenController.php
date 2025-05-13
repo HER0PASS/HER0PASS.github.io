@@ -13,14 +13,10 @@ use Illuminate\Http\Request;
 class TokenController
 {
     private TokenValidator $validator;
-    private GetApiKeyService $service;
-
     public function __construct(
-        TokenValidator   $validator,
-        GetApiKeyService $service,
+        TokenValidator $validator,
     ) {
         $this->validator = $validator;
-        $this->service = $service;
     }
     public function createToken(Request $request): JsonResponse
     {

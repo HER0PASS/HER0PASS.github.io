@@ -15,14 +15,11 @@ use PharIo\Manifest\InvalidEmailException;
 class RegisterController extends BaseController
 {
     private RegisterValidator $validator;
-    private GetApiKeyService $service;
 
     public function __construct(
         RegisterValidator $validator,
-        GetApiKeyService  $service,
     ) {
         $this->validator = $validator;
-        $this->service = $service;
     }
     public function getApiKeyData(Request $request): JsonResponse
     {
