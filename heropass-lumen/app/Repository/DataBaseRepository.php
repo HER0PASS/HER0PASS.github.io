@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Config\Config;
 use PDO;
 use PDOException;
 
@@ -23,6 +22,21 @@ class DataBaseRepository
             return '';
         }
         return json_encode($user);
+    }
+    public function checkUserExistence($email, $api_key): ?string
+    {
+        $this->getConnection();
+
+        $stmt = $this->db->prepare("SELECT id FROM users WHERE email = :email AND api_key = :api_key");
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':api_key', $api_key);
+        $stmt->execute();
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$user) {
+            return null;
+        }
+        return $user['id'];
     }
     public function updateApiKey(string $email, string $api_key): void
     {

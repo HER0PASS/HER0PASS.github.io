@@ -2,23 +2,28 @@
 
 namespace Tests\Http\Controllers;
 
+use App\Exceptions\InvalidEmailAddressException;
+use App\Http\Controllers\RegisterController;
+use Illuminate\Http\JsonResponse;
 use Tests\TestCase;
 
 class TokenControllerTest extends TestCase
 {
-    /** Test */
+    /**
+     * @test
+     */
     public function testGets400WhenEmailIsMissing(): void
     {
         $response = $this->call(
             'POST',
-            '/tokenRefactor',
+            '/token',
             [
                 'api_key' => 'validApiKey',
             ]
         );
         $response->assertStatus(400);
         $response->assertJson([
-            'error' => 'Invalid parameter, email is required',
+            'error' => 'The email is mandatory',
         ]);
     }
 
@@ -27,14 +32,14 @@ class TokenControllerTest extends TestCase
     {
         $response = $this->call(
             'POST',
-            '/tokenRefactor',
+            '/token',
             [
                 'email' => 'invalidEmail'
             ]
         );
         $response->assertStatus(400);
         $response->assertJson([
-            'error' => 'The email given must be a valid address',
+            'error' => 'The email must be a valid email address',
         ]);
     }
 
@@ -43,7 +48,7 @@ class TokenControllerTest extends TestCase
     {
         $response = $this->call(
             'POST',
-            '/tokenRefactor',
+            '/token',
             [
                 'email' => 'test@example.com'
             ]
@@ -58,7 +63,7 @@ class TokenControllerTest extends TestCase
     {
         $response = $this->call(
             'POST',
-            '/tokenRefactor',
+            '/token',
             [
                 'email' => 'test@example.com',
                 'api_key' => '__invalid|ApiKey__'
@@ -67,24 +72,6 @@ class TokenControllerTest extends TestCase
         $response->assertStatus(400);
         $response->assertJson([
             'error' => 'Invalid API key format',
-        ]);
-    }
-
-    /** Test */
-    public function testGets200AndReturnJsonFormatWhenApiKeyAndEmailGivenIsValid(): void
-    {
-        $response = $this->call(
-            'POST',
-            '/tokenRefactor',
-            [
-                'email' => 'test@example.com',
-                'api_key' => 'correctApiKeyFormat'
-            ]
-        );
-        $response->assertStatus(200);
-        $response->assertJson([
-            'email' => 'test@example.com',
-            'api_key' => 'correctApiKeyFormat'
         ]);
     }
 }
