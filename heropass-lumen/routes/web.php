@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Controller;
+use App\Repository\DataBaseRepository;
 use Illuminate\Http\Request;
 
 /** @var \Laravel\Lumen\Routing\Router $router */
@@ -31,7 +32,7 @@ $router->get('/hello', function () {
     return response()->json(['message' => 'Hola desde Lumen']);
 });
 
-$router->post('/register', 'GetApiKeyByEmailController@getApiKeyData');
+$router->post('/register', 'RegisterController@getApiKeyData');
 
 $router->post('/token', function () {
     require __DIR__ . '/../public/endpoints/token.php';

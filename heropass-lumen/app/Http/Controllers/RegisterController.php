@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidEmailAddressException;
-use App\Services\GetApiKeyService;
+use App\Services\RegisterService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,18 +15,20 @@ use PharIo\Manifest\InvalidEmailException;
 class RegisterController extends BaseController
 {
     private RegisterValidator $validator;
+    private RegisterService $service;
 
     public function __construct(
         RegisterValidator $validator,
+        RegisterService $service,
     ) {
         $this->validator = $validator;
+        $this->service = $service;
     }
     public function getApiKeyData(Request $request): JsonResponse
     {
         try {
             $email = $this->validator->validate($request->input('email'));
-
-            return new JsonResponse(['email' => $email], 200);/*Ahora hariamos el service*/
+            return $this->service->registerUser($email);
         } catch (EmptyEmailException | InvalidEmailAddressException $e) {
             return new JsonResponse([
                 'error' =>  $e->getMessage(),

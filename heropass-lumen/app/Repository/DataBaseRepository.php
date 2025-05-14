@@ -40,7 +40,6 @@ class DataBaseRepository
         $stmt->execute();
     }
 
-
     public function connect(): ?PDO
     {
         $host     = env('DB_HOST');
