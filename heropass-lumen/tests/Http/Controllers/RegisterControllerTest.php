@@ -21,7 +21,7 @@ class RegisterControllerTest extends TestCase
         );
         $response->assertStatus(400);
         $response->assertJson([
-            'error' => 'Invalid parameter, email is required',
+            'error' => 'The email is mandatory',
         ]);
     }
     /**
@@ -38,13 +38,13 @@ class RegisterControllerTest extends TestCase
         );
         $response->assertStatus(400);
         $response->assertJson([
-            'error' => 'The email given must be a valid address',
+            'error' => 'The email must be a valid email address',
         ]);
     }
     /**
      * @test
      */
-    public function testGivenRequestWithNotSanitazedEmailReturnsSanitazedEmail(): void
+    public function testGivenRequestWithNotSanitazedEmailReturnsApiKey(): void
     {
         $response = $this->call(
             'POST',
@@ -53,9 +53,8 @@ class RegisterControllerTest extends TestCase
                 'email' => '(notSanitazed@mail.com)',
             ]
         );
-        $response->assertStatus(200);
-        $response->assertJson([
-            'email' => 'notSanitazed@mail.com',
+        $response->assertJsonStructure([
+            'api_key',
         ]);
     }
 }

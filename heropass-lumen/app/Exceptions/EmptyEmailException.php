@@ -6,6 +6,6 @@ class EmptyEmailException extends \RuntimeException
 {
     public function __construct()
     {
-        parent::__construct('Invalid parameter, email is required');
+        parent::__construct('The email is mandatory');
     }
 }
