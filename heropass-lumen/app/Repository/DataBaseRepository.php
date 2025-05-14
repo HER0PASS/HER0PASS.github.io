@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Config\Config;
 use PDO;
 use PDOException;
 
