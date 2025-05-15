@@ -1,168 +1,130 @@
 <?php
 
-namespace Tests\Http\Middleware;
+namespace App\Repository;
 
-use App\Http\Middleware\TokenManager;
-use App\Repository\DataBaseRepository;
-use Tests\TestCase;
+use PDO;
+use PDOException;
 
-class TokenManagerTest extends TestCase
+class DataBaseRepository
 {
-    public function setUp(): void
+    private ?PDO $db = null;
+
+    public function getUserByEmail($email): string
     {
-        parent::setUp();
-        date_default_timezone_set('Europe/Madrid');
-        $this->databaseTestRepository = new DataBaseRepository();
-        // Esto hará que $db esté listo
+        $this->getConnection();
+
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$user) {
+            return '';
+        }
+        return json_encode($user);
     }
-    /** Test */
-    public function testGets200AndTokenWhenValidApiKeyAndEmailAreGiven2(): void
+    public function checkUserExistence($email, $api_key): ?string
     {
-        $email = 'notSanitazed@mail.com';
-        $apiKey = 'a39f4e4a9fd2329b9d190e18e67e58c7';
-        $expectedUserId = '12';
+        $this->getConnection();
 
-        // Creamos un mock del repositorio
-        $mockRepository = $this->createMock(DataBaseRepository::class);
+        $stmt = $this->db->prepare("SELECT id FROM users WHERE email = :email AND api_key = :api_key");
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':api_key', $api_key);
+        $stmt->execute();
 
-        // Definimos el comportamiento esperado
-        $mockRepository->expects($this->once())
-            ->method('checkUserExistence')
-            ->with($email, $apiKey)
-            ->willReturn($expectedUserId);
-
-        // Creamos TokenManager con el mock
-        $tokenManager = new TokenManager($mockRepository);
-
-        // Act
-        $actualUserId = $tokenManager->checkUser($email, $apiKey);
-
-        // Assert
-        $this->assertEquals($expectedUserId, $actualUserId);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$user) {
+            return null;
+        }
+        return $user['id'];
     }
-    public function testGetsExpiredDateAndTokenWhenGivingAUserId(): void
+    public function updateApiKey(string $email, string $api_key): void
     {
-        $userId = '2';
-        $token = 'ab7ecdeaa06336505d1781576c805f47';
-        $expectedExpiredDate = '2025-02-16 16:20:49';
+        $this->getConnection();
+        $stmt = $this->db->prepare("UPDATE users SET api_key = :api_key WHERE email = :email");
 
-        $mockRepository = $this->createMock(DataBaseRepository::class);
-
-        $mockRepository->expects($this->once())
-            ->method('getTokenFromDataBase')
-            ->with($userId)
-            ->willReturn($token);
-
-        $mockRepository->expects($this->once())
-            ->method('getExpireDate')
-            ->with($token)
-            ->willReturn($expectedExpiredDate);
-
-        $tokenManager = new TokenManager($mockRepository);
-
-        // Act: obtenemos el JsonResponse
-        $response = $tokenManager->getToken($userId);
-
-        // Extraemos los datos como array asociativo
-        $data = $response->getData(true);
-
-        // Assert
-        $this->assertEquals($token, $data['token']);
-        $this->assertEquals($expectedExpiredDate, $data['expires_at']);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':api_key', $api_key);
+        $stmt->execute();
     }
-
-    public function testUpdatesDatabaseWhenGivingExpiredToken(): void
+    public function registerEmailAndApiKey(string $email, string $api_key): void
     {
-        $userId = '2';
-        $token = 'ab7ecdeaa06336505d1781576c805f47';
-        $expectedExpiredDate = '2025-02-16 16:20:49';
-
-        $mockRepository = $this->createMock(DataBaseRepository::class);
-
-        $mockRepository->expects($this->once())
-            ->method('getTokenFromDataBase')
-            ->with($userId)
-            ->willReturn($token);
-
-        $mockRepository->expects($this->once())
-            ->method('getExpireDate')
-            ->with($token)
-            ->willReturn($expectedExpiredDate);
-
-        $tokenManager = new TokenManager($mockRepository);
-
-        // Act: obtenemos el JsonResponse
-        $response = $tokenManager->getToken($userId);
-
-        // Extraemos los datos como array asociativo
-        $data = $response->getData(true);
-
-        // Assert
-        $this->assertEquals($token, $data['token']);
-        $this->assertEquals($expectedExpiredDate, $data['expires_at']);
+        $this->getConnection();
+        $stmt = $this->db->prepare("INSERT INTO users (email, api_key) VALUES (:email, :api_key)");
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':api_key', $api_key);
+        $stmt->execute();
     }
-    public function testRegisterTokenCalledWhenNoTokenExists(): void
+    public function getExpireDate($token): ?string
     {
-        $userId = '15';
-        $token = bin2hex(random_bytes(16));
-        $expires_at = date('Y-m-d H:i:s', time() + (3 * 24 * 60 * 60));
-        $mockRepo = $this->createMock(DataBaseRepository::class);
+        $this->getConnection();
+        $stmt = $this->db->prepare("SELECT expires_at FROM sessions WHERE token LIKE :token");
+        $stmt->bindParam(':token', $token);
+        $stmt->execute();
 
-        // getTokenFromDatabase debe devolver null
-        $mockRepo->expects($this->once())
-            ->method('getTokenFromDatabase')
-            ->with($userId)
-            ->willReturn(null);
-        // Se espera que se llame a registerTokenInDatabase
-        $mockRepo->expects($this->once())
-            ->method('registerTokenInDatabase')
-            ->with($token, $expires_at, $userId);
-
-        // No debe llamarse a updateTokenInDatabase
-        $mockRepo->expects($this->never())
-            ->method('updateTokenInDatabase');
-
-        $tokenManager = new \App\Http\Middleware\TokenManager($mockRepo);
-        $tokenManager->updateToken($token, $expires_at, $userId);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? $row['expires_at'] : null;
     }
-    public function testWithNullTokenIsCreatedAndInserted()
+    public function getTokenFromDatabase($userId): ?string
     {
-        $userId = '15';
-        $token = bin2hex(random_bytes(16));
-        $expires_at = date('Y-m-d H:i:s', time() + (3 * 24 * 60 * 60));
+        $this->getConnection();
+        $stmt = $this->db->prepare("SELECT token FROM sessions WHERE user_id LIKE :user_id");
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->execute();
 
-        // Llamamos a la función que debe insertar el token
-        $this->databaseTestRepository->registerTokenInDatabase($token, $expires_at, $userId);
-
-        // Ahora verificamos que el token existe en la base de datos
-        $stmt = $this->databaseTestRepository->connect()->prepare("SELECT * FROM sessions WHERE user_id = :user_id AND token = :token");
-        $stmt->execute(['user_id' => $userId, 'token' => $token]);
-        $result = $stmt->fetch();
-
-        $this->assertNotFalse($result, 'El token debería estar registrado en la base de datos');
-        $this->assertEquals($expires_at, $result['expires_at']);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? $row['token'] : null;
     }
-    public function testWithExpiredTokenIsCreatedAndUpdated()
+    public function registerTokenInDatabase($token, $expires_at, $userId): void
     {
-        $userId = '4';
-        $token = '41d2562ddc215251d5c6dfd86c44d16a';
-        $expires_at = date('Y-m-d H:i:s', time() + (3 * 24 * 60 * 60));
+        $this->getConnection();
+        $stmt = $this->db->prepare("INSERT INTO sessions (user_id, token, expires_at) VALUES (:user_id, :token, :expires_at)");
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->bindParam(':token', $token);
+        $stmt->bindParam(':expires_at', $expires_at);
+        $stmt->execute();
+    }
+    public function updateTokenInDatabase($token, $expires_at, $userId): void
+    {
+        $this->getConnection();
+        $stmt = $this->db->prepare("UPDATE sessions SET token = :token, expires_at = :expires_at WHERE user_id = :user_id");
 
-        // ⬇️ Mostramos lo que vamos a insertar
-        echo "Insertando expires_at: $expires_at\n";
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->bindParam(':token', $token);
+        $stmt->bindParam(':expires_at', $expires_at);
+        $stmt->execute();
+    }
+    public function connect(): ?PDO
+    {
+        $host     = env('DB_HOST');
+        $port     = env('DB_PORT');
+        $dbname   = env('DB_DATABASE');
+        $user     = env('DB_USERNAME');
+        $password = env('DB_PASSWORD');
 
-        // Insertamos
-        $this->databaseTestRepository->updateTokenInDatabase($token, $expires_at, $userId);
+        $dsn = "mysql:host=$host;port=$port;dbname=$dbname";
 
-        // Consultamos lo insertado
-        $stmt = $this->databaseTestRepository->connect()->prepare("SELECT * FROM sessions WHERE user_id = :user_id AND token = :token");
-        $stmt->execute(['user_id' => $userId, 'token' => $token]);
-        $result = $stmt->fetch();
+        try {
+            $pdo = new PDO($dsn, $user, $password);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // ⬇️ Mostramos lo que se guardó
-        echo "Fecha guardada en BBDD: {$result['expires_at']}\n";
+            return $pdo;
+        } catch (\PDOException $e) {
+            // Error de conexión
+            error_log('Connection failed: ' . $e->getMessage());
+            return null;
+        }
+    }
+    private function getConnection(): ?PDO
+    {
+        if ($this->db === null) {
+            $this->db = $this->connect();
+        }
 
-        $this->assertNotFalse($result, 'El token debería estar registrado en la base de datos');
-        $this->assertEquals($expires_at, $result['expires_at']);
+        if ($this->db === null) {
+            throw new \Exception('No se pudo establecer la conexión con la base de datos.');
+        }
+
+        return $this->db;
     }
 }
