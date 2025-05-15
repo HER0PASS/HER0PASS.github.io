@@ -53,6 +53,22 @@ class DataBaseRepository
         $stmt->bindParam(':api_key', $api_key);
         $stmt->execute();
     }
+    public function getExpireDate($token): ?string
+    {
+        $stmt = $this->db->prepare("SELECT expires_at FROM sessions WHERE token LIKE :tken");
+        $stmt->bindParam(':token', $token);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function getTokenFromDatabase($userId): ?string
+    {
+        $stmt = $this->db->prepare("SELECT token FROM sessions WHERE user_id LIKE :user_id");
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
     public function connect(): ?PDO
     {
