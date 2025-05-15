@@ -21,10 +21,6 @@ class TokenManager
     {
         return $this->dataBaseRepository->checkUserExistence($email, $api_key);
     }
-    public function expiredToken($userId): bool
-    {
-        return $this->dataBaseRepository->checkExpiredToken($userId);
-    }
     public function getToken($userId): JsonResponse
     {
         $token =  $this->dataBaseRepository->getTokenFromDataBase($userId);
@@ -35,6 +31,7 @@ class TokenManager
     {
         $token = bin2hex(random_bytes(16));
         $expires_at = date('Y-m-d H:i:s', time() + (3 * 24 * 60 * 60));
+
         return new JsonResponse(['token' => $token, 'expires_at' => $expires_at]);
     }
     public function updateToken($token, $expires_at, $userId): void

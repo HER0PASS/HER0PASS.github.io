@@ -19,15 +19,22 @@ class TokenService
     public function createToken($email, $api_key): JsonResponse
     {
         $userId = $this->tokenManager->checkUser($email, $api_key);
+
         $response = $this->tokenManager->getToken($userId);
+
         $data = json_decode($response->getContent(), true);
+
         $token = $data['token'] ?? null;
         $expires_at = $data['expires_at'] ?? null;
+
         if ($token === null | $expires_at < time()) {
             $response = $this->tokenManager->generateToken();
+
             $data = json_decode($response->getContent(), true);
+
             $token = $data['token'] ?? null;
             $expires_at = $data['expires_at'] ?? null;
+
             $this->tokenManager->updateToken($token, $expires_at, $userId);
         }
 
