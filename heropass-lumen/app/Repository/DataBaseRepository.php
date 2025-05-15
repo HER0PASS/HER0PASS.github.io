@@ -23,6 +23,7 @@ class DataBaseRepository
         }
         return json_encode($user);
     }
+  
     public function checkUserExistence($email, $api_key): ?string
     {
         $this->getConnection();
@@ -49,12 +50,15 @@ class DataBaseRepository
     }
     public function registerEmailAndApiKey(string $email, string $api_key): void
     {
+
         $this->getConnection();
+      
         $stmt = $this->db->prepare("INSERT INTO users (email, api_key) VALUES (:email, :api_key)");
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':api_key', $api_key);
         $stmt->execute();
     }
+
     public function getExpireDate($token): ?string
     {
         $this->getConnection();
@@ -94,6 +98,7 @@ class DataBaseRepository
         $stmt->bindParam(':expires_at', $expires_at);
         $stmt->execute();
     }
+
     public function connect(): ?PDO
     {
         $host     = env('DB_HOST');
