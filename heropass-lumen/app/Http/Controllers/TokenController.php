@@ -35,10 +35,14 @@ class TokenController
             $apiKey = $this->validator->validateApiKey($request->input('api_key'));
 
             return $this->service->createToken($email, $apiKey);
-        } catch (EmptyEmailException | InvalidEmailAddressException | EmptyApiKeyException | InvalidApiKeyException $e) {
+        } catch (EmptyEmailException | EmptyApiKeyException | InvalidEmailAddressException $e) {
             return new JsonResponse([
                 'error' =>  $e->getMessage(),
             ], 400);
+        } catch (InvalidApiKeyException $e) {
+            return new JsonResponse([
+                'error' =>  $e->getMessage(),
+            ], 401);
         }
     }
 }

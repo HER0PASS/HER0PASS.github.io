@@ -40,6 +40,7 @@ class DataBaseRepository
     }
     public function updateApiKey(string $email, string $api_key): void
     {
+        $this->getConnection();
         $stmt = $this->db->prepare("UPDATE users SET api_key = :api_key WHERE email = :email");
 
         $stmt->bindParam(':email', $email);
@@ -48,6 +49,7 @@ class DataBaseRepository
     }
     public function registerEmailAndApiKey(string $email, string $api_key): void
     {
+        $this->getConnection();
         $stmt = $this->db->prepare("INSERT INTO users (email, api_key) VALUES (:email, :api_key)");
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':api_key', $api_key);
@@ -55,21 +57,43 @@ class DataBaseRepository
     }
     public function getExpireDate($token): ?string
     {
-        $stmt = $this->db->prepare("SELECT expires_at FROM sessions WHERE token LIKE :tken");
+        $this->getConnection();
+        $stmt = $this->db->prepare("SELECT expires_at FROM sessions WHERE token LIKE :token");
         $stmt->bindParam(':token', $token);
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? $row['expires_at'] : null;
     }
     public function getTokenFromDatabase($userId): ?string
     {
+        $this->getConnection();
         $stmt = $this->db->prepare("SELECT token FROM sessions WHERE user_id LIKE :user_id");
         $stmt->bindParam(':user_id', $userId);
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? $row['token'] : null;
     }
+    public function registerTokenInDatabase($token, $expires_at, $userId): void
+    {
+        $this->getConnection();
+        $stmt = $this->db->prepare("INSERT INTO sessions (user_id, token, expires_at) VALUES (:user_id, :token, :expires_at)");
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->bindParam(':token', $token);
+        $stmt->bindParam(':expires_at', $expires_at);
+        $stmt->execute();
+    }
+    public function updateTokenInDatabase($token, $expires_at, $userId): void
+    {
+        $this->getConnection();
+        $stmt = $this->db->prepare("UPDATE sessions SET token = :token, expires_at = :expires_at WHERE user_id = :user_id");
 
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->bindParam(':token', $token);
+        $stmt->bindParam(':expires_at', $expires_at);
+        $stmt->execute();
+    }
     public function connect(): ?PDO
     {
         $host     = env('DB_HOST');

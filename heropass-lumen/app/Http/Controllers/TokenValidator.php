@@ -27,7 +27,8 @@ class TokenValidator
         if (empty($apiKey)) {
             throw new EmptyApiKeyException();
         }
-        if (!preg_match('/^[a-zA-Z0-9]+$/', $apiKey)) {
+        $apiKeyLength = strlen($apiKey);
+        if (!preg_match('/^[a-zA-Z0-9]+$/', $apiKey) | $apiKeyLength != 32) {
             throw new InvalidApiKeyException();
         }
         return $apiKey;

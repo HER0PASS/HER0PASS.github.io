@@ -37,4 +37,12 @@ class TokenManager
         $expires_at = date('Y-m-d H:i:s', time() + (3 * 24 * 60 * 60));
         return new JsonResponse(['token' => $token, 'expires_at' => $expires_at]);
     }
+    public function updateToken($token, $expires_at, $userId): void
+    {
+        if ($this->dataBaseRepository->getTokenFromDataBase($userId) === null) {
+            $this->dataBaseRepository->registerTokenInDatabase($token, $expires_at, $userId);
+        } else {
+            $this->dataBaseRepository->updateTokenInDatabase($token, $expires_at, $userId);
+        }
+    }
 }
