@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\GetUserById\GetUserByIdController;
 use App\Repository\DataBaseRepository;
 use Illuminate\Http\Request;
 
@@ -46,9 +47,7 @@ $router->get('/analytics/topsofthetops', function () {
     require __DIR__ . '/../public/endpoints/analytics/topsofthetops.php';
 });
 
-$router->get('/analytics/user', function () {
-    require __DIR__ . '/../public/endpoints/analytics/user.php';
-});
+$router->get('/analytics/user', 'GetUserById\GetUserByIdController@index');
 
 $router->get('/analytics/streams', function () {
     require __DIR__ . '/../public/endpoints/analytics/streams.php';
