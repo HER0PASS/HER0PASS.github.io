@@ -8,6 +8,13 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class GetStreamsController extends BaseController
 {
+    private $validator;
+
+    public function __construct(GetStreamsValidator $validator)
+    {
+        $this->validator = $validator;
+    }
+
     public function index(Request $request)
     {
         // Verificar token
@@ -20,6 +27,12 @@ class GetStreamsController extends BaseController
         $user_id = $this->verificarToken($token);
         if (!$user_id) {
             return response()->json(["error" => "Unauthorized. Twitch access token is invalid or has expired."], 401);
+        }
+
+        // Validar parámetros
+        $isValidationOk = $this->validator->validate();
+        if (!$isValidationOk) {
+            return response()->json(["error" => "Parámetros inválidos."], 400);
         }
 
         // Obtener credenciales de Twitch
