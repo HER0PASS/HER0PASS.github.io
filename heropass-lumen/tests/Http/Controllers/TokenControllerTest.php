@@ -55,7 +55,7 @@ class TokenControllerTest extends TestCase
         );
         $response->assertStatus(400);
         $response->assertJson([
-            'error' => 'API key is empty',
+            'error' => 'The api_key is mandatory',
         ]);
     }
     /** Test */
@@ -69,9 +69,9 @@ class TokenControllerTest extends TestCase
                 'api_key' => '__invalid|ApiKey__'
             ]
         );
-        $response->assertStatus(400);
+        $response->assertStatus(401);
         $response->assertJson([
-            'error' => 'Invalid API key format',
+            'error' => 'Unauthorized. API access token is invalid.',
         ]);
     }
     public function testGetsTokenWhenGivenApiKeyAndEmail(): void
@@ -80,12 +80,12 @@ class TokenControllerTest extends TestCase
             'POST',
             '/token',
             [
-                'email' => 'testofuser2@example.com',
-                'api_key' => '1ce0ec097bbbbb5b97b9e4e8ccfcba4l',
+                'email' => 'heropass@gmail.com',
+                'api_key' => '14932a25a74d001fd896c3cefdc860b8',
             ]
         );
         $response->assertJson([
-            'token' => 'd28aab08263d18a5031bd0d5552444c9',
+            'token' => '2ed400fe932003eaeebf5e194f02eb05',
         ]);
     }
 }

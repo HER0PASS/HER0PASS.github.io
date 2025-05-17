@@ -15,7 +15,7 @@ class RegisterValidatorTest extends TestCase
         $validator = new RegisterValidator();
 
         $this->expectException(EmptyEmailException::class);
-        $this->expectExceptionMessage('Invalid parameter, email is required');
+        $this->expectExceptionMessage('The email is mandatory');
 
         $validator->validate(null);
     }
@@ -25,7 +25,7 @@ class RegisterValidatorTest extends TestCase
         $validator = new RegisterValidator();
 
         $this->expectException(InvalidEmailAddressException::class);
-        $this->expectExceptionMessage('The email given must be a valid address');
+        $this->expectExceptionMessage('The email must be a valid email address');
 
         $validator->validate('testNotValid');
     }
