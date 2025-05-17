@@ -1,6 +1,6 @@
 # TWITCH ANALYTICS
 
-Segunda entrega de la asignatura Verificación y Validación del Software.  
+Tercera entrega de la asignatura Verificación y Validación del Software.  
 API pública programada en PHP, capaz de hacer consultas a la API de Twitch para obtener información sobre streamers, usuarios y streams.  
 
 **Alumnos:** Asier Muñoz, Iñigo Aznárez, Miguel Vallés y Alejandro Molina
@@ -15,22 +15,33 @@ API pública programada en PHP, capaz de hacer consultas a la API de Twitch para
 ---
 
 ## **EJECUTAR EL PROYECTO**
-Para ejecutar el proyecto basta con utilizar la URL base adecuada en cada entorno.  
-En cada endpoint, sustituye {base_url} por la URL base del entorno deseado.
+Para ejecutar el proyecto, simplemente utiliza la URL base adecuada según el entorno.  
+En cada endpoint, sustituye {base_url} por la URL del entorno deseado.
 
 ### EN LÍNEA
 ```bash
 {base_url} = https://heropass-deploy-fe0660f60d3c.herokuapp.com
 ```
 
-### LOCALMENTE
-Para ejecutar el proyecto localmente hemos utilizado la herramienta XAMPP, mediante la cual levantábamos el servicio web en local.  
-Se debe crear una base de datos llamada **"heropass"** e importar en ella el archivo: **./public_html/heropass.sql**  
+### LOCALMENTE (Docker + Lumen)
+Utilizamos Docker para levantar el servidor PHP y la base de datos MySQL ya configurada.  
+Pasos para levantar el entorno:
 
 ```bash
-{base_url} = http://localhost/.../HER0PASS.github.io/public_html  
+# Situarse en la raíz del proyecto Lumen
+cd heropass-lumen
+
+# Instalar dependencias PHP
+composer install
+
+# Construir e iniciar el entorno completo
+docker-compose up --build
 ````
-(Los puntos ... deben ser sustituidos por la ruta local correspondiente al proyecto en tu sistema)
+De esta manera se iniciará el servidor en local, creará automáticamente la base de datos lumen con los datos necesarios y generará el archivo .env si no existe.
+
+```bash
+{base_url} = http://localhost:8000
+```
 
 ---
 
@@ -74,7 +85,7 @@ Ejemplo de Respuesta:
 ```
 
 ### **CASO DE USO 3: TOPS OF THE TOPS**
-Este endpoints requieren autenticación mediante un token válido. El token debe ser enviado en el encabezado `X-Auth-Token` en cada petición.
+Este endpoint requiere autenticación mediante un token válido. El token debe ser enviado en el encabezado `Authorization: Bearer {generated_token}` en cada petición.
 Este endpoint proporcionará información sobre los 40 videos más visualizados de cada uno de los tres juegos más populares en Twitch.
 
 Ejemplo de petición autenticada:
