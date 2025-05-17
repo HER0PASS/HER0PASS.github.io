@@ -36,7 +36,8 @@ class GetUserByIdControllerTest extends TestCase
      * @test
      */
     public function getsErrorIfIdParameterIsMissing()
-    {        // Crear request con token válido pero sin ID
+    {
+        // Crear request con token válido pero sin ID
         $request = Request::create('/analytics/user', 'GET');
         $request->headers->set('Authorization', 'Bearer valid-token');
 
@@ -93,7 +94,8 @@ class GetUserByIdControllerTest extends TestCase
             '{"error":"Invalid or missing \'id\' parameter."}',
             $response->getContent()
         );
-    }    /**
+    }
+    /**
      * @test
      */
     public function getsErrorIfIdParameterIsNotNumeric()
