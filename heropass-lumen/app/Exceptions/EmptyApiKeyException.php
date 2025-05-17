@@ -6,6 +6,6 @@ class EmptyApiKeyException extends \RuntimeException
 {
     public function __construct()
     {
-        parent::__construct('API key is empty');
+        parent::__construct('The api_key is mandatory');
     }
 }

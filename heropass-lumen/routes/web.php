@@ -36,13 +36,7 @@ $router->get('/hello', function () {
 
 $router->post('/register', 'RegisterController@getApiKeyData');
 
-$router->post('/token', function () {
-    require __DIR__ . '/../public/endpoints/token.php';
-});
-
-$router->post('/registerRefactor', 'RegisterController@getApiKeyData');
-
-$router->post('/tokenRefactor', 'TokenController@CreateToken');
+$router->post('/token', 'TokenController@createToken');
 
 $router->get('/analytics/topsofthetops', function () {
     require __DIR__ . '/../public/endpoints/analytics/topsofthetops.php';

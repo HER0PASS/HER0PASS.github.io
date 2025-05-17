@@ -16,7 +16,7 @@ class RegisterControllerTest extends TestCase
     {
         $response = $this->call(
             'POST',
-            '/registerRefactor',
+            '/register',
             []
         );
         $response->assertStatus(400);
@@ -31,7 +31,7 @@ class RegisterControllerTest extends TestCase
     {
         $response = $this->call(
             'POST',
-            '/registerRefactor',
+            '/register',
             [
                 'email' => 'notValidMail.com',
             ]
@@ -48,9 +48,9 @@ class RegisterControllerTest extends TestCase
     {
         $response = $this->call(
             'POST',
-            '/registerRefactor',
+            '/register',
             [
-                'email' => '(notSanitazed@mail.com)',
+                'email' => '(jejeje@mail.com)',
             ]
         );
         $response->assertJsonStructure([
