@@ -4,7 +4,10 @@ namespace Tests\Http\Controllers;
 
 use App\Exceptions\InvalidEmailAddressException;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\TokenValidator;
+use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
+use Mockery;
 use Tests\TestCase;
 
 class TokenControllerTest extends TestCase
@@ -76,16 +79,39 @@ class TokenControllerTest extends TestCase
     }
     public function testGetsTokenWhenGivenApiKeyAndEmail(): void
     {
+        $token = 'mocked-token';
+        $mockResponse = new JsonResponse(['token' => $token], 200);
+
+        $mockService = Mockery::mock(TokenService::class);
+        $mockService->shouldReceive('createToken')
+            ->once()
+            ->with('test@example.com', 'validApiKey')
+            ->andReturn($mockResponse);
+
+        $mockValidator = Mockery::mock(TokenValidator::class);
+        $mockValidator->shouldReceive('validateEmail')
+            ->once()
+            ->with('test@example.com')
+            ->andReturn('test@example.com');
+
+        $mockValidator->shouldReceive('validateApiKey')
+            ->once()
+            ->with('validApiKey')
+            ->andReturn('validApiKey');
+
+        $this->app->instance(TokenService::class, $mockService);
+        $this->app->instance(TokenValidator::class, $mockValidator);
+
         $response = $this->call(
             'POST',
             '/token',
             [
-                'email' => 'heropass@gmail.com',
-                'api_key' => '14932a25a74d001fd896c3cefdc860b8',
+                'email' => 'test@example.com',
+                'api_key' => 'validApiKey',
             ]
         );
-        $response->assertJson([
-            'token' => '2ed400fe932003eaeebf5e194f02eb05',
-        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson(['token' => $token]);
     }
 }
