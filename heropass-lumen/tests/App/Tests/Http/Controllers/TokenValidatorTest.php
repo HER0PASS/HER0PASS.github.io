@@ -17,7 +17,7 @@ class TokenValidatorTest extends TestCase
         $validator = new TokenValidator();
 
         $this->expectException(EmptyEmailException::class);
-        $this->expectExceptionMessage('Invalid parameter, email is required');
+        $this->expectExceptionMessage('The email is mandatory');
 
         $validator->validateEmail(null);
     }
@@ -39,7 +39,7 @@ class TokenValidatorTest extends TestCase
         $validator = new TokenValidator();
 
         $this->expectException(InvalidEmailAddressException::class);
-        $this->expectExceptionMessage('The email given must be a valid address');
+        $this->expectExceptionMessage('The email must be a valid email address');
 
         $validator->validateEmail('bad_address_email');
     }
