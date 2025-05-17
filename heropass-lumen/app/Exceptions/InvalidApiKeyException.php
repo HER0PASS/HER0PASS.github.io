@@ -6,6 +6,6 @@ class InvalidApiKeyException extends \RuntimeException
 {
     public function __construct()
     {
-        parent::__construct('Invalid API key format');
+        parent::__construct('Unauthorized. API access token is invalid.');
     }
 }
