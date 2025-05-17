@@ -8,17 +8,18 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class GetUserByIdController extends BaseController
 {
+    private $validator;
+
+    public function __construct(GetUserByIdValidator $validator)
+    {
+        $this->validator = $validator;
+    }
+
     public function index(Request $request): JsonResponse
     {
         // Verificar token
-        $headers = getallheaders();
-        if (
-            !isset($headers['Authorization']) || !preg_match(
-                '/Bearer\s(\S+)/',
-                $headers['Authorization'],
-                $matches
-            )
-        ) {
+        $authHeader = $request->header('Authorization');
+        if (!$authHeader || !preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
             return response()->json(["error" => "Unauthorized. Twitch access token is invalid or has expired."], 401);
         }
 
@@ -29,7 +30,8 @@ class GetUserByIdController extends BaseController
         }
 
         // Validar parámetro id
-        if (empty($request->input('id'))) {
+        $isValidationOk = $this->validator->validate($request->input('id'));
+        if (!$isValidationOk) {
             return response()->json(["error" => "Invalid or missing 'id' parameter."], 400);
         }
 
@@ -59,19 +61,19 @@ class GetUserByIdController extends BaseController
         return response()->json($result, 200);
     }
 
-    private function verificarToken($token)
+    protected function verificarToken($token)
     {
         require_once base_path('public/endpoints/verificarToken.php');
         return verificarToken($token);
     }
 
-    private function obtenerToken()
+    protected function obtenerToken()
     {
         require_once base_path('public/endpoints/api/crearToken.php');
         return obtenerToken();
     }
 
-    private function getUserDataFromDB($userId)
+    protected function getUserDataFromDB($userId)
     {
         require_once base_path('public/endpoints/bbdd/conexion.php');
         global $conn;
@@ -91,7 +93,7 @@ class GetUserByIdController extends BaseController
         return null;
     }
 
-    private function getUserDataFromApi($userId, $credentials)
+    protected function getUserDataFromApi($userId, $credentials)
     {
         $client_id = $credentials['client_id'];
         $access_token = $credentials['access_token'];
@@ -144,7 +146,7 @@ class GetUserByIdController extends BaseController
         }
     }
 
-    private function saveUserDataToDB($userData)
+    protected function saveUserDataToDB($userData)
     {
         require_once base_path('public/endpoints/bbdd/conexion.php');
         global $conn;
