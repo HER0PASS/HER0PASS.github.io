@@ -27,10 +27,6 @@ $router->get('/', function () {
     return 'Lumen funcionando 🎉';
 });
 
-$router->get('/hello', function () {
-    return response()->json(['message' => 'Hola desde Lumen']);
-});
-
 $router->post('/register', function () {
     require __DIR__ . '/../public/endpoints/register.php';
 });
@@ -43,7 +39,7 @@ $router->get('/analytics/topsofthetops', function () {
     require __DIR__ . '/../public/endpoints/analytics/topsofthetops.php';
 });
 
-$router->get('/analytics/user', 'GetUserById\GetUserByIdController@index');
+$router->get('/analytics/user', 'GetUserById\GetUserByIdController@getUser');
 
 $router->get('/analytics/streams', function () {
     require __DIR__ . '/../public/endpoints/analytics/streams.php';

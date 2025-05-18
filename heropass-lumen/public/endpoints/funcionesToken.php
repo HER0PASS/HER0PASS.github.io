@@ -65,8 +65,9 @@ function gestionarTokenUsuario($user_id)
     }
 }
 
-function handleRequest()
+function handleRequest(): void
 {
+    // Más adelante los ifs irán dentro de un validador del token
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         http_response_code(405);
         echo json_encode(["error" => "Method not allowed"]);
@@ -75,7 +76,7 @@ function handleRequest()
 
     $data = json_decode(file_get_contents('php://input'), true);
 
-    if (!isset($data['email']) || empty($data['email'])) {
+    if (empty($data['email'])) {
         http_response_code(400);
         echo json_encode(["error" => "The email is mandatory"]);
         exit;

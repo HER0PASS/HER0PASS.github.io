@@ -31,9 +31,9 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-// $app->withFacades();
+ $app->withFacades();
 
-// $app->withEloquent();
+ $app->withEloquent();
 
 // Registrar dependencias para la inyección
 // Estas ahora se registran en AppServiceProvider
@@ -71,6 +71,12 @@ $app->singleton(
 */
 
 $app->configure('app');
+
+$app->configure('database');
+
+
+$app->register(Illuminate\Database\DatabaseServiceProvider::class);
+
 
 /*
 |--------------------------------------------------------------------------
