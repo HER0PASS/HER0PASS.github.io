@@ -8,7 +8,7 @@ class GetUserByIdService
 {
     /**
      * Verifica si el token proporcionado es válido
-     * 
+     *
      * @param string $token Token a verificar
      * @return string|bool ID del usuario si el token es válido, false en caso contrario
      */
@@ -20,7 +20,7 @@ class GetUserByIdService
 
     /**
      * Obtiene los datos de un usuario por su ID
-     * 
+     *
      * @param string $userId ID del usuario
      * @return JsonResponse Respuesta JSON con los datos del usuario
      */
@@ -51,7 +51,7 @@ class GetUserByIdService
 
     /**
      * Obtiene un token de acceso para la API de Twitch
-     * 
+     *
      * @return array Credenciales de acceso a la API
      */
     private function obtenerToken(): array
@@ -62,7 +62,7 @@ class GetUserByIdService
 
     /**
      * Obtiene los datos de un usuario desde la base de datos
-     * 
+     *
      * @param string $userId ID del usuario
      * @return string|null Datos del usuario en formato JSON o null si no existe
      */
@@ -88,7 +88,7 @@ class GetUserByIdService
 
     /**
      * Obtiene los datos de un usuario desde la API de Twitch
-     * 
+     *
      * @param string $userId ID del usuario
      * @param array $credentials Credenciales de acceso a la API
      * @return array Datos del usuario o error
@@ -147,7 +147,7 @@ class GetUserByIdService
 
     /**
      * Guarda los datos de un usuario en la base de datos
-     * 
+     *
      * @param array $userData Datos del usuario
      * @return void
      */

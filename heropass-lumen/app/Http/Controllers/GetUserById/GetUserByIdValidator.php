@@ -6,7 +6,7 @@ class GetUserByIdValidator
 {
     /**
      * Valida que el ID proporcionado sea válido
-     * 
+     *
      * @param mixed $id El ID a validar
      * @return bool True si el ID es válido, false en caso contrario
      */
