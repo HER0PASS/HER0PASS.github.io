@@ -43,9 +43,7 @@ $router->get('/analytics/topsofthetops', function () {
     require __DIR__ . '/../public/endpoints/analytics/topsofthetops.php';
 });
 
-$router->get('/analytics/user', function () {
-    require __DIR__ . '/../public/endpoints/analytics/user.php';
-});
+$router->get('/analytics/user', 'GetUserById\GetUserByIdController@index');
 
 $router->get('/analytics/streams', function () {
     require __DIR__ . '/../public/endpoints/analytics/streams.php';
