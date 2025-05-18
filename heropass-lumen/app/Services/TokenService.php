@@ -27,7 +27,7 @@ class TokenService
         $token = $data['token'] ?? null;
         $expires_at = $data['expires_at'] ?? null;
 
-        if ($token === null | $expires_at < time()) {
+        if ($token === null || strtotime($expires_at) < time()) {
             $response = $this->tokenManager->generateToken();
 
             $data = json_decode($response->getContent(), true);
