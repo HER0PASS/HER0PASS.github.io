@@ -25,8 +25,6 @@ class GetUserByIdControllerTest extends TestCase
         $this->controller = Mockery::mock(GetUserByIdController::class, [$this->validator, $this->service])
         ->makePartial()
         ->shouldAllowMockingProtectedMethods();
-
-
     }
 
     protected function tearDown(): void
@@ -44,19 +42,17 @@ class GetUserByIdControllerTest extends TestCase
         $request = Request::create('/analytics/user', 'GET');
         $request->headers->set('Authorization', 'Bearer valid-token');
 
-        // Configurar mock para verificarToken
-        $this->controller
-            ->shouldReceive('verificarToken')
-            ->with('valid-token')
-            ->andReturn('12345');
-
         // Configurar mock para el validador
         $this->validator
-            ->shouldReceive('validate')
-            ->with(null)
-            ->andReturn(false);
+            ->shouldReceive('validateRequest')
+            ->with($request)
+            ->andReturn([
+                'isValid' => false,
+                'error' => "Invalid or missing 'id' parameter.",
+                'status' => 400
+            ]);
 
-        // Ejecutar el método index con el request
+        // Ejecutar el método getUser con el request
         $response = $this->controller->getUser($request);
 
         // Verificar el resultado
@@ -76,28 +72,27 @@ class GetUserByIdControllerTest extends TestCase
         $request = Request::create('/analytics/user', 'GET', ['id' => '0']);
         $request->headers->set('Authorization', 'Bearer valid-token');
 
-        // Configurar mock para verificarToken
-        $this->controller
-            ->shouldReceive('verificarToken')
-            ->with('valid-token')
-            ->andReturn('12345');
-
         // Configurar mock para el validador
         $this->validator
-            ->shouldReceive('validate')
-            ->with('0')
-            ->andReturn(false);
+            ->shouldReceive('validateRequest')
+            ->with($request)
+            ->andReturn([
+                'isValid' => false,
+                'error' => "Invalid 'id' parameter. Must be numeric and greater than or equal to 1.",
+                'status' => 400
+            ]);
 
-        // Ejecutar el metodo index con el request
+        // Ejecutar el metodo getUser con el request
         $response = $this->controller->getUser($request);
 
         // Verificar el resultado
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals(
-            '{"error":"Invalid or missing \'id\' parameter."}',
+            '{"error":"Invalid \'id\' parameter. Must be numeric and greater than or equal to 1."}',
             $response->getContent()
         );
     }
+
     /**
      * @test
      */
@@ -107,25 +102,23 @@ class GetUserByIdControllerTest extends TestCase
         $request = Request::create('/analytics/user', 'GET', ['id' => 'abc']);
         $request->headers->set('Authorization', 'Bearer valid-token');
 
-        // Configurar mock para verificarToken
-        $this->controller
-            ->shouldReceive('verificarToken')
-            ->with('valid-token')
-            ->andReturn('12345');
-
         // Configurar mock para el validador
         $this->validator
-            ->shouldReceive('validate')
-            ->with('abc')
-            ->andReturn(false);
+            ->shouldReceive('validateRequest')
+            ->with($request)
+            ->andReturn([
+                'isValid' => false,
+                'error' => "Invalid 'id' parameter. Must be numeric and greater than or equal to 1.",
+                'status' => 400
+            ]);
 
-        // Ejecutar el método index con el request
+        // Ejecutar el método getUser con el request
         $response = $this->controller->getUser($request);
 
         // Verificar el resultado
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals(
-            '{"error":"Invalid or missing \'id\' parameter."}',
+            '{"error":"Invalid \'id\' parameter. Must be numeric and greater than or equal to 1."}',
             $response->getContent()
         );
     }
@@ -138,7 +131,53 @@ class GetUserByIdControllerTest extends TestCase
         // Crear request sin Authorization header
         $request = Request::create('/analytics/user', 'GET', ['id' => '1']);
 
-        // Ejecutar el método index con el request
+        // Configurar mock para el validador
+        $this->validator
+            ->shouldReceive('validateRequest')
+            ->with($request)
+            ->andReturn([
+                'isValid' => false,
+                'error' => "Unauthorized. Twitch access token is invalid or has expired.",
+                'status' => 401
+            ]);
+
+        // Ejecutar el método getUser con el request
+        $response = $this->controller->getUser($request);
+
+        // Verificar el resultado
+        $this->assertEquals(401, $response->getStatusCode());
+        $this->assertEquals(
+            '{"error":"Unauthorized. Twitch access token is invalid or has expired."}',
+            $response->getContent()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function getsErrorIfTokenIsInvalid()
+    {
+        // Crear request con token inválido pero ID válido
+        $request = Request::create('/analytics/user', 'GET', ['id' => '12345']);
+        $request->headers->set('Authorization', 'Bearer invalid-token');
+
+        // Configurar mock para validateRequest
+        $this->validator
+            ->shouldReceive('validateRequest')
+            ->with($request)
+            ->andReturn([
+                'isValid' => true,
+                'token' => 'invalid-token',
+                'id' => '12345'
+            ]);
+
+        // Configurar mock para verificarToken
+        $this->validator
+            ->shouldReceive('verificarToken')
+            ->with('invalid-token')
+            ->andReturn(false);
+
+        // Ejecutar el metodo getUser con el request
         $response = $this->controller->getUser($request);
 
         // Verificar el resultado
@@ -158,17 +197,21 @@ class GetUserByIdControllerTest extends TestCase
         $request = Request::create('/analytics/user', 'GET', ['id' => '12345']);
         $request->headers->set('Authorization', 'Bearer valid-token');
 
+        // Configurar mock para validateRequest
+        $this->validator
+            ->shouldReceive('validateRequest')
+            ->with($request)
+            ->andReturn([
+                'isValid' => true,
+                'token' => 'valid-token',
+                'id' => '12345'
+            ]);
+
         // Configurar mock para verificarToken
-        $this->controller
+        $this->validator
             ->shouldReceive('verificarToken')
             ->with('valid-token')
             ->andReturn('user-123');
-
-        // Configurar mock para el validador
-        $this->validator
-            ->shouldReceive('validate')
-            ->with('12345')
-            ->andReturn(true);
 
         // sevicio devuelve lo esperado
         $expectedResponse = response()->json([
@@ -181,8 +224,7 @@ class GetUserByIdControllerTest extends TestCase
             ->with('12345')
             ->andReturn($expectedResponse);
 
-
-        // Ejecutar el método index con el request
+        // Ejecutar el método getUser con el request
         $response = $this->controller->getUser($request);
 
         // Verificar el resultado

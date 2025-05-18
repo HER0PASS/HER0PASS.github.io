@@ -1,7 +1,7 @@
 <?php
 
 // Obtener valores de las variables de entorno si están disponibles, sino hardcodearlas (esto hay que quitarlo)
-$host     = getenv('DB_HOST')     ?: "mysql";
+$host     = getenv('DB_HOST') ?: "mysql";
 $user     = getenv('DB_USERNAME') ?: "lumen";
 $password = getenv('DB_PASSWORD') ?: "lumen";
 $database = getenv('DB_DATABASE') ?: "lumen";
