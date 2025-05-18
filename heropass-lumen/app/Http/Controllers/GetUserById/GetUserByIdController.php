@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\GetUserById;
 
 use App\Services\GetUserByIdService;
+
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -51,6 +52,7 @@ class GetUserByIdController extends BaseController
                 "trace"   => $e->getTraceAsString(),
             ], 500);
         }
+
     }
 
     protected function verificarToken($token)
