@@ -14,18 +14,9 @@ class GetUserByIdValidator
 
     public function validateRequest(Request $request): array
     {
-        // Verificar que exista el parámetro id
+        // Verificar que exista el parametro id y que sea valido
         $id = $request->input('id');
-        if (!$id) {
-            return [
-                "isValid" => false,
-                "error" => "Invalid or missing 'id' parameter.",
-                "status" => 400
-            ];
-        }
-
-        // Validar que el ID sea válido
-        if (!$this->validate($id)) {
+        if (!$id || !$this->validate($id)) {
             return [
                 "isValid" => false,
                 "error" => "Invalid or missing 'id' parameter.",
