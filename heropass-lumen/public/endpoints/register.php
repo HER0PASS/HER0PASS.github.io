@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-if (!isset($data['email']) || empty($data['email'])) {
+if (empty($data['email'])) {
     http_response_code(400);
     echo json_encode(["error" => "The email is mandatory"]);
     exit;

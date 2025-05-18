@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `cache`
 --
 
-CREATE TABLE `cache` (
+CREATE TABLE IF NOT EXISTS `cache` (
   `id` int NOT NULL,
   `endpoint` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `data` text COLLATE utf8mb4_general_ci NOT NULL,
@@ -48,7 +48,7 @@ INSERT INTO `cache` (`id`, `endpoint`, `data`, `timestamp`) VALUES
 -- Estructura de tabla para la tabla `sessions`
 --
 
-CREATE TABLE `sessions` (
+CREATE TABLE IF NOT EXISTS `sessions` (
   `id` int UNSIGNED NOT NULL,
   `user_id` int UNSIGNED NOT NULL,
   `token` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
@@ -73,7 +73,7 @@ INSERT INTO `sessions` (`id`, `user_id`, `token`, `expires_at`) VALUES
 -- Estructura de tabla para la tabla `users`
 --
 
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `id` int UNSIGNED NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `api_key` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
@@ -100,7 +100,7 @@ INSERT INTO `users` (`id`, `email`, `api_key`) VALUES
 -- Estructura de tabla para la tabla `TwitchUsers`
 --
 
-CREATE TABLE `TwitchUsers` (
+CREATE TABLE IF NOT EXISTS `TwitchUsers` (
   `idUser` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `data` text COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`idUser`)

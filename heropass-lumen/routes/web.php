@@ -1,9 +1,6 @@
 <?php
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\GetStreams\GetStreamsController;
-use App\Http\Controllers\GetUserById\GetUserByIdController;
-use App\Repository\DataBaseRepository;
 use Illuminate\Http\Request;
 
 /** @var \Laravel\Lumen\Routing\Router $router */
@@ -30,21 +27,23 @@ $router->get('/', function () {
     return 'Lumen funcionando 🎉';
 });
 
-$router->get('/hello', function () {
-    return response()->json(['message' => 'Hola desde Lumen']);
+$router->post('/register', function () {
+    require __DIR__ . '/../public/endpoints/register.php';
 });
 
-$router->post('/register', 'RegisterController@getApiKeyData');
-
-$router->post('/token', 'TokenController@createToken');
+$router->post('/token', function () {
+    require __DIR__ . '/../public/endpoints/token.php';
+});
 
 $router->get('/analytics/topsofthetops', function () {
     require __DIR__ . '/../public/endpoints/analytics/topsofthetops.php';
 });
 
-$router->get('/analytics/user', 'GetUserById\GetUserByIdController@index');
+$router->get('/analytics/user', 'GetUserById\GetUserByIdController@getUser');
 
-$router->get('/analytics/streams', 'GetStreams\GetStreamsController@index');
+$router->get('/analytics/streams', function () {
+    require __DIR__ . '/../public/endpoints/analytics/streams.php';
+});
 
 $router->get('/analytics/streams/enriched', function () {
     require __DIR__ . '/../public/endpoints/analytics/streams/enriched.php';

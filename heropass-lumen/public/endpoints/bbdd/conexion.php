@@ -1,14 +1,13 @@
 <?php
 
-$host = "mysql";         // nombre del servicio en docker-compose
-$user = "lumen";         // definido en docker-compose.yml
-$password = "lumen";     // igual
-$database = "lumen";     // nombre de la base de datos creada en init.sql
+// Obtener valores de las variables de entorno si están disponibles, sino hardcodearlas (esto hay que quitarlo)
+$host     = getenv('DB_HOST')     ?: "mysql";
+$user     = getenv('DB_USERNAME') ?: "lumen";
+$password = getenv('DB_PASSWORD') ?: "lumen";
+$database = getenv('DB_DATABASE') ?: "lumen";
 
-// Crear conexión
 $conn = new mysqli($host, $user, $password, $database);
-
-// Verificar conexión
 if ($conn->connect_error) {
-    die("❌ Conexión fallida: " . $conn->connect_error);
+    error_log("Conexión fallida: " . $conn->connect_error);
+    throw new Exception("MySQLi connection failed: {$conn->connect_error}");
 }
