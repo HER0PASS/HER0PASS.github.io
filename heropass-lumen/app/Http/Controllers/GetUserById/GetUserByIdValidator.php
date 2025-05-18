@@ -4,8 +4,10 @@ namespace App\Http\Controllers\GetUserById;
 
 class GetUserByIdValidator
 {
-    public function validate($id)
+
+    public function validate($id): bool
     {
-        return !is_null($id) && is_numeric($id) && intval($id) >= 1;
+        // El ID debe ser numérico y mayor o igual a 1
+        return is_numeric($id) && intval($id) >= 1;
     }
 }
