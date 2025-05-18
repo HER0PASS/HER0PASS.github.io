@@ -52,7 +52,7 @@ class GetUserByIdControllerTest extends TestCase
                 'status' => 400
             ]);
 
-        // Ejecutar el método getUser con el request
+        // Ejecutar el metodo getUser con el request
         $response = $this->controller->getUser($request);
 
         // Verificar el resultado
@@ -78,7 +78,7 @@ class GetUserByIdControllerTest extends TestCase
             ->with($request)
             ->andReturn([
                 'isValid' => false,
-                'error' => "Invalid 'id' parameter. Must be numeric and greater than or equal to 1.",
+                'error' => "Invalid or missing 'id' parameter.",
                 'status' => 400
             ]);
 
@@ -88,7 +88,7 @@ class GetUserByIdControllerTest extends TestCase
         // Verificar el resultado
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals(
-            '{"error":"Invalid \'id\' parameter. Must be numeric and greater than or equal to 1."}',
+            '{"error":"Invalid or missing \'id\' parameter."}',
             $response->getContent()
         );
     }
@@ -108,17 +108,17 @@ class GetUserByIdControllerTest extends TestCase
             ->with($request)
             ->andReturn([
                 'isValid' => false,
-                'error' => "Invalid 'id' parameter. Must be numeric and greater than or equal to 1.",
+                'error' => "Invalid or missing 'id' parameter.",
                 'status' => 400
             ]);
 
-        // Ejecutar el método getUser con el request
+        // Ejecutar el metodo getUser con el request
         $response = $this->controller->getUser($request);
 
         // Verificar el resultado
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals(
-            '{"error":"Invalid \'id\' parameter. Must be numeric and greater than or equal to 1."}',
+            '{"error":"Invalid or missing \'id\' parameter."}',
             $response->getContent()
         );
     }
@@ -141,7 +141,7 @@ class GetUserByIdControllerTest extends TestCase
                 'status' => 401
             ]);
 
-        // Ejecutar el método getUser con el request
+        // Ejecutar el metodo getUser con el request
         $response = $this->controller->getUser($request);
 
         // Verificar el resultado
@@ -224,7 +224,7 @@ class GetUserByIdControllerTest extends TestCase
             ->with('12345')
             ->andReturn($expectedResponse);
 
-        // Ejecutar el método getUser con el request
+        // Ejecutar el metodo getUser con el request
         $response = $this->controller->getUser($request);
 
         // Verificar el resultado

@@ -86,7 +86,7 @@ class GetUserByIdValidatorTest extends TestCase
         $result = $this->validator->validateRequest($request);
 
         $this->assertFalse($result['isValid']);
-        $this->assertEquals("Invalid 'id' parameter. Must be numeric and greater than or equal to 1.", $result['error']);
+        $this->assertEquals("Invalid or missing 'id' parameter.", $result['error']);
         $this->assertEquals(400, $result['status']);
     }
 
