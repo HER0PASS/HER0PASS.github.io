@@ -28,7 +28,7 @@ class GetUserByIdValidator
         if (!$this->validate($id)) {
             return [
                 "isValid" => false,
-                "error" => "Invalid 'id' parameter. Must be numeric and greater than or equal to 1.",
+                "error" => "Invalid or missing 'id' parameter.",
                 "status" => 400
             ];
         }
