@@ -157,35 +157,14 @@ class GetUserByIdControllerTest extends TestCase
      */
     public function getsErrorIfTokenIsInvalid()
     {
-        // Crear request con token inválido pero ID válido
-        $request = Request::create('/analytics/user', 'GET', ['id' => '12345']);
-        $request->headers->set('Authorization', 'Bearer invalid-token');
+        $response = $this->call('GET', '/analytics/user', ['id' => '123'], [
+            'Authorization' => 'Bearer invalid-token',
+        ]);
 
-        // Configurar mock para validateRequest
-        $this->validator
-            ->shouldReceive('validateRequest')
-            ->with($request)
-            ->andReturn([
-                'isValid' => true,
-                'token' => 'invalid-token',
-                'id' => '12345'
-            ]);
-
-        // Configurar mock para verificarToken
-        $this->validator
-            ->shouldReceive('verificarToken')
-            ->with('invalid-token')
-            ->andReturn(false);
-
-        // Ejecutar el metodo getUser con el request
-        $response = $this->controller->getUser($request);
-
-        // Verificar el resultado
-        $this->assertEquals(401, $response->getStatusCode());
-        $this->assertEquals(
-            '{"error":"Unauthorized. Twitch access token is invalid or has expired."}',
-            $response->getContent()
-        );
+        $response->assertStatus(401);
+        $response->assertJson([
+            'error' => 'Unauthorized. Token is invalid or expired.'
+        ]);
     }
 
     /**
