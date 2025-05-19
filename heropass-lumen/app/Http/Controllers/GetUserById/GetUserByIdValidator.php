@@ -24,26 +24,9 @@ class GetUserByIdValidator
             ];
         }
 
-        // Verificar token de autorización
-        $authHeader = $request->header('Authorization');
-        if (!$authHeader || !preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
-            return [
-                "isValid" => false,
-                "error" => "Unauthorized. Twitch access token is invalid or has expired.",
-                "status" => 401
-            ];
-        }
-
         return [
             "isValid" => true,
-            "token" => $matches[1],
             "id" => $id
         ];
-    }
-
-    public function verificarToken($token)
-    {
-        require_once base_path('public/endpoints/verificarToken.php');
-        return verificarToken($token);
     }
 }

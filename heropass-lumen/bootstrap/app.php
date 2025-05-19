@@ -59,6 +59,8 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+$app->singleton(App\Http\Middleware\TokenManager::class);
+
 /*
 |--------------------------------------------------------------------------
 | Register Config Files
@@ -89,13 +91,9 @@ $app->register(Illuminate\Database\DatabaseServiceProvider::class);
 |
 */
 
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
-
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\Authenticate::class,
+]);
 
 /*
 |--------------------------------------------------------------------------

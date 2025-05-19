@@ -42,4 +42,15 @@ class TokenManager
             $this->dataBaseRepository->updateTokenInDatabase($token, $expires_at, $userId);
         }
     }
+
+    public function tokenIsActive($token): bool
+    {
+        $expires_at = $this->dataBaseRepository->getExpireDate($token);
+
+        if (!$expires_at) {
+            return false;
+        }
+
+        return strtotime($expires_at) > time();
+    }
 }

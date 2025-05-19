@@ -28,12 +28,6 @@ class GetUserByIdController extends BaseController
                 return response()->json(["error" => $validation['error']], $validation['status']);
             }
 
-            // Verificar token
-            $user_id = $this->getUserByIdValidator->verificarToken($validation['token']);
-            if ($user_id === false) {
-                return response()->json(["error" => "Unauthorized. Twitch access token is invalid or has expired."], 401);
-            }
-
             // Obtener datos del usuario
             return $this->getUserByIdService->getUserData($validation['id']);
         } catch (\Exception $e) {

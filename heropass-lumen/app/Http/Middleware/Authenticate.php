@@ -4,39 +4,33 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
+use Illuminate\Http\JsonResponse;
 
 class Authenticate
 {
-    /**
-     * The authentication guard factory instance.
-     *
-     * @var \Illuminate\Contracts\Auth\Factory
-     */
-    protected $auth;
+    private TokenManager $tokenManager;
 
-    /**
-     * Create a new middleware instance.
-     *
-     * @param  \Illuminate\Contracts\Auth\Factory  $auth
-     * @return void
-     */
-    public function __construct(Auth $auth)
+    public function __construct(TokenManager $tokenManager)
     {
-        $this->auth = $auth;
+        $this->tokenManager = $tokenManager;
     }
 
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string|null  $guard
-     * @return mixed
-     */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
-        if ($this->auth->guard($guard)->guest()) {
-            return response('Unauthorized.', 401);
+        $authHeader = $request->header('Authorization');
+
+        if (!$authHeader || !str_starts_with($authHeader, 'Bearer ')) {
+            return new JsonResponse([
+                'error' => 'Unauthorized. Token is invalid or expired.',
+            ], 401);
+        }
+
+        $token = substr($authHeader, 7); // Eliminar "Bearer "
+
+        if (!$this->tokenManager->tokenIsActive($token)) {
+            return new JsonResponse([
+                'error' => 'Unauthorized. Token is invalid or expired.',
+            ], 401);
         }
 
         return $next($request);
