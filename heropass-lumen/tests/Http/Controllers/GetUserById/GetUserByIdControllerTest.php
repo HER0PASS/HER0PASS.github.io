@@ -7,6 +7,7 @@ use App\Http\Controllers\GetUserById\GetUserByIdValidator;
 use App\Services\GetUserByIdService;
 use Illuminate\Http\Request;
 use Tests\Fakes\FakeDataBaseRepository;
+use Tests\Fakes\FakeTwitchApiRepository;
 use Tests\TestCase;
 
 class GetUserByIdControllerTest extends TestCase
@@ -18,7 +19,7 @@ class GetUserByIdControllerTest extends TestCase
         parent::setUp();
 
         $validator = new GetUserByIdValidator();
-        $service = new GetUserByIdService(new FakeDataBaseRepository());
+        $service = new GetUserByIdService(new FakeDataBaseRepository(), new FakeTwitchApiRepository());
 
         $this->controller = new GetUserByIdController($validator, $service);
     }

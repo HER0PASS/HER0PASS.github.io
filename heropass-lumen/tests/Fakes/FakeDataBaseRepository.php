@@ -83,11 +83,10 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
 
     public function getSessionByToken($token): ?APISessions
     {
-        foreach ($this->fakeSessions as $session) {
-            if ($session->getToken() === $token) {
-                return $session;
-            }
+        if ($token === 'valid_token') {
+            return new APISessions('12345', 'valid_token', new \DateTime('+3 days'));
         }
+
         return null;
     }
 

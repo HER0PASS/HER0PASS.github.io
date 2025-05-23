@@ -1,8 +1,11 @@
 <?php
 
 use App\Interfaces\DataBaseRepositoryInterface;
+use App\Interfaces\TwitchApiRepositoryInterface;
 use App\Repository\DataBaseRepository;
+use App\Repository\TwitchAPIRepository;
 use Tests\Fakes\FakeDataBaseRepository;
+use Tests\Fakes\FakeTwitchApiRepository;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -17,11 +20,13 @@ if (getenv('APP_ENV') === 'testing') {
         '.env.testing'
     ))->bootstrap();
     $app->bind(DataBaseRepositoryInterface::class, FakeDataBaseRepository::class);
+    $app->bind(TwitchApiRepositoryInterface::class, FakeTwitchApiRepository::class);
 } else {
     (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
         dirname(__DIR__)
     ))->bootstrap();
     $app->bind(DataBaseRepositoryInterface::class, DataBaseRepository::class);
+    $app->bind(TwitchApiRepositoryInterface::class, TwitchApiRepository::class);
 }
 
 date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
