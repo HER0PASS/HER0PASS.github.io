@@ -23,7 +23,7 @@ class RegisterController extends BaseController
     public function register(Request $request): JsonResponse
     {
         try {
-            $email = $this->validator->validate($request->input('email'));
+            $email = $this->validator->validateEmail($request->input('email'));
 
             $user = new APIUser(null, $email);
 
