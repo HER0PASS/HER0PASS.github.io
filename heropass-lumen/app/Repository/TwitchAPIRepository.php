@@ -3,9 +3,10 @@
 namespace App\Repository;
 
 use App\Interfaces\DataBaseRepositoryInterface;
+use App\Interfaces\TwitchApiRepositoryInterface;
 use App\Models\TwitchUser;
 
-class DataBaseApiRepository implements DataBaseRepositoryInterface
+class DataBaseApiRepository implements TwitchApiRepositoryInterface
 {
     private array $credentials;
 
@@ -14,7 +15,7 @@ class DataBaseApiRepository implements DataBaseRepositoryInterface
         $this->credentials = $credentials;
     }
 
-    public function getUserById(string $userId): ?TwitchUser
+    public function getTwitchUserById(string $userId): ?TwitchUser
     {
         $userData = $this->getUserDataFromApi($userId);
         if (isset($userData['error'])) {
@@ -24,10 +25,6 @@ class DataBaseApiRepository implements DataBaseRepositoryInterface
         return TwitchUser::fromArray($userData);
     }
 
-    public function saveUser(TwitchUser $user): void
-    {
-        // No implementamos esta función ya que la API no permite guardar datos
-    }
 
     private function getUserDataFromApi(string $userId): array
     {

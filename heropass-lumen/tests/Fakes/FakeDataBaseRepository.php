@@ -2,9 +2,10 @@
 
 namespace Tests\Fakes;
 
+use App\Interfaces\DataBaseRepositoryInterface;
 use App\Models\TwitchUser;
 
-class FakeDataBaseRepository implements \App\Interfaces\DataBaseRepositoryInterface
+class FakeDataBaseRepository implements DataBaseRepositoryInterface
 {
     private array $fakeUsers = [
         [
@@ -33,7 +34,7 @@ class FakeDataBaseRepository implements \App\Interfaces\DataBaseRepositoryInterf
         ]
     ];
 
-    public function getUserById(string $id): ?TwitchUser
+    public function getTwitchUserById(string $id): ?TwitchUser
     {
         foreach ($this->fakeUsers as $data) {
             if ($data['id'] === $id) {
@@ -43,7 +44,7 @@ class FakeDataBaseRepository implements \App\Interfaces\DataBaseRepositoryInterf
         return null;
     }
 
-    public function saveUser(TwitchUser $user): void
+    public function saveTwitchUser(TwitchUser $user): void
     {
         // TODO: Implement saveUser() method.
     }

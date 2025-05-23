@@ -1,17 +1,28 @@
 <?php
 
+use App\Interfaces\DataBaseRepositoryInterface;
+use App\Repository\DataBaseRepository;
+use Tests\Fakes\FakeDataBaseRepository;
+
 require_once __DIR__ . '/../vendor/autoload.php';
+
+$app = new Laravel\Lumen\Application(
+    dirname(__DIR__)
+);
 
 // Cargar el archivo .env.testing si estamos en entorno de pruebas
 if (getenv('APP_ENV') === 'testing') {
     (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
         dirname(__DIR__),
         '.env.testing'
+
     ))->bootstrap();
+    $app->bind(DataBaseRepositoryInterface::class, FakeDataBaseRepository::class);
 } else {
     (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
         dirname(__DIR__)
     ))->bootstrap();
+    $app->bind(DataBaseRepositoryInterface::class, DataBaseRepository::class);
 }
 
 date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
@@ -26,10 +37,6 @@ date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 | application as an "IoC" container and router for this framework.
 |
 */
-
-$app = new Laravel\Lumen\Application(
-    dirname(__DIR__)
-);
 
 $app->withFacades();
 
