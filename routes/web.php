@@ -29,9 +29,7 @@ $router->get('/', function () {
 
 $router->post('/register', 'Register\RegisterController@register');
 
-$router->post('/token', function () {
-    require __DIR__ . '/../public/endpoints/token.php';
-});
+$router->post('/token', 'Token\TokenController@token');
 
 $router->get('/analytics/topsofthetops', function () {
     require __DIR__ . '/../public/endpoints/analytics/topsofthetops.php';
