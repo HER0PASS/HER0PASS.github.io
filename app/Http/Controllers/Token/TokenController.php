@@ -1,38 +1,40 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Token;
 
 use App\Exceptions\EmptyApiKeyException;
 use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidApiKeyException;
 use App\Exceptions\InvalidEmailAddressException;
-use App\Services\GetApiKeyService;
+use App\Http\Controllers\Register\EmailValidator;
 use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Js;
 
 class TokenController
 {
-    private TokenValidator $validator;
+    private EmailValidator $emailValidator;
+    private ApiKeyValidator $apiKeyValidator;
     private TokenService $service;
 
     public function __construct(
-        TokenValidator $validator,
+        EmailValidator $validator,
+        ApiKeyValidator $apiKeyValidator,
         TokenService $service,
     ) {
-        $this->validator = $validator;
+        $this->emailValidator = $validator;
+        $this->apiKeyValidator = $apiKeyValidator;
         $this->service = $service;
     }
 
     /**
      * @throws \Exception
      */
-    public function createToken(Request $request): JsonResponse
+    public function token(Request $request): JsonResponse
     {
         try {
-            $email = $this->validator->validateEmail($request->input('email'));
-            $apiKey = $this->validator->validateApiKey($request->input('api_key'));
+            $email = $this->emailValidator->validateEmail($request->input('email'));
+            $apiKey = $this->apiKeyValidator->validateApiKey($request->input('api_key'));
 
             return $this->service->createToken($email, $apiKey);
         } catch (EmptyEmailException | EmptyApiKeyException | InvalidEmailAddressException $e) {
