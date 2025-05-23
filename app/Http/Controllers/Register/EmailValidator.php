@@ -7,7 +7,7 @@ use App\Exceptions\InvalidEmailAddressException;
 
 class EmailValidator
 {
-    public function validate(?string $email): string
+    public function validateEmail(?string $email): string
     {
         if (empty($email)) {
             throw new EmptyEmailException();
