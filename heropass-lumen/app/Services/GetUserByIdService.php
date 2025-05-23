@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Interfaces\DataBaseRepositoryInterface;
-use App\Repository\DataBaseRepository;
 use App\Repository\TwitchAPIRepository;
 use Illuminate\Http\JsonResponse;
 

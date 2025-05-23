@@ -2,9 +2,7 @@
 
 namespace App\Services;
 
-use App\Http\Controllers\TokenValidator;
 use App\Http\Middleware\TokenManager;
-use App\Repository\DataBaseRepository;
 use Illuminate\Http\JsonResponse;
 
 class TokenService
