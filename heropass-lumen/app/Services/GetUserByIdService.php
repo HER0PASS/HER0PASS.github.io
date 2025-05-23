@@ -50,10 +50,10 @@ class GetUserByIdService
         return response()->json($user->toArray(), 200);
     }
 
-    // Más adelante hay que crear el token manager
+    // SOLUCIONAR ESTO: GESTIONAR TOKEN DE CONSULTAS A LA API DE TWITCH
     private function obtenerToken(): array
     {
-        require_once base_path('public/endpoints/api/crearToken.php');
+        require_once __DIR__ . '/../../public/endpoints/api/crearToken.php';
         return obtenerToken();
     }
 }

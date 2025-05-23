@@ -17,16 +17,19 @@ class TokenManager
     {
         $this->dataBaseRepository = $dataBaseRepository;
     }
+
     public function checkUser($email, $api_key): ?string
     {
         return $this->dataBaseRepository->checkUserExistence($email, $api_key);
     }
+
     public function getToken($userId): JsonResponse
     {
         $token =  $this->dataBaseRepository->getTokenFromDataBase($userId);
         $expires_at = $this->dataBaseRepository->getExpireDate($token);
         return new JsonResponse(['token' => $token, 'expires_at' => $expires_at]);
     }
+
     public function generateToken(): JsonResponse
     {
         $token = bin2hex(random_bytes(16));
@@ -34,6 +37,7 @@ class TokenManager
 
         return new JsonResponse(['token' => $token, 'expires_at' => $expires_at]);
     }
+
     public function updateToken($token, $expires_at, $userId): void
     {
         if ($this->dataBaseRepository->getTokenFromDataBase($userId) === null) {
