@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Register;
 
 use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidEmailAddressException;
 
-class RegisterValidator
+class EmailValidator
 {
     public function validate(?string $email): string
     {
