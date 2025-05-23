@@ -3,39 +3,38 @@
 namespace App\Services;
 
 use App\Http\Middleware\TokenManager;
+use App\Interfaces\DataBaseRepositoryInterface;
+use App\Models\APISessions;
+use App\Models\APIUser;
 use Illuminate\Http\JsonResponse;
 
 class TokenService
 {
-    private TokenManager $tokenManager;
-
-    public function __construct(TokenManager $tokenManager)
+    public function __construct(private DataBaseRepositoryInterface $dataBaseRepository)
     {
-        $this->tokenManager = $tokenManager;
     }
 
-    public function createToken($email, $api_key): JsonResponse
+    public function createToken($email, $api_key): ?APISessions
     {
-        $userId = $this->tokenManager->checkUser($email, $api_key);
+        $user = new APIUser(null, $email, $api_key);
 
-        $response = $this->tokenManager->getToken($userId);
+        $validUser = $this->dataBaseRepository->getAPIUserByEmail($email, $api_key);
 
-        $data = json_decode($response->getContent(), true);
-
-        $token = $data['token'] ?? null;
-        $expires_at = $data['expires_at'] ?? null;
-
-        if ($token === null | $expires_at < time()) {
-            $response = $this->tokenManager->generateToken();
-
-            $data = json_decode($response->getContent(), true);
-
-            $token = $data['token'] ?? null;
-            $expires_at = $data['expires_at'] ?? null;
-
-            $this->tokenManager->updateToken($token, $expires_at, $userId);
+        if (!$validUser) {
+            return null;
         }
 
-        return new JsonResponse(['token' => $token]);
+        $session = $this->dataBaseRepository->getSessionByUserId($validUser->getId());
+
+        if (!$session) {
+            $session = new APISessions($validUser->getId());
+            $session->generateToken();
+            $this->dataBaseRepository->registerSession($session);
+        } else {
+            $session->generateToken();
+            $this->dataBaseRepository->updateSession($session);
+        }
+
+        return $session;
     }
 }
