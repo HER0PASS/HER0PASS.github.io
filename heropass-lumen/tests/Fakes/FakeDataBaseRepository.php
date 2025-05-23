@@ -4,7 +4,7 @@ namespace Tests\Fakes;
 
 use App\Models\TwitchUser;
 
-class FakeDataBaseRepository implements \App\Repository\UserRepositoryInterface
+class FakeDataBaseRepository implements \App\Interfaces\DataBaseRepositoryInterface
 {
     private array $fakeUsers = [
         [

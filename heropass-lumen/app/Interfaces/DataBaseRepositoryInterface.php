@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repository;
+namespace App\Interfaces;
 
 use App\Models\TwitchUser;
 
-interface UserRepositoryInterface
+interface DataBaseRepositoryInterface
 {
     public function getUserById(string $userId): ?TwitchUser;
     public function saveUser(TwitchUser $user): void;

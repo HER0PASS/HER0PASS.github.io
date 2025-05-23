@@ -2,10 +2,11 @@
 
 namespace App\Repository;
 
+use App\Interfaces\DataBaseRepositoryInterface;
 use App\Models\TwitchUser;
 use Illuminate\Support\Facades\DB;
 
-class UserDBRepository implements UserRepositoryInterface
+class DataBaseDBRepository implements DataBaseRepositoryInterface
 {
     public function getUserById(string $userId): ?TwitchUser
     {

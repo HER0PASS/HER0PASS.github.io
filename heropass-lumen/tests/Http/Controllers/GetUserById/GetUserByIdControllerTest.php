@@ -42,7 +42,7 @@ class GetUserByIdControllerTest extends TestCase
      */
     public function gets404IfUserIsNotFound(): void
     {
-        $request = Request::create('/analytics/user', 'GET', ['id' => 'nonexistent-id']);
+        $request = Request::create('/analytics/user', 'GET', ['id' => '1']);
 
         $response = $this->controller->getUser($request);
         $data = json_decode($response->getContent(), true);

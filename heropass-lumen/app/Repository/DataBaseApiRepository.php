@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Interfaces\DataBaseRepositoryInterface;
 use App\Models\TwitchUser;
 
-class UserApiRepository implements UserRepositoryInterface
+class DataBaseApiRepository implements DataBaseRepositoryInterface
 {
     private array $credentials;
 
