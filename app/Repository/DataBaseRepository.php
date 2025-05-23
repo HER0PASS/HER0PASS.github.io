@@ -58,10 +58,11 @@ class DataBaseRepository implements DataBaseRepositoryInterface
 
     public function registerAPIUser(APIUser $apiUser): void
     {
-        DB::table('users')->insert([
-            'email' => $apiUser->getEmail(),
-            'api_key' => $apiUser->getApiKey(),
-        ]);
+        DB::table('users')->updateOrInsert(
+            [
+            'email' => $apiUser->getEmail()],
+            ['api_key' => $apiUser->getApiKey()]
+        );
     }
 
     public function getSessionByToken($token): ?APISessions
