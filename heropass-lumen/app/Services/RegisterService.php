@@ -3,22 +3,25 @@
 namespace App\Services;
 
 use App\Interfaces\DataBaseRepositoryInterface;
-use Illuminate\Http\JsonResponse;
+use App\Models\APIUser;
 
 class RegisterService
 {
     public function __construct(private DataBaseRepositoryInterface $dataBaseRepository)
     {
     }
-    public function registerUser($email): JsonResponse
+    public function registerUser(APIUser $user): APIUser
     {
-        $api_key = bin2hex(random_bytes(16));
-        $user = $this->dataBaseRepository->getAPIUserByEmail($email);
-        if ($user) {
-            $this->dataBaseRepository->updateAPIUserAPIKey($email, $api_key);
+        $existing = $this->dataBaseRepository->getAPIUserByEmail($user->getEmail());
+
+        $user->generateApiKey();
+
+        if ($existing) {
+            $this->dataBaseRepository->updateAPIUserAPIKey($user);
         } else {
-            $this->dataBaseRepository->registerAPIUser($email, $api_key);
+            $this->dataBaseRepository->registerAPIUser($user);
         }
-        return new JsonResponse(['api_key' => $api_key], 200);
+
+        return $user;
     }
 }

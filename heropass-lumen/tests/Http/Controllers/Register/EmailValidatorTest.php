@@ -1,18 +1,20 @@
 <?php
 
-namespace Tests\Http\Controllers;
+namespace Http\Controllers\Register;
 
 use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidEmailAddressException;
-use App\Http\Controllers\RegisterValidator;
+use App\Http\Controllers\Register\EmailValidator;
 use PHPUnit\Framework\TestCase;
 
-class RegisterValidatorTest extends TestCase
+class EmailValidatorTest extends TestCase
 {
-    /** Test */
+    /**
+     * @test
+     */
     public function testValidateGivenNoEmailThrowsException(): void
     {
-        $validator = new RegisterValidator();
+        $validator = new EmailValidator();
 
         $this->expectException(EmptyEmailException::class);
         $this->expectExceptionMessage('The email is mandatory');
@@ -20,9 +22,12 @@ class RegisterValidatorTest extends TestCase
         $validator->validate(null);
     }
 
+    /**
+     * @test
+     */
     public function testRequestIsInvalidateIfEmailAddressGivenIsNotValid(): void
     {
-        $validator = new RegisterValidator();
+        $validator = new EmailValidator();
 
         $this->expectException(InvalidEmailAddressException::class);
         $this->expectExceptionMessage('The email must be a valid email address');
@@ -30,9 +35,12 @@ class RegisterValidatorTest extends TestCase
         $validator->validate('testNotValid');
     }
 
+    /**
+     * @test
+     */
     public function testGivenNotSanitazedMailReturnsSanitazedEmail(): void
     {
-        $validator = new RegisterValidator();
+        $validator = new EmailValidator();
         $response = $validator->validate('(notSanitazed@mail.com)');
         $this->assertEquals('notSanitazed@mail.com', $response);
     }

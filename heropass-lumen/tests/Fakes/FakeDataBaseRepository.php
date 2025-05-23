@@ -10,7 +10,7 @@ use App\Models\TwitchUser;
 class FakeDataBaseRepository implements DataBaseRepositoryInterface
 {
     private array $fakeSessions;
-    private array $fakeUsers = [
+    private array $fakeTwitchUsers = [
         [
             'id' => '12345',
             'login' => 'ninja',
@@ -45,10 +45,9 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
         ];
     }
 
-
     public function getTwitchUserById(string $id): ?TwitchUser
     {
-        foreach ($this->fakeUsers as $data) {
+        foreach ($this->fakeTwitchUsers as $data) {
             if ($data['id'] === $id) {
                 return TwitchUser::fromArray($data);
             }
@@ -61,9 +60,27 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
         // TODO: Implement saveUser() method.
     }
 
+    private array $fakeAPIUsers = [
+        [
+            'id' => '1',
+            'email' => 'user1@example.com',
+            'api_key' => '6288f213b19339919569e8b43f1ad852'
+        ],
+        [
+            'id' => '2',
+            'email' => 'user2@example.com',
+            'api_key' => 'bab8ea158c16e2741c1b7ec1ec14febc'
+        ]
+    ];
+
     public function getAPIUserByEmail($email): ?APIUser
     {
-        //TODO: Implement getAPIUserByEmail() method.
+        foreach ($this->fakeAPIUsers as $userData) {
+            if ($userData['email'] === $email) {
+                return APIUser::fromArray($userData);
+            }
+        }
+        return null;
     }
 
     public function checkAPIUserExistence(APIUser $apiUser): ?APIUser
@@ -73,7 +90,12 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
 
     public function updateAPIUserAPIKey(APIUser $apiUser): void
     {
-        // TODO: Implement updateAPIUserAPIKey() method.
+        foreach ($this->fakeAPIUsers as &$userData) {
+            if ($userData['email'] === $apiUser->getEmail()) {
+                $userData['api_key'] = $apiUser->getApiKey();
+                return;
+            }
+        }
     }
 
     public function registerAPIUser(APIUser $apiUser): void
@@ -114,5 +136,10 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
             }
         }
         $this->fakeSessions[] = $apiSession;
+    }
+
+    public function storeUser(APIUser $user): void
+    {
+        $this->fakeAPIUsers[] = $user->toArray();
     }
 }

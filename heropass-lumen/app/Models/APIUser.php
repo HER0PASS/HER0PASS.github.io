@@ -4,19 +4,24 @@ namespace App\Models;
 
 class APIUser
 {
-    private string $id;
+    private ?int $id = null;
     private string $email;
-    private string $api_key;
+    private string $apiKey;
 
 
-    public function __construct(string $id, string $email, string $api_key)
+    public function __construct(?int $id, string $email, string $apiKey = '')
     {
-        $this->id = $id;
         $this->email = $email;
-        $this->api_key = $api_key;
+        $this->id = $id;
+        $this->apiKey = $apiKey;
     }
 
-    public function getId(): string
+    public function generateApiKey(): void
+    {
+        $this->apiKey = bin2hex(random_bytes(16));
+    }
+
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -28,7 +33,12 @@ class APIUser
 
     public function getApiKey(): string
     {
-        return $this->api_key;
+        return $this->apiKey;
+    }
+
+    public function setApiKey(string $apiKey): void
+    {
+        $this->apiKey = $apiKey;
     }
 
     public function toArray(): array
@@ -36,7 +46,7 @@ class APIUser
         return [
             'id' => $this->id,
             'email' => $this->email,
-            'api_key' => $this->api_key
+            'api_key' => $this->apiKey
         ];
     }
 
