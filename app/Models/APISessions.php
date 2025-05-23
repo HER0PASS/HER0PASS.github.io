@@ -9,11 +9,11 @@ class APISessions
 
     private \DateTime $expires_at;
 
-    public function __construct(?int $user_id, ?string $token, ?\DateTime $expires_at)
+    public function __construct(?int $user_id, ?string $token = null, ?\DateTime $expires_at = null)
     {
         $this->user_id = $user_id;
         $this->token = $token ?? '';
-        $this->expires_at = $expires_at;
+        $this->expires_at = $expires_at ?? new \DateTime();
     }
 
     public function generateToken(): void
@@ -22,7 +22,7 @@ class APISessions
         $this->setExpiresAt((new \DateTime())->add(new \DateInterval('P3D')));
     }
 
-    public function getUserId(): string
+    public function getUserId(): ?string
     {
         return $this->user_id;
     }
