@@ -73,7 +73,7 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
         ]
     ];
 
-    public function getAPIUserByEmail($email): ?APIUser
+    public function getAPIUserByEmail($email, $apiKey): ?APIUser
     {
         foreach ($this->fakeAPIUsers as $userData) {
             if ($userData['email'] === $email) {
@@ -81,11 +81,6 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
             }
         }
         return null;
-    }
-
-    public function checkAPIUserExistence(APIUser $apiUser): ?APIUser
-    {
-        // TODO: Implement checkAPIUserExistence() method.
     }
 
     public function updateAPIUserAPIKey(APIUser $apiUser): void

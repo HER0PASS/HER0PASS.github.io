@@ -10,7 +10,7 @@ class RegisterEndpointTest extends TestCase
 {
     public function createApplication()
     {
-        $app = require __DIR__ . '/../../../bootstrap/app.php';
+        $app = require __DIR__ . '/../../bootstrap/app.php';
 
         $app->bind(DataBaseRepositoryInterface::class, FakeDataBaseRepository::class);
 

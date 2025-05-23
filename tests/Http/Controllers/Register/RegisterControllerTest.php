@@ -111,7 +111,7 @@ class RegisterControllerTest extends TestCase
         $this->assertArrayHasKey('api_key', $data);
         $this->assertNotEquals($oldKey, $data['api_key']);
 
-        $storedUser = $repository->getAPIUserByEmail('user1@example.com');
+        $storedUser = $repository->getAPIUserByEmail('user1@example.com', "");
         $this->assertEquals($data['api_key'], $storedUser->getApiKey());
     }
 }
