@@ -15,7 +15,6 @@ if (getenv('APP_ENV') === 'testing') {
     (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
         dirname(__DIR__),
         '.env.testing'
-
     ))->bootstrap();
     $app->bind(DataBaseRepositoryInterface::class, FakeDataBaseRepository::class);
 } else {

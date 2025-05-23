@@ -21,8 +21,8 @@ services:
     container_name: lumen-db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: lumen_test
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lumen
+      MYSQL_ROOT_PASSWORD: lumen
       MYSQL_USER: lumen
       MYSQL_PASSWORD: lumen
     ports:
