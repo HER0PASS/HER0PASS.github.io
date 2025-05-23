@@ -2,17 +2,17 @@
 
 namespace App\Services;
 
-use App\Models\TwitchUser;
-use App\Repository\UserApiRepository;
-use App\Repository\UserRepositoryInterface;
+use App\Interfaces\DataBaseRepositoryInterface;
+use App\Repository\DataBaseRepository;
+use App\Repository\TwitchAPIRepository;
 use Illuminate\Http\JsonResponse;
 
 class GetUserByIdService
 {
-    private UserRepositoryInterface $dbRepository;
-    private ?UserApiRepository $apiRepository = null;
+    private DataBaseRepositoryInterface $dbRepository;
+    private ?TwitchAPIRepository $apiRepository = null;
 
-    public function __construct(UserRepositoryInterface $dbRepository)
+    public function __construct(DataBaseRepositoryInterface $dbRepository)
     {
         $this->dbRepository = $dbRepository;
     }
@@ -20,7 +20,7 @@ class GetUserByIdService
     public function getUserData(string $userId): JsonResponse
     {
         // Primero buscamos en la base de datos
-        $user = $this->dbRepository->getUserById($userId);
+        $user = $this->dbRepository->getTwitchUserById($userId);
         if ($user) {
             return response()->json($user->toArray(), 200);
         }
@@ -34,10 +34,10 @@ class GetUserByIdService
         }
 
         // Creamos el repositorio de la API con las credenciales obtenidas
-        $this->apiRepository = new UserApiRepository($credentials);
+        $this->apiRepository = new TwitchAPIRepository($credentials);
 
         // Obtenemos el usuario desde la API
-        $user = $this->apiRepository->getUserById($userId);
+        $user = $this->apiRepository->getTwitchUserById($userId);
         if (!$user) {
             return response()->json([
                 "error" => "User not found."
@@ -45,15 +45,15 @@ class GetUserByIdService
         }
 
         // Guardamos el usuario en la base de datos
-        $this->dbRepository->saveUser($user);
+        $this->dbRepository->saveTwitchUser($user);
 
         return response()->json($user->toArray(), 200);
     }
 
-    // Más adelante hay que crear el token manager
-    private function obtenerToken(): array
+    // SOLUCIONAR ESTO: GESTIONAR TOKEN DE CONSULTAS A LA API DE TWITCH
+    public function obtenerToken(): array
     {
-        require_once base_path('public/endpoints/api/crearToken.php');
+        require_once __DIR__ . '/../../public/endpoints/api/crearToken.php';
         return obtenerToken();
     }
 }

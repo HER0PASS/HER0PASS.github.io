@@ -39,7 +39,10 @@ $router->get('/analytics/topsofthetops', function () {
     require __DIR__ . '/../public/endpoints/analytics/topsofthetops.php';
 });
 
-$router->get('/analytics/user', 'GetUserById\GetUserByIdController@getUser');
+$router->get('/analytics/user', [
+    'middleware' => 'auth',
+    'uses' => 'GetUserById\GetUserByIdController@getUser'
+]);
 
 $router->get('/analytics/streams', function () {
     require __DIR__ . '/../public/endpoints/analytics/streams.php';

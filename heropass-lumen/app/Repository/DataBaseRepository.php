@@ -2,129 +2,121 @@
 
 namespace App\Repository;
 
-use PDO;
-use PDOException;
+use App\Interfaces\DataBaseRepositoryInterface;
+use App\Models\APISessions;
+use App\Models\APIUser;
+use App\Models\TwitchUser;
+use Illuminate\Support\Facades\DB;
 
-class DataBaseRepository
+class DataBaseRepository implements DataBaseRepositoryInterface
 {
-    private ?PDO $db = null;
-
-    public function getUserByEmail($email): string
+    public function getTwitchUserById(string $userId): ?TwitchUser
     {
-        $this->getConnection();
+        $row = DB::table('TwitchUsers')
+            ->where('idUser', $userId)
+            ->first();
 
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email");
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
-
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$user) {
-            return '';
-        }
-        return json_encode($user);
-    }
-    public function checkUserExistence($email, $api_key): ?string
-    {
-        $this->getConnection();
-
-        $stmt = $this->db->prepare("SELECT id FROM users WHERE email = :email AND api_key = :api_key");
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':api_key', $api_key);
-        $stmt->execute();
-
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$user) {
+        if (!$row || !$row->data) {
             return null;
         }
-        return $user['id'];
-    }
-    public function updateApiKey(string $email, string $api_key): void
-    {
-        $this->getConnection();
-        $stmt = $this->db->prepare("UPDATE users SET api_key = :api_key WHERE email = :email");
 
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':api_key', $api_key);
-        $stmt->execute();
+        $userData = json_decode($row->data, true);
+        return TwitchUser::fromArray($userData);
     }
-    public function registerEmailAndApiKey(string $email, string $api_key): void
+
+    public function saveTwitchUser(TwitchUser $user): void
     {
-        $this->getConnection();
-        $stmt = $this->db->prepare("INSERT INTO users (email, api_key) VALUES (:email, :api_key)");
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':api_key', $api_key);
-        $stmt->execute();
+        DB::table('TwitchUsers')->updateOrInsert(
+            ['idUser' => $user->getId()],
+            ['data' => json_encode($user->toArray())]
+        );
     }
-    public function getExpireDate($token): ?string
+
+    public function getAPIUserByEmail($email): ?APIUser
     {
-        $this->getConnection();
-        $stmt = $this->db->prepare("SELECT expires_at FROM sessions WHERE token LIKE :token");
-        $stmt->bindParam(':token', $token);
-        $stmt->execute();
+        $row = DB::table('users')
+            ->where('email', $email)
+            ->first();
 
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row ? $row['expires_at'] : null;
-    }
-    public function getTokenFromDatabase($userId): ?string
-    {
-        $this->getConnection();
-        $stmt = $this->db->prepare("SELECT token FROM sessions WHERE user_id LIKE :user_id");
-        $stmt->bindParam(':user_id', $userId);
-        $stmt->execute();
-
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row ? $row['token'] : null;
-    }
-    public function registerTokenInDatabase($token, $expires_at, $userId): void
-    {
-        $this->getConnection();
-        $stmt = $this->db->prepare("INSERT INTO sessions (user_id, token, expires_at) VALUES (:user_id, :token, :expires_at)");
-        $stmt->bindParam(':user_id', $userId);
-        $stmt->bindParam(':token', $token);
-        $stmt->bindParam(':expires_at', $expires_at);
-        $stmt->execute();
-    }
-    public function updateTokenInDatabase($token, $expires_at, $userId): void
-    {
-        $this->getConnection();
-        $stmt = $this->db->prepare("UPDATE sessions SET token = :token, expires_at = :expires_at WHERE user_id = :user_id");
-
-        $stmt->bindParam(':user_id', $userId);
-        $stmt->bindParam(':token', $token);
-        $stmt->bindParam(':expires_at', $expires_at);
-        $stmt->execute();
-    }
-    public function connect(): ?PDO
-    {
-        $host     = env('DB_HOST');
-        $port     = env('DB_PORT');
-        $dbname   = env('DB_DATABASE');
-        $user     = env('DB_USERNAME');
-        $password = env('DB_PASSWORD');
-
-        $dsn = "mysql:host=$host;port=$port;dbname=$dbname";
-
-        try {
-            $pdo = new PDO($dsn, $user, $password);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            return $pdo;
-        } catch (\PDOException $e) {
-            // Error de conexión
-            error_log('Connection failed: ' . $e->getMessage());
+        if (!$row) {
             return null;
         }
+
+        return new APIUser($row->id, $row->email, $row->api_key);
     }
-    private function getConnection(): ?PDO
+
+    public function checkAPIUserExistence(APIUser $apiUser): ?APIUser
     {
-        if ($this->db === null) {
-            $this->db = $this->connect();
+        $row = DB::table('users')
+            ->where('email', $apiUser->getEmail())
+            ->where('api_key', $apiUser->getApiKey())
+            ->first();
+
+        return $row ? $apiUser : null;
+    }
+
+    public function updateAPIUserAPIKey(APIUser $apiUser): void
+    {
+        DB::table('users')
+            ->where('email', $apiUser->getEmail())
+            ->update(['api_key' => $apiUser->getApiKey()]);
+    }
+
+    public function registerAPIUser(APIUser $apiUser): void
+    {
+        DB::table('users')->insert([
+            'email' => $apiUser->getEmail(),
+            'api_key' => $apiUser->getApiKey(),
+        ]);
+    }
+
+    public function getSessionByToken($token): ?APISessions
+    {
+        $row = DB::table('sessions')
+            ->where('token', $token)
+            ->first();
+
+        if (!$row) {
+            return null;
         }
 
-        if ($this->db === null) {
-            throw new \Exception('No se pudo establecer la conexión con la base de datos.');
+        return new APISessions(
+            (string) $row->user_id,
+            $row->token,
+            new \DateTime($row->expires_at)
+        );
+    }
+
+    public function getSessionByUserId($user_id): ?APISessions
+    {
+        $row = DB::table('sessions')
+            ->where('user_id', $user_id)
+            ->first();
+
+        if (!$row) {
+            return null;
         }
 
-        return $this->db;
+        return new APISessions(
+            (string) $row->user_id,
+            $row->token,
+            new \DateTime($row->expires_at)
+        );
+    }
+
+    public function registerSession(APISessions $apiSession): void
+    {
+        DB::table('sessions')->insert([
+            'user_id' => $apiSession->getUserId(),
+            'token' => $apiSession->getToken(),
+            'expires_at' => $apiSession->getExpiresAt()
+        ]);
+    }
+
+    public function updateSession(APISessions $apiSession): void
+    {
+        DB::table('sessions')
+            ->where('user_id', $apiSession->getUserId())
+            ->update(['token' => $apiSession->getToken(), 'expires_at' => $apiSession->getExpiresAt()]);
     }
 }

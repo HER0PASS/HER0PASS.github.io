@@ -6,232 +6,64 @@ use App\Http\Controllers\GetUserById\GetUserByIdController;
 use App\Http\Controllers\GetUserById\GetUserByIdValidator;
 use App\Services\GetUserByIdService;
 use Illuminate\Http\Request;
-use Mockery;
+use Tests\Fakes\FakeDataBaseRepository;
 use Tests\TestCase;
 
 class GetUserByIdControllerTest extends TestCase
 {
-    private GetUserByIdValidator $validator;
     private GetUserByIdController $controller;
-    private GetUserByIdService $service;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        // Crear mock para el validador
-        $this->validator = Mockery::mock(GetUserByIdValidator::class);
-        $this->service = Mockery::mock(GetUserByIdService::class);
-        $this->controller = Mockery::mock(GetUserByIdController::class, [$this->validator, $this->service])
-        ->makePartial()
-        ->shouldAllowMockingProtectedMethods();
-    }
+        $validator = new GetUserByIdValidator();
+        $service = new GetUserByIdService(new FakeDataBaseRepository());
 
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
+        $this->controller = new GetUserByIdController($validator, $service);
     }
 
     /**
      * @test
      */
-    public function getsErrorIfIdParameterIsMissing()
+    public function gets400IfIdIsMissing(): void
     {
-        // Crear request con token válido pero sin ID
         $request = Request::create('/analytics/user', 'GET');
-        $request->headers->set('Authorization', 'Bearer valid-token');
 
-        // Configurar mock para el validador
-        $this->validator
-            ->shouldReceive('validateRequest')
-            ->with($request)
-            ->andReturn([
-                'isValid' => false,
-                'error' => "Invalid or missing 'id' parameter.",
-                'status' => 400
-            ]);
-
-        // Ejecutar el método getUser con el request
         $response = $this->controller->getUser($request);
+        $data = json_decode($response->getContent(), true);
 
-        // Verificar el resultado
         $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals(
-            '{"error":"Invalid or missing \'id\' parameter."}',
-            $response->getContent()
-        );
+        $this->assertEquals("Invalid or missing 'id' parameter.", $data['error']);
     }
 
     /**
      * @test
      */
-    public function getsErrorIfIdParameterIsLessThanOne()
+    public function gets404IfUserIsNotFound(): void
     {
-        // Crear request con token válido pero ID menor que 1
-        $request = Request::create('/analytics/user', 'GET', ['id' => '0']);
-        $request->headers->set('Authorization', 'Bearer valid-token');
+        $request = Request::create('/analytics/user', 'GET', ['id' => '99999']);
 
-        // Configurar mock para el validador
-        $this->validator
-            ->shouldReceive('validateRequest')
-            ->with($request)
-            ->andReturn([
-                'isValid' => false,
-                'error' => "Invalid 'id' parameter. Must be numeric and greater than or equal to 1.",
-                'status' => 400
-            ]);
-
-        // Ejecutar el metodo getUser con el request
         $response = $this->controller->getUser($request);
+        $data = json_decode($response->getContent(), true);
 
-        // Verificar el resultado
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals(
-            '{"error":"Invalid \'id\' parameter. Must be numeric and greater than or equal to 1."}',
-            $response->getContent()
-        );
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertEquals("User not found.", $data['error']);
     }
+
 
     /**
      * @test
      */
-    public function getsErrorIfIdParameterIsNotNumeric()
+    public function getsUserDataIfIdIsValid()
     {
-        // Crear request con token válido pero ID no numérico
-        $request = Request::create('/analytics/user', 'GET', ['id' => 'abc']);
-        $request->headers->set('Authorization', 'Bearer valid-token');
-
-        // Configurar mock para el validador
-        $this->validator
-            ->shouldReceive('validateRequest')
-            ->with($request)
-            ->andReturn([
-                'isValid' => false,
-                'error' => "Invalid 'id' parameter. Must be numeric and greater than or equal to 1.",
-                'status' => 400
-            ]);
-
-        // Ejecutar el método getUser con el request
-        $response = $this->controller->getUser($request);
-
-        // Verificar el resultado
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals(
-            '{"error":"Invalid \'id\' parameter. Must be numeric and greater than or equal to 1."}',
-            $response->getContent()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getsErrorIfAuthorizationHeaderIsMissing()
-    {
-        // Crear request sin Authorization header
-        $request = Request::create('/analytics/user', 'GET', ['id' => '1']);
-
-        // Configurar mock para el validador
-        $this->validator
-            ->shouldReceive('validateRequest')
-            ->with($request)
-            ->andReturn([
-                'isValid' => false,
-                'error' => "Unauthorized. Twitch access token is invalid or has expired.",
-                'status' => 401
-            ]);
-
-        // Ejecutar el método getUser con el request
-        $response = $this->controller->getUser($request);
-
-        // Verificar el resultado
-        $this->assertEquals(401, $response->getStatusCode());
-        $this->assertEquals(
-            '{"error":"Unauthorized. Twitch access token is invalid or has expired."}',
-            $response->getContent()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getsErrorIfTokenIsInvalid()
-    {
-        // Crear request con token inválido pero ID válido
         $request = Request::create('/analytics/user', 'GET', ['id' => '12345']);
-        $request->headers->set('Authorization', 'Bearer invalid-token');
 
-        // Configurar mock para validateRequest
-        $this->validator
-            ->shouldReceive('validateRequest')
-            ->with($request)
-            ->andReturn([
-                'isValid' => true,
-                'token' => 'invalid-token',
-                'id' => '12345'
-            ]);
-
-        // Configurar mock para verificarToken
-        $this->validator
-            ->shouldReceive('verificarToken')
-            ->with('invalid-token')
-            ->andReturn(false);
-
-        // Ejecutar el metodo getUser con el request
         $response = $this->controller->getUser($request);
+        $data = json_decode($response->getContent(), true);
 
-        // Verificar el resultado
-        $this->assertEquals(401, $response->getStatusCode());
-        $this->assertEquals(
-            '{"error":"Unauthorized. Twitch access token is invalid or has expired."}',
-            $response->getContent()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getsUserDataSuccessfully()
-    {
-        // Crear request con token válido e ID válido
-        $request = Request::create('/analytics/user', 'GET', ['id' => '12345']);
-        $request->headers->set('Authorization', 'Bearer valid-token');
-
-        // Configurar mock para validateRequest
-        $this->validator
-            ->shouldReceive('validateRequest')
-            ->with($request)
-            ->andReturn([
-                'isValid' => true,
-                'token' => 'valid-token',
-                'id' => '12345'
-            ]);
-
-        // Configurar mock para verificarToken
-        $this->validator
-            ->shouldReceive('verificarToken')
-            ->with('valid-token')
-            ->andReturn('user-123');
-
-        // sevicio devuelve lo esperado
-        $expectedResponse = response()->json([
-            'id' => '12345',
-            'display_name' => 'TestUser',
-            'profile_image_url' => 'http://example.com/image.jpg'
-        ]);
-        $this->service
-            ->shouldReceive('getUserData')
-            ->with('12345')
-            ->andReturn($expectedResponse);
-
-        // Ejecutar el método getUser con el request
-        $response = $this->controller->getUser($request);
-
-        // Verificar el resultado
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertJsonStringEqualsJsonString(
-            $expectedResponse->getContent(),
-            $response->getContent()
-        );
+        $this->assertArrayHasKey('display_name', $data);
+        $this->assertEquals('Ninja', $data['display_name']);
     }
 }

@@ -14,45 +14,19 @@ class GetUserByIdValidator
 
     public function validateRequest(Request $request): array
     {
-        // Verificar que exista el parámetro id
+        // Verificar que exista el parametro id y que sea valido
         $id = $request->input('id');
-        if (!$id) {
+        if (!$id || !$this->validate($id)) {
             return [
                 "isValid" => false,
                 "error" => "Invalid or missing 'id' parameter.",
                 "status" => 400
-            ];
-        }
-
-        // Validar que el ID sea válido
-        if (!$this->validate($id)) {
-            return [
-                "isValid" => false,
-                "error" => "Invalid or missing 'id' parameter.",
-                "status" => 400
-            ];
-        }
-
-        // Verificar token de autorización
-        $authHeader = $request->header('Authorization');
-        if (!$authHeader || !preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
-            return [
-                "isValid" => false,
-                "error" => "Unauthorized. Twitch access token is invalid or has expired.",
-                "status" => 401
             ];
         }
 
         return [
             "isValid" => true,
-            "token" => $matches[1],
             "id" => $id
         ];
-    }
-
-    public function verificarToken($token)
-    {
-        require_once base_path('public/endpoints/verificarToken.php');
-        return verificarToken($token);
     }
 }
