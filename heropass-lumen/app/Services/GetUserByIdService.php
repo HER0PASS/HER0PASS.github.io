@@ -3,17 +3,18 @@
 namespace App\Services;
 
 use App\Interfaces\DataBaseRepositoryInterface;
-use App\Repository\TwitchAPIRepository;
+use App\Interfaces\TwitchApiRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 
 class GetUserByIdService
 {
     private DataBaseRepositoryInterface $dbRepository;
-    private ?TwitchAPIRepository $apiRepository = null;
+    private TwitchApiRepositoryInterface $apiRepository;
 
-    public function __construct(DataBaseRepositoryInterface $dbRepository)
+    public function __construct(DataBaseRepositoryInterface $dbRepository, TwitchApiRepositoryInterface $apiRepository)
     {
         $this->dbRepository = $dbRepository;
+        $this->apiRepository = $apiRepository;
     }
 
     public function getUserData(string $userId): JsonResponse
@@ -31,9 +32,6 @@ class GetUserByIdService
                 "error" => "Internal server error."
             ], 500);
         }
-
-        // Creamos el repositorio de la API con las credenciales obtenidas
-        $this->apiRepository = new TwitchAPIRepository($credentials);
 
         // Obtenemos el usuario desde la API
         $user = $this->apiRepository->getTwitchUserById($userId);

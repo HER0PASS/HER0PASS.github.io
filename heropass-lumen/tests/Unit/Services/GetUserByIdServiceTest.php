@@ -5,6 +5,7 @@ namespace Tests\Unit\Services;
 use App\Services\GetUserByIdService;
 use PHPUnit\Framework\TestCase;
 use Tests\Fakes\FakeDataBaseRepository;
+use Tests\Fakes\FakeTwitchApiRepository;
 
 class GetUserByIdServiceTest extends TestCase
 {
@@ -15,7 +16,9 @@ class GetUserByIdServiceTest extends TestCase
         parent::setUp();
 
         $repo = new FakeDataBaseRepository();
-        $this->service = new GetUserByIdService($repo);
+        $api = new FakeTwitchApiRepository();
+
+        $this->service = new GetUserByIdService($repo, $api);
     }
 
     /**
@@ -24,8 +27,9 @@ class GetUserByIdServiceTest extends TestCase
     public function gets500IfCredentialsError(): void
     {
         $repo = new FakeDataBaseRepository();
+        $api = new FakeTwitchApiRepository();
         $service = $this->getMockBuilder(GetUserByIdService::class)
-            ->setConstructorArgs([$repo])
+            ->setConstructorArgs([$repo, $api])
             ->onlyMethods(['obtenerToken'])
             ->getMock();
 
