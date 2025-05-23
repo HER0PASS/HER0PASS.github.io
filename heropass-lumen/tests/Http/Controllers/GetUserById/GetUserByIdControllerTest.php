@@ -27,7 +27,7 @@ class GetUserByIdControllerTest extends TestCase
     /**
      * @test
      */
-    public function gets400IfIdIsMissing(): void
+    public function givenRequestWithMissingTwitchUserIdReturns400(): void
     {
         $request = Request::create('/analytics/user', 'GET');
 
@@ -41,7 +41,7 @@ class GetUserByIdControllerTest extends TestCase
     /**
      * @test
      */
-    public function gets404IfUserIsNotFound(): void
+    public function givenTwitchUserIdNonExistentReturns404(): void
     {
         $request = Request::create('/analytics/user', 'GET', ['id' => '99999']);
 
@@ -56,7 +56,7 @@ class GetUserByIdControllerTest extends TestCase
     /**
      * @test
      */
-    public function getsUserDataIfIdIsValid()
+    public function givenValidTwitchUserIdReturns200()
     {
         $request = Request::create('/analytics/user', 'GET', ['id' => '12345']);
 

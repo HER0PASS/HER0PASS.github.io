@@ -46,7 +46,7 @@ class GetUserByIdServiceTest extends TestCase
     /**
      * @test
      */
-    public function gets400IfUserDoesNotExist(): void
+    public function givenTwitchUserIdNonExistentReturns404AndMessage(): void
     {
         $response = $this->service->getUserData('99999');
         $this->assertEquals(404, $response->getStatusCode());
@@ -58,7 +58,7 @@ class GetUserByIdServiceTest extends TestCase
     /**
      * @test
      */
-    public function getUserDataIfUserExists()
+    public function givenValidTwitchUserIdReturnsData()
     {
         $response = $this->service->getUserData('12345');
         $data = json_decode($response->getContent(), true);

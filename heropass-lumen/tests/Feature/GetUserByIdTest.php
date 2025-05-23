@@ -23,7 +23,7 @@ class GetUserByIdTest extends BaseTestCase
     /**
      * @test
      */
-    public function gets200WhenUserExistsInDataBase()
+    public function givenTwitchUserIdRegisteredInDBReturns200()
     {
         $this->get('/analytics/user?id=12345', ['Authorization' => 'Bearer valid_token']);
         $this->seeStatusCode(200);
@@ -35,7 +35,7 @@ class GetUserByIdTest extends BaseTestCase
     /**
      * @test
      */
-    public function gets404WhenUserDoesNotExistAnywhere()
+    public function givenTwitchUserIdNonExistentReturns404()
     {
         $this->get('/analytics/user?id=99999', ['Authorization' => 'Bearer valid_token']);
         $this->seeStatusCode(404);
@@ -47,7 +47,7 @@ class GetUserByIdTest extends BaseTestCase
     /**
      * @test
      */
-    public function gets400WhenIdIsMissing()
+    public function givenRequestWithMissingTwitchUserIdReturns400()
     {
         $this->get('/analytics/user', ['Authorization' => 'Bearer valid_token']);
         $this->seeStatusCode(400);
@@ -59,7 +59,7 @@ class GetUserByIdTest extends BaseTestCase
     /**
      * @test
      */
-    public function gets401WhenAuthorizationIsInvalid()
+    public function givenRequestWithInvalidTokenReturns401()
     {
         $this->get('/analytics/user?id=12345');
         $this->seeStatusCode(401);
