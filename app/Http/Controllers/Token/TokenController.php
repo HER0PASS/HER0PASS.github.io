@@ -36,7 +36,16 @@ class TokenController
             $email = $this->emailValidator->validateEmail($request->input('email'));
             $apiKey = $this->apiKeyValidator->validateApiKey($request->input('api_key'));
 
-            return $this->service->createToken($email, $apiKey);
+            $session = $this->service->createToken($email, $apiKey);
+            if (!$session) {
+                return response()->json([
+                    'error' => 'Unauthorized. API access token is invalid.'
+                ], 401);
+            }
+
+            return response()->json([
+                'token' => $session->getToken()
+            ], 200);
         } catch (EmptyEmailException | EmptyApiKeyException | InvalidEmailAddressException $e) {
             return new JsonResponse([
                 'error' =>  $e->getMessage(),
