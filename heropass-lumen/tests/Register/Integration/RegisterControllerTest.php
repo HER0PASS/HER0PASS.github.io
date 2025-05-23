@@ -5,6 +5,7 @@ namespace Register\Integration;
 use App\Http\Controllers\Register\EmailValidator;
 use App\Http\Controllers\Register\RegisterController;
 use App\Interfaces\DataBaseRepositoryInterface;
+use App\Models\APIUser;
 use App\Services\RegisterService;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\TestCase;
@@ -85,5 +86,33 @@ class RegisterControllerTest extends TestCase
 
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertEquals('The email must be a valid email address', $data['error']);
+    }
+
+    /**
+     * @test
+     */
+    public function givenRequestWithRegisteredUserReturnsUpdatedAPIKey(): void
+    {
+        $oldKey = '6288f213b19339919569e8b43f1ad852';
+        $existingUser = new APIUser(1, 'user1@example.com', $oldKey);
+
+        $repository = new FakeDataBaseRepository();
+        $repository->storeUser($existingUser);
+
+        $service = new RegisterService($repository);
+        $validator = new EmailValidator();
+        $controller = new RegisterController($validator, $service);
+
+        $request = Request::create('/register', 'POST', ['email' => 'user1@example.com']);
+        $response = $controller->register($request);
+
+        $data = json_decode($response->getContent(), true);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertArrayHasKey('api_key', $data);
+        $this->assertNotEquals($oldKey, $data['api_key']);
+
+        $storedUser = $repository->getAPIUserByEmail('user1@example.com');
+        $this->assertEquals($data['api_key'], $storedUser->getApiKey());
     }
 }

@@ -113,4 +113,9 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
     {
         // TODO: Implement updateSession() method.
     }
+
+    public function storeUser(APIUser $user): void
+    {
+        $this->fakeAPIUsers[] = $user->toArray();
+    }
 }
