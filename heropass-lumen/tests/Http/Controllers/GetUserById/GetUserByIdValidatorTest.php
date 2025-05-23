@@ -26,7 +26,7 @@ class GetUserByIdValidatorTest extends TestCase
     /**
      * @test
      */
-    public function requestIsInvalidIfIdIsNotNumeric()
+    public function givenInvalidIdFormatReturnsFalse()
     {
         $this->assertFalse($this->validator->validate('abc'));
         $this->assertFalse($this->validator->validate([]));
@@ -36,7 +36,7 @@ class GetUserByIdValidatorTest extends TestCase
     /**
      * @test
      */
-    public function getsErrorIfIdIsMissing()
+    public function givenRequestWithMissingIdReturnsError()
     {
         $request = Request::create('/analytics/user', 'GET');
         $request->headers->set('Authorization', 'Bearer valid-token');
@@ -51,7 +51,7 @@ class GetUserByIdValidatorTest extends TestCase
     /**
      * @test
      */
-    public function getsErrorIfIdIsInvalid()
+    public function givenRequestWithInvalidIdReturnsError()
     {
         $request = Request::create('/analytics/user', 'GET', ['id' => '0']);
         $request->headers->set('Authorization', 'Bearer valid-token');
@@ -66,7 +66,7 @@ class GetUserByIdValidatorTest extends TestCase
     /**
      * @test
      */
-    public function getsSuccessWithValidData()
+    public function givenValidRequestReturnsValidResponse()
     {
         $request = Request::create('/analytics/user', 'GET', ['id' => '1']);
         $request->headers->set('Authorization', 'Bearer valid-token');

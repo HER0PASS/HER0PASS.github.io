@@ -2,9 +2,6 @@
 
 namespace Tests\Http\Controllers;
 
-use App\Exceptions\InvalidEmailAddressException;
-use App\Http\Controllers\RegisterController;
-use Illuminate\Http\JsonResponse;
 use Tests\TestCase;
 
 class TokenControllerTest extends TestCase

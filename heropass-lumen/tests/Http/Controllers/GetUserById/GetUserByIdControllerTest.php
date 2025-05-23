@@ -7,6 +7,7 @@ use App\Http\Controllers\GetUserById\GetUserByIdValidator;
 use App\Services\GetUserByIdService;
 use Illuminate\Http\Request;
 use Tests\Fakes\FakeDataBaseRepository;
+use Tests\Fakes\FakeTwitchApiRepository;
 use Tests\TestCase;
 
 class GetUserByIdControllerTest extends TestCase
@@ -18,7 +19,7 @@ class GetUserByIdControllerTest extends TestCase
         parent::setUp();
 
         $validator = new GetUserByIdValidator();
-        $service = new GetUserByIdService(new FakeDataBaseRepository());
+        $service = new GetUserByIdService(new FakeDataBaseRepository(), new FakeTwitchApiRepository());
 
         $this->controller = new GetUserByIdController($validator, $service);
     }
@@ -26,7 +27,7 @@ class GetUserByIdControllerTest extends TestCase
     /**
      * @test
      */
-    public function gets400IfIdIsMissing(): void
+    public function givenRequestWithMissingTwitchUserIdReturns400(): void
     {
         $request = Request::create('/analytics/user', 'GET');
 
@@ -40,7 +41,7 @@ class GetUserByIdControllerTest extends TestCase
     /**
      * @test
      */
-    public function gets404IfUserIsNotFound(): void
+    public function givenTwitchUserIdNonExistentReturns404(): void
     {
         $request = Request::create('/analytics/user', 'GET', ['id' => '99999']);
 
@@ -55,7 +56,7 @@ class GetUserByIdControllerTest extends TestCase
     /**
      * @test
      */
-    public function getsUserDataIfIdIsValid()
+    public function givenValidTwitchUserIdReturns200()
     {
         $request = Request::create('/analytics/user', 'GET', ['id' => '12345']);
 
