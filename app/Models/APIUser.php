@@ -18,7 +18,7 @@ class APIUser
 
     public function generateApiKey(): void
     {
-        $this->apiKey = bin2hex(random_bytes(16));
+        $this->setApiKey(bin2hex(random_bytes(16)));
     }
 
     public function getId(): ?int

@@ -4,16 +4,22 @@ namespace App\Models;
 
 class APISessions
 {
-    private string $user_id;
+    private ?int $user_id = null;
     private string $token;
 
     private \DateTime $expires_at;
 
-    public function __construct(string $user_id, string $token, \DateTime $expires_at)
+    public function __construct(?int $user_id, ?string $token, ?\DateTime $expires_at)
     {
         $this->user_id = $user_id;
-        $this->token = $token;
+        $this->token = $token ?? '';
         $this->expires_at = $expires_at;
+    }
+
+    public function generateToken(): void
+    {
+        $this->setToken(bin2hex(random_bytes(32)));
+        $this->setExpiresAt((new \DateTime())->add(new \DateInterval('P3D')));
     }
 
     public function getUserId(): string
@@ -30,6 +36,18 @@ class APISessions
     {
         return $this->expires_at;
     }
+
+    public function setToken(string $token): void
+    {
+        $this->token = $token;
+    }
+
+    public function setExpiresAt(\DateTime $expires_at): void
+    {
+        $this->expires_at = $expires_at;
+    }
+
+
 
     public function toArray(): array
     {
