@@ -8,9 +8,9 @@ use App\Models\APIUser;
 use App\Models\TwitchUser;
 use Illuminate\Support\Facades\DB;
 
-class RealDataBaseRepository implements DataBaseRepositoryInterface
+class DataBaseRepository implements DataBaseRepositoryInterface
 {
-    public function getUserById(string $userId): ?TwitchUser
+    public function getTwitchUserById(string $userId): ?TwitchUser
     {
         $row = DB::table('TwitchUsers')
             ->where('idUser', $userId)
@@ -24,7 +24,7 @@ class RealDataBaseRepository implements DataBaseRepositoryInterface
         return TwitchUser::fromArray($userData);
     }
 
-    public function saveUser(TwitchUser $user): void
+    public function saveTwitchUser(TwitchUser $user): void
     {
         DB::table('TwitchUsers')->updateOrInsert(
             ['idUser' => $user->getId()],
@@ -32,91 +32,91 @@ class RealDataBaseRepository implements DataBaseRepositoryInterface
         );
     }
 
-    public function getUserByEmail($email): ?APIUser
+    public function getAPIUserByEmail($email): ?APIUser
     {
         $row = DB::table('users')
             ->where('email', $email)
             ->first();
 
-        if (!$row || !$row->data) {
+        if (!$row) {
             return null;
         }
 
-        $userData = json_decode($row->data, true);
-        return APIUser::fromArray($userData);
+        return new APIUser($row->id, $row->email, $row->api_key);
     }
 
-    public function checkUserExistence($email, $api_key): ?APIUser
+    public function checkAPIUserExistence(APIUser $apiUser): ?APIUser
     {
         $row = DB::table('users')
-            ->where('email', $email)
-            ->where('api_key', $api_key)
+            ->where('email', $apiUser->getEmail())
+            ->where('api_key', $apiUser->getApiKey())
             ->first();
 
-        if (!$row || !$row->data) {
-            return null;
-        }
-
-        $userData = json_decode($row->data, true);
-        return APIUser::fromArray($userData);
+        return $row ? $apiUser : null;
     }
 
-    public function updateApiKey(string $email, string $api_key): void
+    public function updateAPIUserAPIKey(APIUser $apiUser): void
     {
         DB::table('users')
-            ->where('email', $email)
-            ->update(['api_key' => $api_key]);
+            ->where('email', $apiUser->getEmail())
+            ->update(['api_key' => $apiUser->getApiKey()]);
     }
 
-    public function registerEmailAndApiKey(string $email, string $api_key): void
+    public function registerAPIUser(APIUser $apiUser): void
     {
         DB::table('users')->insert([
-            'email' => $email,
-            'api_key' => $api_key,
+            'email' => $apiUser->getEmail(),
+            'api_key' => $apiUser->getApiKey(),
         ]);
     }
 
-    public function getExpireDate($token): ?APISessions
+    public function getSessionByToken($token): ?APISessions
     {
         $row = DB::table('sessions')
             ->where('token', $token)
             ->first();
 
-        if (!$row || !$row->data) {
+        if (!$row) {
             return null;
         }
 
-        $sessionData = json_decode($row->data, true);
-        return APISessions::fromArray($sessionData);
+        return new APISessions(
+            (string) $row->user_id,
+            $row->token,
+            new \DateTime($row->expires_at)
+        );
     }
 
-    public function getTokenFromDatabase($user_id): ?APISessions
+    public function getSessionByUserId($user_id): ?APISessions
     {
         $row = DB::table('sessions')
             ->where('user_id', $user_id)
             ->first();
 
-        if (!$row || !$row->data) {
+        if (!$row) {
             return null;
         }
 
-        $sessionData = json_decode($row->data, true);
-        return APISessions::fromArray($sessionData);
+        return new APISessions(
+            (string) $row->user_id,
+            $row->token,
+            new \DateTime($row->expires_at)
+        );
     }
 
-    public function registerTokenInDatabase($token, $expires_at, $user_id): void
+    public function registerSession(APISessions $apiSession): void
     {
         DB::table('sessions')->insert([
-            'user_id' => $user_id,
-            'token' => $token,
-            'expires_at' => $expires_at
+            'user_id' => $apiSession->getUserId(),
+            'token' => $apiSession->getToken(),
+            'expires_at' => $apiSession->getExpiresAt()
         ]);
     }
 
-    public function updateTokenInDatabase($token, $expires_at, $user_id): void
+    public function updateSession(APISessions $apiSession): void
     {
         DB::table('sessions')
-            ->where('user_id', $user_id)
-            ->update(['token' => $token, 'expires_at' => $expires_at]);
+            ->where('user_id', $apiSession->getUserId())
+            ->update(['token' => $apiSession->getToken(), 'expires_at' => $apiSession->getExpiresAt()]);
     }
 }

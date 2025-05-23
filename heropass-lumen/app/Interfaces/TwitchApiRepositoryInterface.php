@@ -2,7 +2,9 @@
 
 namespace App\Interfaces;
 
+use App\Models\TwitchUser;
+
 interface TwitchApiRepositoryInterface
 {
-    public function getUserByDisplayName(string $name): ?User;
+    public function getTwitchUserById(string $userId): ?TwitchUser;
 }

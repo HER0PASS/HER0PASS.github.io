@@ -6,6 +6,6 @@ use App\Models\TwitchUser;
 
 interface DataBaseRepositoryInterface
 {
-    public function getUserById(string $userId): ?TwitchUser;
-    public function saveUser(TwitchUser $user): void;
+    public function getTwitchUserById(string $userId): ?TwitchUser;
+    public function saveTwitchUser(TwitchUser $user): void;
 }
