@@ -24,7 +24,7 @@ class TokenManagerTest extends TestCase
         $mockRepository = $this->createMock(DataBaseRepository::class);
 
         $mockRepository->expects($this->once())
-            ->method('checkUserExistence')
+            ->method('checkAPIUserExistence')
             ->with($email, $apiKey)
             ->willReturn($expectedUserId);
 
@@ -43,7 +43,7 @@ class TokenManagerTest extends TestCase
         $mockRepository = $this->createMock(DataBaseRepository::class);
 
         $mockRepository->expects($this->once())
-            ->method('getTokenFromDataBase')
+            ->method('getSessionByUserId')
             ->with($userId)
             ->willReturn($token);
 
@@ -71,7 +71,7 @@ class TokenManagerTest extends TestCase
         $mockRepository = $this->createMock(DataBaseRepository::class);
 
         $mockRepository->expects($this->once())
-            ->method('getTokenFromDataBase')
+            ->method('getSessionByUserId')
             ->with($userId)
             ->willReturn($token);
 
@@ -97,16 +97,16 @@ class TokenManagerTest extends TestCase
         $mockRepo = $this->createMock(DataBaseRepository::class);
 
         $mockRepo->expects($this->once())
-            ->method('getTokenFromDatabase')
+            ->method('getSessionByUserId')
             ->with($userId)
             ->willReturn(null);
 
         $mockRepo->expects($this->once())
-            ->method('registerTokenInDatabase')
+            ->method('registerSession')
             ->with($token, $expires_at, $userId);
 
         $mockRepo->expects($this->never())
-            ->method('updateTokenInDatabase');
+            ->method('updateSession');
 
         $tokenManager = new \App\Http\Middleware\TokenManager($mockRepo);
         $tokenManager->updateToken($token, $expires_at, $userId);
@@ -117,7 +117,7 @@ class TokenManagerTest extends TestCase
         $token = bin2hex(random_bytes(16));
         $expires_at = date('Y-m-d H:i:s', time() + (3 * 24 * 60 * 60));
 
-        $this->databaseTestRepository->registerTokenInDatabase($token, $expires_at, $userId);
+        $this->databaseTestRepository->registerSession($token, $expires_at, $userId);
 
         $stmt = $this->databaseTestRepository->connect()->prepare("SELECT * FROM sessions WHERE user_id = :user_id AND token = :token");
         $stmt->execute(['user_id' => $userId, 'token' => $token]);
@@ -134,7 +134,7 @@ class TokenManagerTest extends TestCase
 
         echo "Insertando expires_at: $expires_at\n";
 
-        $this->databaseTestRepository->updateTokenInDatabase($token, $expires_at, $userId);
+        $this->databaseTestRepository->updateSession($token, $expires_at, $userId);
 
         $stmt = $this->databaseTestRepository->connect()->prepare("SELECT * FROM sessions WHERE user_id = :user_id AND token = :token");
         $stmt->execute(['user_id' => $userId, 'token' => $token]);
