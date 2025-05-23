@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Http\Controllers;
+namespace Http\Controllers\Token;
 
 use Tests\TestCase;
 

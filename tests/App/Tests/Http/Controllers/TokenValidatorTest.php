@@ -6,7 +6,7 @@ use App\Exceptions\EmptyApiKeyException;
 use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidApiKeyException;
 use App\Exceptions\InvalidEmailAddressException;
-use App\Http\Controllers\TokenValidator;
+use App\Http\Controllers\Token\ApiKeyValidator;
 use Tests\TestCase;
 
 class TokenValidatorTest extends TestCase
@@ -14,7 +14,7 @@ class TokenValidatorTest extends TestCase
     /** Test */
     public function testGets400WhenNoEmailIsGiven(): void
     {
-        $validator = new TokenValidator();
+        $validator = new ApiKeyValidator();
 
         $this->expectException(EmptyEmailException::class);
         $this->expectExceptionMessage('The email is mandatory');
@@ -25,7 +25,7 @@ class TokenValidatorTest extends TestCase
     /** Test */
     public function testGets400WhenNoApiKeyIsGiven(): void
     {
-        $validator = new TokenValidator();
+        $validator = new ApiKeyValidator();
 
         $this->expectException(EmptyApiKeyException::class);
         $this->expectExceptionMessage('API key is empty');
@@ -36,7 +36,7 @@ class TokenValidatorTest extends TestCase
     /** Test */
     public function testGets400WhenEmailGivenIsInvalid(): void
     {
-        $validator = new TokenValidator();
+        $validator = new ApiKeyValidator();
 
         $this->expectException(InvalidEmailAddressException::class);
         $this->expectExceptionMessage('The email must be a valid email address');
@@ -47,7 +47,7 @@ class TokenValidatorTest extends TestCase
     /** Test */
     public function testGets400WhenApiKeyGivenIsInvalid(): void
     {
-        $validator = new TokenValidator();
+        $validator = new ApiKeyValidator();
 
         $this->expectException(InvalidApiKeyException::class);
         $this->expectExceptionMessage('Invalid API key format');
