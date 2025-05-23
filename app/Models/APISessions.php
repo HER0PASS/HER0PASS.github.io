@@ -22,7 +22,7 @@ class APISessions
         $this->setExpiresAt((new \DateTime())->add(new \DateInterval('P3D')));
     }
 
-    public function getUserId(): ?string
+    public function getUserId(): ?int
     {
         return $this->user_id;
     }
