@@ -1,6 +1,6 @@
 <?php
 
-namespace Register\EndToEnd;
+namespace Feature;
 
 use App\Interfaces\DataBaseRepositoryInterface;
 use Laravel\Lumen\Testing\TestCase;

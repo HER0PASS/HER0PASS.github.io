@@ -1,6 +1,6 @@
 <?php
 
-namespace Register\Unit;
+namespace Tests\Unit\Services;
 
 use App\Models\APIUser;
 use App\Services\RegisterService;

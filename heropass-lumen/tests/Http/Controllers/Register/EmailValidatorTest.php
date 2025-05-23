@@ -1,6 +1,6 @@
 <?php
 
-namespace Register\Unit;
+namespace Http\Controllers\Register;
 
 use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidEmailAddressException;

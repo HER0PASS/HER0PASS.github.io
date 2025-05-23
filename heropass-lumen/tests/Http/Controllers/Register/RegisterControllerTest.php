@@ -1,10 +1,9 @@
 <?php
 
-namespace Register\Integration;
+namespace Http\Controllers\Register;
 
 use App\Http\Controllers\Register\EmailValidator;
 use App\Http\Controllers\Register\RegisterController;
-use App\Interfaces\DataBaseRepositoryInterface;
 use App\Models\APIUser;
 use App\Services\RegisterService;
 use Illuminate\Http\Request;
