@@ -23,7 +23,7 @@ class GetUserByIdServiceTest extends TestCase
      */
     public function gets500IfCredentialsError(): void
     {
-        $repo = new FakeDataBaseRepository(); // lo defines aquí
+        $repo = new FakeDataBaseRepository();
         $service = $this->getMockBuilder(GetUserByIdService::class)
             ->setConstructorArgs([$repo])
             ->onlyMethods(['obtenerToken'])

@@ -6,21 +6,20 @@ use App\Http\Controllers\GetUserById\GetUserByIdController;
 use App\Http\Controllers\GetUserById\GetUserByIdValidator;
 use App\Services\GetUserByIdService;
 use Illuminate\Http\Request;
-use Mockery;
+use Tests\Fakes\FakeDataBaseRepository;
 use Tests\TestCase;
 
 class GetUserByIdControllerTest extends TestCase
 {
-    private GetUserByIdValidator $validator;
     private GetUserByIdController $controller;
-    private GetUserByIdService $service;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $validator = new GetUserByIdValidator();
-        $service = new GetUserByIdService();
+        $service = new GetUserByIdService(new FakeDataBaseRepository());
+
         $this->controller = new GetUserByIdController($validator, $service);
     }
 
@@ -29,15 +28,13 @@ class GetUserByIdControllerTest extends TestCase
      */
     public function gets400IfIdIsMissing(): void
     {
-        $request = new Request();
+        $request = Request::create('/analytics/user', 'GET');
 
         $response = $this->controller->getUser($request);
-        $responseData = json_decode($response->getContent(), true);
+        $data = json_decode($response->getContent(), true);
 
         $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals([
-            'error' => "Invalid or missing 'id' parameter."
-        ], $responseData);
+        $this->assertEquals("Invalid or missing 'id' parameter.", $data['error']);
     }
 
     /**
@@ -45,15 +42,13 @@ class GetUserByIdControllerTest extends TestCase
      */
     public function gets404IfUserIsNotFound(): void
     {
-        $request = new Request([], ['id' => 'nonexistent-id']);
+        $request = Request::create('/analytics/user', 'GET', ['id' => 'nonexistent-id']);
 
         $response = $this->controller->getUser($request);
-        $responseData = json_decode($response->getContent(), true);
+        $data = json_decode($response->getContent(), true);
 
         $this->assertEquals(404, $response->getStatusCode());
-        $this->assertEquals([
-            'error' => 'User not found'
-        ], $responseData);
+        $this->assertEquals("User not found", $data['error']);
     }
 
 
@@ -62,12 +57,13 @@ class GetUserByIdControllerTest extends TestCase
      */
     public function getsUserDataIfIdIsValid()
     {
-        $request = new Request([], ['id' => '12345']);
+        $request = Request::create('/analytics/user', 'GET', ['id' => '12345']);
 
         $response = $this->controller->getUser($request);
-        $responseData = json_decode($response->getContent(), true);
+        $data = json_decode($response->getContent(), true);
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertArrayHasKey('display_name', $responseData);
+        $this->assertArrayHasKey('display_name', $data);
+        $this->assertEquals('Ninja', $data['display_name']);
     }
 }
