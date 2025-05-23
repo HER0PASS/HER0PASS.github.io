@@ -2,16 +2,15 @@
 
 namespace App\Services;
 
-use App\Interfaces\DataBaseRepositoryInterface;
+use App\Repository\DataBaseRepository;
+use Illuminate\Http\JsonResponse;
 use App\Models\APIUser;
 
 class RegisterService
 {
-    private DataBaseRepositoryInterface $dataBaseRepository;
-
-    public function __construct(DataBaseRepositoryInterface $dataBaseRepository)
-    {
-        $this->dataBaseRepository = $dataBaseRepository;
+    public function __construct(
+        private DataBaseRepository $dataBaseRepository,
+    ) {
     }
     public function registerUser(APIUser $user): APIUser
     {

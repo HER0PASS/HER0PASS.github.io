@@ -9,6 +9,7 @@ use App\Models\TwitchUser;
 
 class FakeDataBaseRepository implements DataBaseRepositoryInterface
 {
+    private array $fakeSessions;
     private array $fakeTwitchUsers = [
         [
             'id' => '12345',
@@ -35,6 +36,14 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
             'created_at' => '2013-03-15T00:00:00Z'
         ]
     ];
+
+    public function __construct()
+    {
+        $this->fakeSessions = [
+            new APISessions('2', 'ab7ecdeaa06336505d1781576c805f47', new \DateTime('2025-02-16 16:20:49')),
+            new APISessions('4', '41d2562ddc215251d5c6dfd86c44d16b', new \DateTime('2025-04-26 17:12:02')),
+        ];
+    }
 
     public function getTwitchUserById(string $id): ?TwitchUser
     {
@@ -96,22 +105,37 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
 
     public function getSessionByToken($token): ?APISessions
     {
-        // TODO: Implement getSessionByToken() method.
+        if ($token === 'valid_token') {
+            return new APISessions('12345', 'valid_token', new \DateTime('+3 days'));
+        }
+
+        return null;
     }
 
     public function getSessionByUserId($user_id): ?APISessions
     {
-        // TODO: Implement getSessionByUserId() method.
+        foreach ($this->fakeSessions as $session) {
+            if ($session->getUserId() === $user_id) {
+                return $session;
+            }
+        }
+        return null;
     }
 
     public function registerSession(APISessions $apiSession): void
     {
-        // TODO: Implement registerSession() method.
+        $this->fakeSessions[] = $apiSession;
     }
 
     public function updateSession(APISessions $apiSession): void
     {
-        // TODO: Implement updateSession() method.
+        foreach ($this->fakeSessions as $i => $session) {
+            if ($session->getUserId() === $apiSession->getUserId()) {
+                $this->fakeSessions[$i] = $apiSession;
+                return;
+            }
+        }
+        $this->fakeSessions[] = $apiSession;
     }
 
     public function storeUser(APIUser $user): void
