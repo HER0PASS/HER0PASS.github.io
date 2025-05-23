@@ -81,7 +81,7 @@ class DataBaseRepository implements DataBaseRepositoryInterface
         }
 
         return new APISessions(
-            (string) $row->user_id,
+            (int) $row->user_id,
             $row->token,
             new \DateTime($row->expires_at)
         );
@@ -98,7 +98,7 @@ class DataBaseRepository implements DataBaseRepositoryInterface
         }
 
         return new APISessions(
-            (string) $row->user_id,
+            (int) $row->user_id,
             $row->token,
             new \DateTime($row->expires_at)
         );
