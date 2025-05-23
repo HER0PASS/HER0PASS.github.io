@@ -27,7 +27,7 @@ $router->get('/', function () {
     return 'Lumen funcionando 🎉';
 });
 
-$router->post('/register', 'RegisterController@register');
+$router->post('/register', 'Register\RegisterController@register');
 
 $router->post('/token', function () {
     require __DIR__ . '/../public/endpoints/token.php';

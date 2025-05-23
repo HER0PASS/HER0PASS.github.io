@@ -25,9 +25,11 @@ class RegisterController extends BaseController
         try {
             $email = $this->validator->validate($request->input('email'));
 
-            $apiKey = $this->service->registerUser($email);
+            $user = new APIUser(null, $email);
 
-            return response()->json(['api_key' => $apiKey], 200);
+            $registeredUser = $this->service->registerUser($user);
+
+            return response()->json(['api_key' => $registeredUser->getApiKey()], 200);
         } catch (EmptyEmailException | InvalidEmailAddressException $e) {
             return new JsonResponse([
                 'error' =>  $e->getMessage(),
