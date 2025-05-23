@@ -1,27 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Token;
 
 use App\Exceptions\EmptyApiKeyException;
 use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidApiKeyException;
 use App\Exceptions\InvalidEmailAddressException;
-use Illuminate\Http\JsonResponse;
 
-class TokenValidator
+class ApiKeyValidator
 {
-    public function validateEmail(?string $email): string
-    {
-        if (empty($email)) {
-            throw new EmptyEmailException();
-        }
-        $sanitizedEmail = filter_var($email, FILTER_SANITIZE_EMAIL);
-        if (!filter_var($sanitizedEmail, FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidEmailAddressException();
-        }
-        return $email;
-    }
-
     public function validateApiKey(?string $apiKey): string
     {
         if (empty($apiKey)) {
