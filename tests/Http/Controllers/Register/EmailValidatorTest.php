@@ -19,7 +19,7 @@ class EmailValidatorTest extends TestCase
         $this->expectException(EmptyEmailException::class);
         $this->expectExceptionMessage('The email is mandatory');
 
-        $validator->validate(null);
+        $validator->validateEmail(null);
     }
 
     /**
@@ -32,7 +32,7 @@ class EmailValidatorTest extends TestCase
         $this->expectException(InvalidEmailAddressException::class);
         $this->expectExceptionMessage('The email must be a valid email address');
 
-        $validator->validate('testNotValid');
+        $validator->validateEmail('testNotValid');
     }
 
     /**
@@ -41,7 +41,7 @@ class EmailValidatorTest extends TestCase
     public function testGivenNotSanitazedMailReturnsSanitazedEmail(): void
     {
         $validator = new EmailValidator();
-        $response = $validator->validate('(notSanitazed@mail.com)');
+        $response = $validator->validateEmail('(notSanitazed@mail.com)');
         $this->assertEquals('notSanitazed@mail.com', $response);
     }
 }
