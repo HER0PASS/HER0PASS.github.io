@@ -15,11 +15,11 @@ class RegisterService
     public function registerUser($email): JsonResponse
     {
         $api_key = bin2hex(random_bytes(16));
-        $user = $this->dataBaseRepository->getUserByEmail($email);
+        $user = $this->dataBaseRepository->getAPIUserByEmail($email);
         if ($user) {
-            $this->dataBaseRepository->updateApiKey($email, $api_key);
+            $this->dataBaseRepository->updateAPIUserAPIKey($email, $api_key);
         } else {
-            $this->dataBaseRepository->registerEmailAndApiKey($email, $api_key);
+            $this->dataBaseRepository->registerAPIUser($email, $api_key);
         }
         return new JsonResponse(['api_key' => $api_key], 200);
     }

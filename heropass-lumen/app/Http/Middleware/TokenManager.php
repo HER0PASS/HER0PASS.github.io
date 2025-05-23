@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\TokenValidator;
+use App\Models\APISessions;
 use App\Repository\DataBaseRepository;
 use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
@@ -18,15 +19,16 @@ class TokenManager
         $this->dataBaseRepository = $dataBaseRepository;
     }
 
-    public function checkUser($email, $api_key): ?string
+    public function checkUser($email, $api_key): \App\Models\APIUser
     {
-        return $this->dataBaseRepository->checkUserExistence($email, $api_key);
+        return $this->dataBaseRepository->checkAPIUserExistence($email, $api_key);
     }
 
-    public function getToken($userId): JsonResponse
+    public function getToken($user_id): JsonResponse
     {
-        $token =  $this->dataBaseRepository->getTokenFromDataBase($userId);
-        $expires_at = $this->dataBaseRepository->getExpireDate($token);
+        $session = $this->dataBaseReposistory->getSessionByUserId($user_id);
+        $token = $session->getToken();
+        $expires_at = $session->getExpireDate($token);
         return new JsonResponse(['token' => $token, 'expires_at' => $expires_at]);
     }
 
@@ -40,21 +42,17 @@ class TokenManager
 
     public function updateToken($token, $expires_at, $userId): void
     {
-        if ($this->dataBaseRepository->getTokenFromDataBase($userId) === null) {
-            $this->dataBaseRepository->registerTokenInDatabase($token, $expires_at, $userId);
+        if ($this->dataBaseRepository->getSessionByUserId($userId) === null) {
+            $this->dataBaseRepository->registerSession($token, $expires_at, $userId);
         } else {
-            $this->dataBaseRepository->updateTokenInDatabase($token, $expires_at, $userId);
+            $this->dataBaseRepository->updateSession($token, $expires_at, $userId);
         }
     }
 
     public function tokenIsActive($token): bool
     {
-        $expires_at = $this->dataBaseRepository->getExpireDate($token);
+        $expires_at = $this->dataBaseRepository->getSessionByToken($token)->getExpiresAt();
 
-        if (!$expires_at) {
-            return false;
-        }
-
-        return strtotime($expires_at) > time();
+        return $expires_at->getTimestamp() > time();
     }
 }

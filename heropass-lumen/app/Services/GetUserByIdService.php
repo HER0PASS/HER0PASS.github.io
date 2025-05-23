@@ -3,13 +3,14 @@
 namespace App\Services;
 
 use App\Interfaces\DataBaseRepositoryInterface;
-use App\Repository\DataBaseApiRepository;
+use App\Repository\DataBaseRepository;
+use App\Repository\TwitchAPIRepository;
 use Illuminate\Http\JsonResponse;
 
 class GetUserByIdService
 {
     private DataBaseRepositoryInterface $dbRepository;
-    private ?DataBaseApiRepository $apiRepository = null;
+    private ?TwitchAPIRepository $apiRepository = null;
 
     public function __construct(DataBaseRepositoryInterface $dbRepository)
     {
@@ -19,7 +20,7 @@ class GetUserByIdService
     public function getUserData(string $userId): JsonResponse
     {
         // Primero buscamos en la base de datos
-        $user = $this->dbRepository->getUserById($userId);
+        $user = $this->dbRepository->getTwitchUserById($userId);
         if ($user) {
             return response()->json($user->toArray(), 200);
         }
@@ -33,10 +34,10 @@ class GetUserByIdService
         }
 
         // Creamos el repositorio de la API con las credenciales obtenidas
-        $this->apiRepository = new DataBaseApiRepository($credentials);
+        $this->apiRepository = new TwitchAPIRepository($credentials);
 
         // Obtenemos el usuario desde la API
-        $user = $this->apiRepository->getUserById($userId);
+        $user = $this->apiRepository->getTwitchUserById($userId);
         if (!$user) {
             return response()->json([
                 "error" => "User not found."
@@ -44,7 +45,7 @@ class GetUserByIdService
         }
 
         // Guardamos el usuario en la base de datos
-        $this->dbRepository->saveUser($user);
+        $this->dbRepository->saveTwitchUser($user);
 
         return response()->json($user->toArray(), 200);
     }
