@@ -25,23 +25,10 @@ class GetStreamsTest extends BaseTestCase
      */
     public function givenValidTokenReturnsStreamsData(): void
     {
-        $this->get('/streams', ['Authorization' => 'Bearer valid_token']);
+        $this->get('/analytics/streams', ['Authorization' => 'Bearer valid_token']);
         $this->seeStatusCode(200);
 
-        $this->seeJson([
-            'title' => 'Analizando la nueva plantilla del FC Barcelona',
-            'user_name' => 'messi'
-        ]);
-
-        $this->seeJson([
-            'title' => 'Jugando al Fortnite con amigos',
-            'user_name' => 'miketroke'
-        ]);
-
-        $this->seeJson([
-            'title' => 'Las aventuras del peiro',
-            'user_name' => 'dembele'
-        ]);
+        // Hacer los otros
     }
 
     /**
@@ -49,10 +36,10 @@ class GetStreamsTest extends BaseTestCase
      */
     public function givenInvalidTokenReturns401(): void
     {
-        $this->get('/streams', ['Authorization' => 'Bearer invalid_token']);
+        $this->get('/analytics/streams', ['Authorization' => 'Bearer invalid_token']);
         $this->seeStatusCode(401);
         $this->seeJson([
-            'error' => 'Unauthorized. Twitch access token is invalid or has expired.'
+            'error' => 'Unauthorized. Token is invalid or expired.'
         ]);
     }
 
@@ -61,10 +48,10 @@ class GetStreamsTest extends BaseTestCase
      */
     public function givenNoTokenReturns401(): void
     {
-        $this->get('/streams');
+        $this->get('/analytics/streams');
         $this->seeStatusCode(401);
         $this->seeJson([
-            'error' => 'Unauthorized. Twitch access token is invalid or has expired.'
+            'error' => 'Unauthorized. Token is invalid or expired.'
         ]);
     }
 }

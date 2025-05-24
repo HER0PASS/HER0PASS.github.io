@@ -37,6 +37,21 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
         ]
     ];
 
+    private array $fakeStreams = [
+        [
+            'title' => 'Analizando la nueva plantilla del FC Barcelona',
+            'user_name' => 'messi'
+        ],
+        [
+            'title' => 'Jugando al Fortnite con amigos',
+            'user_name' => 'miketroke'
+        ],
+        [
+            'title' => 'Las aventuras del peiro',
+            'user_name' => 'dembele'
+        ]
+    ];
+
     public function __construct()
     {
         $this->fakeSessions = [
@@ -136,5 +151,10 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
     public function storeUser(APIUser $user): void
     {
         $this->fakeAPIUsers[] = $user->toArray();
+    }
+
+    public function getStreams(): ?array
+    {
+        return $this->fakeStreams;
     }
 }
