@@ -15,8 +15,8 @@ class GetStreamsService
     {
         $this->dbRepository = $dbRepository;
         $this->apiRepository = $apiRepository;
-    }    
-      public function getStreamsData(): JsonResponse
+    }
+    public function getStreamsData(): JsonResponse
     {
         try {
             // Obtener credenciales de Twitch
@@ -29,10 +29,10 @@ class GetStreamsService
 
             // Establecer las credenciales para el repositorio de la API
             $this->apiRepository = new \App\Repository\TwitchAPIRepository($credentials);
-            
+
             // Obtener datos de los streams desde el repositorio
             $streams = $this->apiRepository->getStreams();
-            
+
             if (!$streams) {
                 return response()->json([
                     "error" => "Unauthorized. Twitch access token is invalid or has expired."
