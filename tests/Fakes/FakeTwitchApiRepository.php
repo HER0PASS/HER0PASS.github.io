@@ -29,12 +29,13 @@ class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
 
     public function getStreams(): ?array
     {
-        $stream1 = new Stream('Test Stream 1', 'TestUser1');
-        $stream2 = new Stream('Test Stream 2', 'TestUser2');
-
+        $stream1 = new Stream('Analizando la nueva plantilla del FC Barcelona', 'messi');
+        $stream2 = new Stream('Jugando al Fortnite con amigos', 'miketroke');
+        $stream3 = new Stream('Las aventuras del peiro', 'dembele');
         return [
             $stream1->getStream(),
-            $stream2->getStream()
+            $stream2->getStream(),
+            $stream3->getStream()
         ];
     }
 }
