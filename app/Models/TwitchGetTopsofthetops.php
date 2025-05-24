@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class TwitchTopsofthetops
+class TwitchGetTopsofthetops
 {
     private string $game_id;
 
