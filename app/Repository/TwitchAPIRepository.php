@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Interfaces\DataBaseRepositoryInterface;
+use App\Exceptions\TwitchApiException;
 use App\Interfaces\TwitchApiRepositoryInterface;
 use App\Models\Stream;
 use App\Models\TwitchUser;
@@ -40,6 +40,10 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
         $api_url = "https://api.twitch.tv/helix/streams?first=10";
 
         [$response, $http_code] = $this->getApiResponse($client_id, $access_token, $api_url);
+
+        if ($http_code === 401) {
+            throw new TwitchApiException();
+        }
 
         $data = json_decode($response, true);
 
