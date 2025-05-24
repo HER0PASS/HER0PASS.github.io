@@ -138,4 +138,9 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
     {
         $this->fakeAPIUsers[] = $user->toArray();
     }
+
+    public function storeSession(APISession $expiredSession)
+    {
+        $this->fakeSessions[$expiredSession->getUserId()] = $expiredSession;
+    }
 }
