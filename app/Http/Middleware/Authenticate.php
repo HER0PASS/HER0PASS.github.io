@@ -8,11 +8,8 @@ use Illuminate\Http\JsonResponse;
 
 class Authenticate
 {
-    private TokenManager $tokenManager;
-
-    public function __construct(TokenManager $tokenManager)
+    public function __construct(private TokenManager $tokenManager)
     {
-        $this->tokenManager = $tokenManager;
     }
 
     public function handle($request, Closure $next)
