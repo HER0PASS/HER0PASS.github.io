@@ -30,7 +30,7 @@ class TokenService
             $session = new APISession($validUser->getId());
             $session->generateToken();
             $this->dataBaseRepository->registerSession($session);
-        } else {
+        } elseif ($session->isExpired()) {
             $session->generateToken();
             $this->dataBaseRepository->updateSession($session);
         }
