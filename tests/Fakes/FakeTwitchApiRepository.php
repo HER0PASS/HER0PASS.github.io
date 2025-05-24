@@ -3,6 +3,7 @@
 namespace Tests\Fakes;
 
 use App\Interfaces\TwitchApiRepositoryInterface;
+use App\Models\Stream;
 use App\Models\TwitchUser;
 
 class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
@@ -24,5 +25,13 @@ class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
             ]);
         }
         return null;
+    }
+
+    public function getStreams(): ?array
+    {
+        $stream1 = new Stream('Analizando la nueva plantilla del FC Barcelona', 'messi');
+        $stream2 = new Stream('Jugando al Fortnite con amigos', 'miketroke');
+        $stream3 = new Stream('Las aventuras del peiro', 'dembele');
+        return [$stream1, $stream2, $stream3];
     }
 }

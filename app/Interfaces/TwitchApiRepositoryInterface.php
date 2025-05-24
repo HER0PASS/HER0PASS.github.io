@@ -7,4 +7,5 @@ use App\Models\TwitchUser;
 interface TwitchApiRepositoryInterface
 {
     public function getTwitchUserById(string $userId): ?TwitchUser;
+    public function getStreams(): ?array;
 }
