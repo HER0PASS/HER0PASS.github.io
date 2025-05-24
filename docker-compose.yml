@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: lumen-api
+    container_name: lumen-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    ports:
+      - "8080:8000" # Cambiado de 8000:8000 a 8080:8000
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: lumen-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: lumen
+      MYSQL_ROOT_PASSWORD: lumen
+      MYSQL_USER: lumen
+      MYSQL_PASSWORD: lumen
+    ports:
+      - "3307:3306" # Este puerto está bien, diferente del estándar 3306
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/mysql-init:/docker-entrypoint-initdb.d
+
+volumes:
+  db_data:

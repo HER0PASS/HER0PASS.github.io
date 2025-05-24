@@ -1,8 +1,8 @@
-﻿.idea
-vendor
-.vscode/
-
+/vendor
+/.idea
+Homestead.json
+Homestead.yaml
+.env
+.phpunit.result.cache
 .php-cs-fixer.cache
-composer.phar
-
-
+/storage

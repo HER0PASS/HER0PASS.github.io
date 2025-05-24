@@ -1,16 +1,45 @@
 {
-    "name": "her0pass/twitch-analytics",
-    "description": "Herramienta de análisis de datos de Twitch para proyectos internos",
-    "license": "proprietary",
+    "name": "laravel/lumen",
+    "description": "The Laravel Lumen Framework.",
+    "keywords": ["framework", "laravel", "lumen"],
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "php": "^8.1",
+        "laravel/lumen-framework": "^10.0"
+    },
     "require-dev": {
-        "squizlabs/php_codesniffer": "*",
-        "phpmd/phpmd": "*",
+        "fakerphp/faker": "^1.9.1",
         "friendsofphp/php-cs-fixer": "*",
-        "phpro/grumphp": "^2.11"
+        "mockery/mockery": "^1.4.4",
+        "phpmd/phpmd": "*",
+        "phpro/grumphp": "^1.4",
+        "phpunit/phpunit": "^10.0",
+        "squizlabs/php_codesniffer": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ]
     },
     "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
         "allow-plugins": {
             "phpro/grumphp": true
         }
-    }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
