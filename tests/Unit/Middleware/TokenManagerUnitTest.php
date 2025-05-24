@@ -17,6 +17,12 @@ class TokenManagerUnitTest extends TestCase
         date_default_timezone_set('Europe/Madrid');
     }
 
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
+    }
+
     /**
      * @test
      */

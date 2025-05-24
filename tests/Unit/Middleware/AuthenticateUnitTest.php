@@ -19,6 +19,13 @@ class AuthenticateUnitTest extends TestCase
         $this->authenticate = new Authenticate($this->tokenManager);
     }
 
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
+    }
+
+
     /**
      * @test
      */
