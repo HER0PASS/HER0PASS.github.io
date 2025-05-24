@@ -23,6 +23,6 @@ class GetStreamsService
             ], 404);
         }
 
-        return response()->json($streams->toArray(), 200);
+        return response()->json(array_map(fn ($s) => $s->toArray(), $streams), 200);
     }
 }
