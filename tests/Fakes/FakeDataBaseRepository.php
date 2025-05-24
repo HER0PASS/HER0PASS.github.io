@@ -64,24 +64,6 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
         ]
     ];
 
-    // -----------------------
-    // TWITCH STREAMS
-    // -----------------------
-    private array $fakeStreams = [
-        [
-            'title' => 'Analizando la nueva plantilla del FC Barcelona',
-            'user_name' => 'messi'
-        ],
-        [
-            'title' => 'Jugando al Fortnite con amigos',
-            'user_name' => 'miketroke'
-        ],
-        [
-            'title' => 'Las aventuras del peiro',
-            'user_name' => 'dembele'
-        ]
-    ];
-
     public function __construct()
     {
         $this->seedFakeSessions();
@@ -182,10 +164,5 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
     public function saveTwitchUser(TwitchUser $user): void
     {
         // Simulación sin guardar realmente, para cumplir la interfaz.
-    }
-
-    public function getStreams(): ?array
-    {
-        return $this->fakeStreams;
     }
 }
