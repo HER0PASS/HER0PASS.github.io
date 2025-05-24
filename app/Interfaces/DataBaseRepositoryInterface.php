@@ -12,7 +12,7 @@ interface DataBaseRepositoryInterface
 
     public function saveTwitchUser(TwitchUser $user): void;
 
-    public function getAPIUserByEmail(string $email, string $apiKey): ?APIUser;
+    public function getAPIUserByEmail(APIUser $apiApiUser): ?APIUser;
 
     public function updateAPIUserAPIKey(APIUser $apiUser): void;
 

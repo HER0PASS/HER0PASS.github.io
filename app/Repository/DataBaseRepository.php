@@ -32,12 +32,12 @@ class DataBaseRepository implements DataBaseRepositoryInterface
         );
     }
 
-    public function getAPIUserByEmail(string $email, ?string $apiKey = null): ?APIUser
+    public function getAPIUserByEmail(APIUser $apiApiUser): ?APIUser
     {
-        $query = DB::table('users')->where('email', $email);
+        $query = DB::table('users')->where('email', $apiApiUser->getEmail());
 
-        if ($apiKey !== null) {
-            $query->where('api_key', $apiKey);
+        if ($apiApiUser->getApiKey() !== null) {
+            $query->where('api_key', $apiApiUser->getApiKey());
         }
 
         $row = $query->first();

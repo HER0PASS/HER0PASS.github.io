@@ -18,7 +18,7 @@ class TokenService
     {
         $user = new APIUser(null, $email, $api_key);
 
-        $validUser = $this->dataBaseRepository->getAPIUserByEmail($email, $api_key);
+        $validUser = $this->dataBaseRepository->getAPIUserByEmail($user);
 
         if (!$validUser) {
             return null;
