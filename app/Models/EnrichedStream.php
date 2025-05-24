@@ -12,8 +12,15 @@ class EnrichedStream
     private string $user_display_name;
     private string $profile_image_url;
 
-    public function __construct(string $stream_id, string $user_id, string $user_name, int $viewer_count, string $title, string $user_display_name, string $profile_image_url)
-    {
+    public function __construct(
+        string $stream_id,
+        string $user_id,
+        string $user_name,
+        int $viewer_count,
+        string $title,
+        string $user_display_name,
+        string $profile_image_url
+    ) {
         $this->stream_id = $stream_id;
         $this->user_id = $user_id;
         $this->user_name = $user_name;
