@@ -3,7 +3,7 @@
 namespace Tests\Fakes;
 
 use App\Interfaces\DataBaseRepositoryInterface;
-use App\Models\APISessions;
+use App\Models\APISession;
 use App\Models\APIUser;
 use App\Models\TwitchUser;
 
@@ -40,8 +40,9 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
     public function __construct()
     {
         $this->fakeSessions = [
-            new APISessions('2', 'ab7ecdeaa06336505d1781576c805f47', new \DateTime('2025-02-16 16:20:49')),
-            new APISessions('4', '41d2562ddc215251d5c6dfd86c44d16b', new \DateTime('2025-04-26 17:12:02')),
+            new APISession('1', '6288f213b19339919569e8b43f1ad852', new \DateTime('2025-02-16 16:20:49')),
+            new APISession('2', 'ab7ecdeaa06336505d1781576c805f47', new \DateTime('2025-02-16 16:20:49')),
+            new APISession('4', '41d2562ddc215251d5c6dfd86c44d16b', new \DateTime('2025-04-26 17:12:02')),
         ];
     }
 
@@ -98,16 +99,16 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
         // TODO: Implement registerAPIUser() method.
     }
 
-    public function getSessionByToken($token): ?APISessions
+    public function getSessionByToken($token): ?APISession
     {
         if ($token === 'valid_token') {
-            return new APISessions('12345', 'valid_token', new \DateTime('+3 days'));
+            return new APISession('12345', 'valid_token', new \DateTime('+3 days'));
         }
 
         return null;
     }
 
-    public function getSessionByUserId($user_id): ?APISessions
+    public function getSessionByUserId($user_id): ?APISession
     {
         foreach ($this->fakeSessions as $session) {
             if ($session->getUserId() === $user_id) {
@@ -117,12 +118,12 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
         return null;
     }
 
-    public function registerSession(APISessions $apiSession): void
+    public function registerSession(APISession $apiSession): void
     {
         $this->fakeSessions[] = $apiSession;
     }
 
-    public function updateSession(APISessions $apiSession): void
+    public function updateSession(APISession $apiSession): void
     {
         foreach ($this->fakeSessions as $i => $session) {
             if ($session->getUserId() === $apiSession->getUserId()) {

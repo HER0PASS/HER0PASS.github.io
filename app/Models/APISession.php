@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class APISessions
+class APISession
 {
     private ?int $user_id = null;
     private string $token;
@@ -20,6 +20,11 @@ class APISessions
     {
         $this->setToken(bin2hex(random_bytes(32)));
         $this->setExpiresAt((new \DateTime())->add(new \DateInterval('P3D')));
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->expires_at < new \DateTime();
     }
 
     public function getUserId(): ?int

@@ -3,7 +3,7 @@
 namespace Tests\Services;
 
 use App\Interfaces\DataBaseRepositoryInterface;
-use App\Models\APISessions;
+use App\Models\APISession;
 use App\Models\APIUser;
 use App\Services\TokenService;
 use Mockery;
@@ -48,14 +48,14 @@ class TokenServiceUnitaryTest extends TestCase
         $this->repository
             ->shouldReceive('registerSession')
             ->once()
-            ->with(Mockery::on(function (APISessions $session) {
+            ->with(Mockery::on(function (APISession $session) {
                 $token = $session->getToken();
                 return strlen($token) > 0;
             }));
 
         $session = $this->service->createToken($email, $apiKey);
 
-        $this->assertInstanceOf(APISessions::class, $session);
+        $this->assertInstanceOf(APISession::class, $session);
         $this->assertNotEmpty($session->getToken());
         $this->assertIsString($session->getToken());
     }
@@ -70,7 +70,7 @@ class TokenServiceUnitaryTest extends TestCase
         $userId = 1;
 
         $user = new APIUser($userId, $email, $apiKey);
-        $existingSession = new APISessions($userId);
+        $existingSession = new APISession($userId);
         $existingSession->generateToken(); // token viejo
 
         $this->repository
@@ -87,13 +87,13 @@ class TokenServiceUnitaryTest extends TestCase
         $this->repository
             ->shouldReceive('updateSession')
             ->once()
-            ->with(Mockery::on(function (APISessions $session) {
+            ->with(Mockery::on(function (APISession $session) {
                 return strlen($session->getToken()) > 0;
             }));
 
         $session = $this->service->createToken($email, $apiKey);
 
-        $this->assertInstanceOf(APISessions::class, $session);
+        $this->assertInstanceOf(APISession::class, $session);
         $this->assertNotEmpty($session->getToken());
     }
 

@@ -4,7 +4,7 @@ namespace Tests\Http\Middleware;
 
 use App\Http\Middleware\TokenManager;
 use App\Interfaces\DataBaseRepositoryInterface;
-use App\Models\APISessions;
+use App\Models\APISession;
 use App\Models\APIUser;
 use Tests\Fakes\FakeDataBaseRepository;
 use Tests\TestCase;
@@ -54,7 +54,7 @@ class TokenManagerTest extends TestCase
 
         $mockRepository = $this->createMock(DataBaseRepositoryInterface::class);
 
-        $session = new APISessions($userId, $token, $expectedExpiredDate);
+        $session = new APISession($userId, $token, $expectedExpiredDate);
 
         $mockRepository->expects($this->once())
             ->method('getSessionByUserId')
@@ -80,7 +80,7 @@ class TokenManagerTest extends TestCase
         $expectedExpiredDate = new \DateTime('2025-02-16 16:20:49');
 
         $mockRepository = $this->createMock(DataBaseRepositoryInterface::class);
-        $session = new APISessions($userId, $token, $expectedExpiredDate);
+        $session = new APISession($userId, $token, $expectedExpiredDate);
 
         $mockRepository->expects($this->once())
             ->method('getSessionByUserId')
@@ -112,7 +112,7 @@ class TokenManagerTest extends TestCase
             ->with($userId)
             ->willReturn(null);
 
-        $expectedSession = new APISessions($userId, $token, $expires_at);
+        $expectedSession = new APISession($userId, $token, $expires_at);
 
         $mockRepo->expects($this->once())
             ->method('registerSession')
@@ -136,7 +136,7 @@ class TokenManagerTest extends TestCase
         $token = bin2hex(random_bytes(16));
         $expires_at = new \DateTime('+3 days');
 
-        $session = new APISessions($userId, $token, $expires_at);
+        $session = new APISession($userId, $token, $expires_at);
         $repo->registerSession($session);
 
         $result = $repo->getSessionByUserId($userId);
@@ -160,11 +160,11 @@ class TokenManagerTest extends TestCase
         $token = '41d2562ddc215251d5c6dfd86c44d16a';
         $oldDate = new \DateTime('2023-01-01 00:00:00');
 
-        $oldSession = new APISessions($userId, $token, $oldDate);
+        $oldSession = new APISession($userId, $token, $oldDate);
         $repo->registerSession($oldSession);
 
         $newExpires = new \DateTime('+3 days');
-        $updatedSession = new APISessions($userId, $token, $newExpires);
+        $updatedSession = new APISession($userId, $token, $newExpires);
         $repo->updateSession($updatedSession);
 
         $result = $repo->getSessionByUserId($userId);

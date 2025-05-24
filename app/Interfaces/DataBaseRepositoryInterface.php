@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-use App\Models\APISessions;
+use App\Models\APISession;
 use App\Models\APIUser;
 use App\Models\TwitchUser;
 
@@ -18,11 +18,11 @@ interface DataBaseRepositoryInterface
 
     public function registerAPIUser(APIUser $apiUser): void;
 
-    public function getSessionByToken($token): ?APISessions;
+    public function getSessionByToken($token): ?APISession;
 
-    public function getSessionByUserId($user_id): ?APISessions;
+    public function getSessionByUserId($user_id): ?APISession;
 
-    public function registerSession(APISessions $apiSession): void;
+    public function registerSession(APISession $apiSession): void;
 
-    public function updateSession(APISessions $apiSession): void;
+    public function updateSession(APISession $apiSession): void;
 }
