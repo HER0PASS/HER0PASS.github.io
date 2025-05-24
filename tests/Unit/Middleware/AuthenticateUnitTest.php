@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Middleware;
+namespace Tests\Unit\Middleware;
 
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\TokenManager;
@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
-class AuthenticateUnitaryTest extends TestCase
+class AuthenticateUnitTest extends TestCase
 {
     protected function setUp(): void
     {

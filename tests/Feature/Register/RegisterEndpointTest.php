@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature;
+namespace Feature\Register;
 
 use App\Interfaces\DataBaseRepositoryInterface;
 use App\Models\APIUser;
@@ -11,7 +11,7 @@ class RegisterEndpointTest extends TestCase
 {
     public function createApplication()
     {
-        $app = require __DIR__ . '/../../bootstrap/app.php';
+        $app = require __DIR__ . '/../../../bootstrap/app.php';
 
         $app->bind(DataBaseRepositoryInterface::class, FakeDataBaseRepository::class);
 

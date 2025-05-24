@@ -9,7 +9,7 @@ use App\Services\TokenService;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
-class TokenServiceUnitaryTest extends TestCase
+class TokenServiceUnitTest extends TestCase
 {
     private $repository;
     private TokenService $service;

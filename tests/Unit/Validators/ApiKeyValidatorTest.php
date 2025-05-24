@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Http\Controllers\Token;
+namespace Tests\Unit\Validators;
 
 use App\Http\Controllers\Token\ApiKeyValidator;
 use PHPUnit\Framework\TestCase;

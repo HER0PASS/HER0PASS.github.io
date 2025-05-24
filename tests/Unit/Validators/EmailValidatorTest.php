@@ -1,8 +1,7 @@
 <?php
 
-namespace Http\Controllers\Register;
+namespace Tests\Unit\Validators;
 
-use App\Exceptions\EmptyEmailException;
 use App\Exceptions\InvalidEmailAddressException;
 use App\Http\Controllers\Register\EmailValidator;
 use PHPUnit\Framework\TestCase;

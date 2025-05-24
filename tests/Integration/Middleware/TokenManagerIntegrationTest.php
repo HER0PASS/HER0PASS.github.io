@@ -1,9 +1,8 @@
 <?php
 
-namespace Http\Middleware;
+namespace Integration\Middleware;
 
 use App\Http\Middleware\TokenManager;
-use App\Interfaces\DataBaseRepositoryInterface;
 use App\Models\APISession;
 use PHPUnit\Framework\TestCase;
 use Tests\Fakes\FakeDataBaseRepository;

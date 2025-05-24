@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Http\Controllers\GetUserById;
+namespace Integration\Controllers;
 
 use App\Http\Controllers\GetUserById\GetUserByIdController;
 use App\Http\Controllers\GetUserById\GetUserByIdValidator;
@@ -10,7 +10,7 @@ use Tests\Fakes\FakeDataBaseRepository;
 use Tests\Fakes\FakeTwitchApiRepository;
 use Tests\TestCase;
 
-class GetUserByIdControllerTest extends TestCase
+class GetUserByIdControllerIntegrationTest extends TestCase
 {
     private GetUserByIdController $controller;
 

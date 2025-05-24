@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Unit\Services;
+namespace Integration\Services;
 
 use App\Services\GetUserByIdService;
 use PHPUnit\Framework\TestCase;
 use Tests\Fakes\FakeDataBaseRepository;
 use Tests\Fakes\FakeTwitchApiRepository;
 
-class GetUserByIdServiceTest extends TestCase
+class GetUserByIdServiceIntegrationTest extends TestCase
 {
     private GetUserByIdService $service;
 
