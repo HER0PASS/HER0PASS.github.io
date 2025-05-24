@@ -81,7 +81,7 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
         $streams = [];
         foreach ($data["data"] as $streamData) {
             $stream = new Stream($streamData["title"], $streamData["user_name"]);
-            $streams[] = $stream->getStream();
+            $streams[] = $stream->toArray();
         }
 
         return $streams;
