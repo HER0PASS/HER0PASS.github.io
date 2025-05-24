@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Http\Controllers\GetUserById;
+namespace Tests\Unit\Validators;
 
 use App\Http\Controllers\GetUserById\GetUserByIdValidator;
 use Illuminate\Http\Request;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Controllers\Token;
+namespace Integration\Controllers;
 
 use App\Http\Controllers\Register\EmailValidator;
 use App\Http\Controllers\Token\ApiKeyValidator;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Tests\Fakes\FakeDataBaseRepository;
 use Tests\TestCase;
 
-class TokenControllerTest extends TestCase
+class TokenControllerIntegrationTest extends TestCase
 {
     private TokenController $controller;
 

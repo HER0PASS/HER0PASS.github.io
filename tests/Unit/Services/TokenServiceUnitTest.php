@@ -9,7 +9,7 @@ use App\Services\TokenService;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
-class TokenServiceUnitaryTest extends TestCase
+class TokenServiceUnitTest extends TestCase
 {
     private $repository;
     private TokenService $service;
@@ -22,6 +22,11 @@ class TokenServiceUnitaryTest extends TestCase
         $this->service = new TokenService($this->repository);
     }
 
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
+    }
     /**
      * @test
      */
@@ -70,9 +75,7 @@ class TokenServiceUnitaryTest extends TestCase
         $userId = 1;
 
         $user = new APIUser($userId, $email, $apiKey);
-        $existingSession = new APISession($userId);
-        $existingSession->generateToken(); // token viejo
-
+        $existingSession = new APISession($userId, 'old_token', new \DateTime('-1 hour'));
         $this->repository
             ->shouldReceive('getAPIUserByEmail')
             ->once()
@@ -95,6 +98,7 @@ class TokenServiceUnitaryTest extends TestCase
 
         $this->assertInstanceOf(APISession::class, $session);
         $this->assertNotEmpty($session->getToken());
+        $this->assertNotEquals('old_token', $session->getToken());
     }
 
 

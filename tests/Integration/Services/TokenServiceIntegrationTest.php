@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests\Unit\Services;
+namespace Integration\Services;
 
 use App\Models\APISession;
-use App\Models\APIUser;
 use App\Services\TokenService;
 use PHPUnit\Framework\TestCase;
 use Tests\Fakes\FakeDataBaseRepository;

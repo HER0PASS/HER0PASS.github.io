@@ -1,23 +1,26 @@
 <?php
 
-namespace Tests\Http\Middleware;
+namespace Tests\Unit\Middleware;
 
 use App\Http\Middleware\TokenManager;
 use App\Interfaces\DataBaseRepositoryInterface;
 use App\Models\APISession;
-use App\Models\APIUser;
-use App\Services\TokenService;
 use Mockery;
-use Tests\Fakes\FakeDataBaseRepository;
 use Tests\TestCase;
 
-class TokenManagerUnitaryTest extends TestCase
+class TokenManagerUnitTest extends TestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
         $this->repository = Mockery::mock(DataBaseRepositoryInterface::class);
         date_default_timezone_set('Europe/Madrid');
+    }
+
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
     }
 
     /**

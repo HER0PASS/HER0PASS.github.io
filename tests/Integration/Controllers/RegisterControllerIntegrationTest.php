@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Controllers\Register;
+namespace Integration\Controllers;
 
 use App\Http\Controllers\Register\EmailValidator;
 use App\Http\Controllers\Register\RegisterController;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use PHPUnit\Framework\TestCase;
 use Tests\Fakes\FakeDataBaseRepository;
 
-class RegisterControllerTest extends TestCase
+class RegisterControllerIntegrationTest extends TestCase
 {
     private RegisterController $controller;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Http\Middleware;
+namespace Integration\Middleware;
 
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\TokenManager;
