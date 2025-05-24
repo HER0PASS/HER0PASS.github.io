@@ -16,7 +16,7 @@ class GetStreamsController extends BaseController
         $this->getStreamsService = $getStreamsService;
     }
 
-    public function getStreams(Request $request): JsonResponse
+    public function getStreams(): JsonResponse
     {
         try {
             // Obtener datos de los streams
