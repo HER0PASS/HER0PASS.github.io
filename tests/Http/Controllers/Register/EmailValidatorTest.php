@@ -9,39 +9,42 @@ use PHPUnit\Framework\TestCase;
 
 class EmailValidatorTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function testValidateGivenNoEmailThrowsException(): void
+    private EmailValidator $validator;
+
+    protected function setUp(): void
     {
-        $validator = new EmailValidator();
-
-        $this->expectException(EmptyEmailException::class);
-        $this->expectExceptionMessage('The email is mandatory');
-
-        $validator->validateEmail(null);
+        parent::setUp();
+        $this->validator = new EmailValidator();
     }
 
     /**
      * @test
      */
-    public function testRequestIsInvalidateIfEmailAddressGivenIsNotValid(): void
+    public function givenEmptyEmailReturnsEmptyEmailException(): void
     {
-        $validator = new EmailValidator();
+        $this->expectException(\App\Exceptions\EmptyEmailException::class);
+        $this->expectExceptionMessage('The email is mandatory');
 
+        $this->validator->validateEmail(null);
+    }
+
+    /**
+     * @test
+     */
+    public function givenInvalidEmailReturnsInvalidEmailAddressException(): void
+    {
         $this->expectException(InvalidEmailAddressException::class);
         $this->expectExceptionMessage('The email must be a valid email address');
 
-        $validator->validateEmail('testNotValid');
+        $this->validator->validateEmail('invalidEmail');
     }
 
     /**
      * @test
      */
-    public function testGivenNotSanitazedMailReturnsSanitazedEmail(): void
+    public function givenNotSanitazedMailReturnsSanitazedEmail(): void
     {
-        $validator = new EmailValidator();
-        $response = $validator->validateEmail('(notSanitazed@mail.com)');
-        $this->assertEquals('notSanitazed@mail.com', $response);
+        $invalidEmail = '(notSanitazed@mail.com)';
+        $this->assertEquals('notSanitazed@mail.com', $this->validator->validateEmail($invalidEmail));
     }
 }
