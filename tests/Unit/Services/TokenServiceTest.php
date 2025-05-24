@@ -96,4 +96,23 @@ class TokenServiceTest extends TestCase
         $this->assertInstanceOf(APISessions::class, $session);
         $this->assertNotEmpty($session->getToken());
     }
+
+
+    /**
+     * @test
+     */
+    public function givenInvalidUserReturnsNull(): void
+    {
+        $email = 'invalid@example.com';
+        $apiKey = str_repeat('B', 32);
+
+        $this->repository
+            ->shouldReceive('getAPIUserByEmail')
+            ->once()
+            ->andReturn(null);
+
+        $session = $this->service->createToken($email, $apiKey);
+
+        $this->assertNull($session);
+    }
 }
