@@ -26,6 +26,10 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
 
         $data = json_decode($response, true);
 
+        if ($http_code === 401) {
+            throw new TwitchApiException();
+        }
+
         if ($http_code !== 200 || !$response || !isset($data["data"][0])) {
             return null;
         }
