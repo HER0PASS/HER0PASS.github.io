@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Streams;
 
 use App\Interfaces\DataBaseRepositoryInterface;
 use App\Interfaces\TwitchApiRepositoryInterface;
@@ -8,13 +8,12 @@ use Laravel\Lumen\Testing\TestCase as BaseTestCase;
 use Tests\Fakes\FakeDataBaseRepository;
 use Tests\Fakes\FakeTwitchApiRepository;
 
-class GetStreamsTest extends BaseTestCase
+class GetStreamsEndpointTest extends BaseTestCase
 {
     public function createApplication()
     {
-        $app = require __DIR__ . '/../../bootstrap/app.php';
+        $app = require __DIR__ . '/../../../bootstrap/app.php';
 
-        $app->bind(DataBaseRepositoryInterface::class, FakeDataBaseRepository::class);
         $app->bind(TwitchApiRepositoryInterface::class, FakeTwitchApiRepository::class);
 
         return $app;
@@ -23,9 +22,16 @@ class GetStreamsTest extends BaseTestCase
     /**
      * @test
      */
-    public function givenValidTokenReturnsStreamsData(): void
+    public function givenValidTokenReturns200AndStreamsList(): void
     {
+        $mockTokenManager = \Mockery::mock(\App\Http\Middleware\TokenManager::class);
+        $mockTokenManager->shouldReceive('tokenIsActive')
+            ->with('valid_token')
+            ->andReturn(true);
+
+        $this->app->instance(\App\Http\Middleware\TokenManager::class, $mockTokenManager);
         $this->get('/analytics/streams', ['Authorization' => 'Bearer valid_token']);
+
         $this->seeStatusCode(200);
 
         $this->seeJson([
@@ -49,7 +55,15 @@ class GetStreamsTest extends BaseTestCase
      */
     public function givenInvalidTokenReturns401(): void
     {
+        $mockTokenManager = \Mockery::mock(\App\Http\Middleware\TokenManager::class);
+        $mockTokenManager->shouldReceive('tokenIsActive')
+            ->with('invalid_token')
+            ->andReturn(false);
+
+        $this->app->instance(\App\Http\Middleware\TokenManager::class, $mockTokenManager);
+
         $this->get('/analytics/streams', ['Authorization' => 'Bearer invalid_token']);
+
         $this->seeStatusCode(401);
         $this->seeJson([
             'error' => 'Unauthorized. Token is invalid or expired.'
