@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\GetStreams;
 
+use App\Exceptions\TwitchApiException;
 use App\Services\GetStreamsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,13 +20,15 @@ class GetStreamsController extends BaseController
     public function getStreams(): JsonResponse
     {
         try {
-            // Obtener datos de los streams
             return $this->getStreamsService->getStreamsData();
+        } catch (TwitchApiException $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 401);
         } catch (\Exception $e) {
             return response()->json([
-                "error"   => "Internal Server Error.",
-                "message" => $e->getMessage(),
-                "trace"   => $e->getTraceAsString(),
+                'error'   => 'Internal Server Error.',
+                'message' => $e->getMessage(),
             ], 500);
         }
     }
