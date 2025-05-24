@@ -28,7 +28,20 @@ class GetStreamsTest extends BaseTestCase
         $this->get('/analytics/streams', ['Authorization' => 'Bearer valid_token']);
         $this->seeStatusCode(200);
 
-        // Hacer los otros
+        $this->seeJson([
+            'title' => 'Analizando la nueva plantilla del FC Barcelona',
+            'user_name' => 'messi'
+        ]);
+
+        $this->seeJson([
+            'title' => 'Jugando al Fortnite con amigos',
+            'user_name' => 'miketroke'
+        ]);
+
+        $this->seeJson([
+            'title' => 'Las aventuras del peiro',
+            'user_name' => 'dembele'
+        ]);
     }
 
     /**

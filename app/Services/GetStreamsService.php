@@ -18,33 +18,21 @@ class GetStreamsService
     }
     public function getStreamsData(): JsonResponse
     {
-        try {
-            // Obtener credenciales de Twitch
-            $credentials = $this->obtenerToken();
-            if (isset($credentials['error'])) {
-                return response()->json([
-                    "error" => "Internal Server Error"
-                ], 500);
-            }
-
-            // Establecer las credenciales para el repositorio de la API
-            $this->apiRepository = new \App\Repository\TwitchAPIRepository($credentials);
-
-            // Obtener datos de los streams desde el repositorio
-            $streams = $this->apiRepository->getStreams();
-
-            if (!$streams) {
-                return response()->json([
-                    "error" => "Unauthorized. Twitch access token is invalid or has expired."
-                ], 401);
-            }
-
+        // Primero buscamos en la base de datos
+        $streams = $this->dbRepository->getStreams();
+        if ($streams) {
             return response()->json($streams, 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                "error" => "Internal Server Error"
-            ], 500);
         }
+
+        // Si no lo encontramos, consultamos a la API
+        $streams = $this->apiRepository->getStreams();
+        if (!$streams) {
+            return response()->json([
+                "error" => "Streams not found."
+            ], 404);
+        }
+
+        return response()->json($streams, 200);
     }
 
     // SOLUCIONAR ESTO: GESTIONAR TOKEN DE CONSULTAS A LA API DE TWITCH
