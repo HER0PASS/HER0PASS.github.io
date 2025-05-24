@@ -32,7 +32,7 @@ class ApiKeyValidatorTest extends TestCase
         $this->expectException(\App\Exceptions\EmptyApiKeyException::class);
         $this->expectExceptionMessage("The api_key is mandatory");
 
-        $this->validator->validateApiKey('');
+        $this->validator->validateApiKey(null);
     }
 
     /**
