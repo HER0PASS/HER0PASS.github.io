@@ -3,6 +3,7 @@
 namespace Tests\Fakes;
 
 use App\Interfaces\TwitchApiRepositoryInterface;
+use App\Models\Stream;
 use App\Models\TwitchUser;
 
 class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
@@ -24,5 +25,16 @@ class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
             ]);
         }
         return null;
+    }
+
+    public function getStreams(): ?array
+    {
+        $stream1 = new Stream('Test Stream 1', 'TestUser1');
+        $stream2 = new Stream('Test Stream 2', 'TestUser2');
+
+        return [
+            $stream1->getStream(),
+            $stream2->getStream()
+        ];
     }
 }

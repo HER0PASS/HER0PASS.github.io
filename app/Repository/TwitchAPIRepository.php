@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Interfaces\DataBaseRepositoryInterface;
 use App\Interfaces\TwitchApiRepositoryInterface;
+use App\Models\Stream;
 use App\Models\TwitchUser;
 
 class TwitchAPIRepository implements TwitchApiRepositoryInterface
@@ -72,19 +73,17 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
         if ($http_code !== 200 || !$response) {
             return null;
         }
-
         $data = json_decode($response, true);
         if (!isset($data["data"])) {
             return null;
         }
 
-        $streams_filtrados = array_map(function ($stream) {
-            return [
-                "title" => $stream["title"],
-                "user_name" => $stream["user_name"],
-            ];
-        }, $data["data"]);
+        $streams = [];
+        foreach ($data["data"] as $streamData) {
+            $stream = new Stream($streamData["title"], $streamData["user_name"]);
+            $streams[] = $stream->getStream();
+        }
 
-        return $streams_filtrados;
+        return $streams;
     }
 }
