@@ -12,7 +12,7 @@ class RegisterService
     }
     public function registerUser(APIUser $user): APIUser
     {
-        $existing = $this->dataBaseRepository->getAPIUserByEmail($user->getEmail(), $user->getApiKey());
+        $existing = $this->dataBaseRepository->getAPIUserByEmail($user);
 
         $user->generateApiKey();
 

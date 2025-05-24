@@ -3,13 +3,40 @@
 namespace Tests\Fakes;
 
 use App\Interfaces\DataBaseRepositoryInterface;
-use App\Models\APISessions;
+use App\Models\APISession;
 use App\Models\APIUser;
 use App\Models\TwitchUser;
 
 class FakeDataBaseRepository implements DataBaseRepositoryInterface
 {
-    private array $fakeSessions;
+    // -----------------------
+    // SESSIONS
+    // -----------------------
+
+    private array $fakeSessionsByUserId = [];
+    private array $fakeSessionsByToken = [];
+
+    // -----------------------
+    // API USERS
+    // -----------------------
+
+    private array $fakeAPIUsers = [
+        [
+            'id' => '1',
+            'email' => 'user1@example.com',
+            'api_key' => '6288f213b19339919569e8b43f1ad852'
+        ],
+        [
+            'id' => '2',
+            'email' => 'user2@example.com',
+            'api_key' => 'bab8ea158c16e2741c1b7ec1ec14febc'
+        ]
+    ];
+
+    // -----------------------
+    // TWITCH USERS
+    // -----------------------
+
     private array $fakeTwitchUsers = [
         [
             'id' => '12345',
@@ -37,6 +64,9 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
         ]
     ];
 
+    // -----------------------
+    // TWITCH STREAMS
+    // -----------------------
     private array $fakeStreams = [
         [
             'title' => 'Analizando la nueva plantilla del FC Barcelona',
@@ -54,44 +84,61 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
 
     public function __construct()
     {
-        $this->fakeSessions = [
-            new APISessions('2', 'ab7ecdeaa06336505d1781576c805f47', new \DateTime('2025-02-16 16:20:49')),
-            new APISessions('4', '41d2562ddc215251d5c6dfd86c44d16b', new \DateTime('2025-04-26 17:12:02')),
+        $this->seedFakeSessions();
+    }
+
+    private function seedFakeSessions(): void
+    {
+        $sessions = [
+            new APISession('1', '6288f213b19339919569e8b43f1ad852', new \DateTime('2025-02-16 16:20:49')),
+            new APISession('2', 'ab7ecdeaa06336505d1781576c805f47', new \DateTime('2025-02-16 16:20:49')),
+            new APISession('4', '41d2562ddc215251d5c6dfd86c44d16b', new \DateTime('2025-04-26 17:12:02')),
+            new APISession('12345', 'valid_token', new \DateTime('+3 days'))
         ];
-    }
 
-    public function getTwitchUserById(string $id): ?TwitchUser
-    {
-        foreach ($this->fakeTwitchUsers as $data) {
-            if ($data['id'] === $id) {
-                return TwitchUser::fromArray($data);
-            }
+        foreach ($sessions as $session) {
+            $this->storeSession($session);
         }
-        return null;
     }
 
-    public function saveTwitchUser(TwitchUser $user): void
+    // -----------------------
+    // SESSIONS API
+    // -----------------------
+
+    public function getSessionByToken($token): ?APISession
     {
-        // TODO: Implement saveUser() method.
+        return $this->fakeSessionsByToken[$token] ?? null;
     }
 
-    private array $fakeAPIUsers = [
-        [
-            'id' => '1',
-            'email' => 'user1@example.com',
-            'api_key' => '6288f213b19339919569e8b43f1ad852'
-        ],
-        [
-            'id' => '2',
-            'email' => 'user2@example.com',
-            'api_key' => 'bab8ea158c16e2741c1b7ec1ec14febc'
-        ]
-    ];
+    public function getSessionByUserId($user_id): ?APISession
+    {
+        return $this->fakeSessionsByUserId[$user_id] ?? null;
+    }
 
-    public function getAPIUserByEmail($email, $apiKey): ?APIUser
+    public function registerSession(APISession $apiSession): void
+    {
+        $this->storeSession($apiSession);
+    }
+
+    public function updateSession(APISession $apiSession): void
+    {
+        $this->storeSession($apiSession);
+    }
+
+    public function storeSession(APISession $session): void
+    {
+        $this->fakeSessionsByUserId[$session->getUserId()] = $session;
+        $this->fakeSessionsByToken[$session->getToken()] = $session;
+    }
+
+    // -----------------------
+    // API USERS
+    // -----------------------
+
+    public function getAPIUserByEmail($apiUser): ?APIUser
     {
         foreach ($this->fakeAPIUsers as $userData) {
-            if ($userData['email'] === $email) {
+            if ($userData['email'] === $apiUser->getEmail()) {
                 return APIUser::fromArray($userData);
             }
         }
@@ -110,47 +157,31 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
 
     public function registerAPIUser(APIUser $apiUser): void
     {
-        // TODO: Implement registerAPIUser() method.
-    }
-
-    public function getSessionByToken($token): ?APISessions
-    {
-        if ($token === 'valid_token') {
-            return new APISessions('12345', 'valid_token', new \DateTime('+3 days'));
-        }
-
-        return null;
-    }
-
-    public function getSessionByUserId($user_id): ?APISessions
-    {
-        foreach ($this->fakeSessions as $session) {
-            if ($session->getUserId() === $user_id) {
-                return $session;
-            }
-        }
-        return null;
-    }
-
-    public function registerSession(APISessions $apiSession): void
-    {
-        $this->fakeSessions[] = $apiSession;
-    }
-
-    public function updateSession(APISessions $apiSession): void
-    {
-        foreach ($this->fakeSessions as $i => $session) {
-            if ($session->getUserId() === $apiSession->getUserId()) {
-                $this->fakeSessions[$i] = $apiSession;
-                return;
-            }
-        }
-        $this->fakeSessions[] = $apiSession;
+        $this->fakeAPIUsers[] = $apiUser->toArray();
     }
 
     public function storeUser(APIUser $user): void
     {
         $this->fakeAPIUsers[] = $user->toArray();
+    }
+
+    // -----------------------
+    // TWITCH USERS
+    // -----------------------
+
+    public function getTwitchUserById(string $id): ?TwitchUser
+    {
+        foreach ($this->fakeTwitchUsers as $data) {
+            if ($data['id'] === $id) {
+                return TwitchUser::fromArray($data);
+            }
+        }
+        return null;
+    }
+
+    public function saveTwitchUser(TwitchUser $user): void
+    {
+        // Simulación sin guardar realmente, para cumplir la interfaz.
     }
 
     public function getStreams(): ?array

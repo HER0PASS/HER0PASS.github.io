@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Interfaces\DataBaseRepositoryInterface;
-use App\Models\APISessions;
+use App\Models\APISession;
 use App\Models\APIUser;
 use App\Models\TwitchUser;
 use Illuminate\Support\Facades\DB;
@@ -32,12 +32,12 @@ class DataBaseRepository implements DataBaseRepositoryInterface
         );
     }
 
-    public function getAPIUserByEmail(string $email, ?string $apiKey = null): ?APIUser
+    public function getAPIUserByEmail(APIUser $apiApiUser): ?APIUser
     {
-        $query = DB::table('users')->where('email', $email);
+        $query = DB::table('users')->where('email', $apiApiUser->getEmail());
 
-        if ($apiKey !== null) {
-            $query->where('api_key', $apiKey);
+        if ($apiApiUser->getApiKey() !== null) {
+            $query->where('api_key', $apiApiUser->getApiKey());
         }
 
         $row = $query->first();
@@ -65,7 +65,7 @@ class DataBaseRepository implements DataBaseRepositoryInterface
         );
     }
 
-    public function getSessionByToken($token): ?APISessions
+    public function getSessionByToken($token): ?APISession
     {
         $row = DB::table('sessions')
             ->where('token', $token)
@@ -75,14 +75,14 @@ class DataBaseRepository implements DataBaseRepositoryInterface
             return null;
         }
 
-        return new APISessions(
+        return new APISession(
             (int) $row->user_id,
             $row->token,
             new \DateTime($row->expires_at)
         );
     }
 
-    public function getSessionByUserId($user_id): ?APISessions
+    public function getSessionByUserId($user_id): ?APISession
     {
         $row = DB::table('sessions')
             ->where('user_id', $user_id)
@@ -92,14 +92,14 @@ class DataBaseRepository implements DataBaseRepositoryInterface
             return null;
         }
 
-        return new APISessions(
+        return new APISession(
             (int) $row->user_id,
             $row->token,
             new \DateTime($row->expires_at)
         );
     }
 
-    public function registerSession(APISessions $apiSession): void
+    public function registerSession(APISession $apiSession): void
     {
         DB::table('sessions')->insert([
             'user_id' => $apiSession->getUserId(),
@@ -108,7 +108,7 @@ class DataBaseRepository implements DataBaseRepositoryInterface
         ]);
     }
 
-    public function updateSession(APISessions $apiSession): void
+    public function updateSession(APISession $apiSession): void
     {
         DB::table('sessions')
             ->where('user_id', $apiSession->getUserId())

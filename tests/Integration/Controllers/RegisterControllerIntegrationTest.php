@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Controllers\Register;
+namespace Integration\Controllers;
 
 use App\Http\Controllers\Register\EmailValidator;
 use App\Http\Controllers\Register\RegisterController;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use PHPUnit\Framework\TestCase;
 use Tests\Fakes\FakeDataBaseRepository;
 
-class RegisterControllerTest extends TestCase
+class RegisterControllerIntegrationTest extends TestCase
 {
     private RegisterController $controller;
 
@@ -111,7 +111,7 @@ class RegisterControllerTest extends TestCase
         $this->assertArrayHasKey('api_key', $data);
         $this->assertNotEquals($oldKey, $data['api_key']);
 
-        $storedUser = $repository->getAPIUserByEmail('user1@example.com', "");
+        $storedUser = $repository->getAPIUserByEmail($existingUser);
         $this->assertEquals($data['api_key'], $storedUser->getApiKey());
     }
 }

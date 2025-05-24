@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Unit\Services;
+namespace Integration\Services;
 
 use App\Models\APIUser;
 use App\Services\RegisterService;
 use PHPUnit\Framework\TestCase;
 use Tests\Fakes\FakeDataBaseRepository;
 
-class RegisterServiceTest extends TestCase
+class RegisterServiceIntegrationTest extends TestCase
 {
     private RegisterService $service;
     private FakeDataBaseRepository $repository;

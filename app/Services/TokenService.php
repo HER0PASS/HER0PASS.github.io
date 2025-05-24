@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Http\Middleware\TokenManager;
 use App\Interfaces\DataBaseRepositoryInterface;
-use App\Models\APISessions;
+use App\Models\APISession;
 use App\Models\APIUser;
 use Illuminate\Http\JsonResponse;
 
@@ -14,11 +14,11 @@ class TokenService
     {
     }
 
-    public function createToken($email, $api_key): ?APISessions
+    public function createToken($email, $api_key): ?APISession
     {
         $user = new APIUser(null, $email, $api_key);
 
-        $validUser = $this->dataBaseRepository->getAPIUserByEmail($email, $api_key);
+        $validUser = $this->dataBaseRepository->getAPIUserByEmail($user);
 
         if (!$validUser) {
             return null;
@@ -27,10 +27,10 @@ class TokenService
         $session = $this->dataBaseRepository->getSessionByUserId($validUser->getId());
 
         if (!$session) {
-            $session = new APISessions($validUser->getId());
+            $session = new APISession($validUser->getId());
             $session->generateToken();
             $this->dataBaseRepository->registerSession($session);
-        } else {
+        } elseif ($session->isExpired()) {
             $session->generateToken();
             $this->dataBaseRepository->updateSession($session);
         }

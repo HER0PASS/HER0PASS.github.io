@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Feature\User;
 
 use App\Interfaces\DataBaseRepositoryInterface;
 use App\Interfaces\TwitchApiRepositoryInterface;
@@ -8,11 +8,11 @@ use Laravel\Lumen\Testing\TestCase as BaseTestCase;
 use Tests\Fakes\FakeDataBaseRepository;
 use Tests\Fakes\FakeTwitchApiRepository;
 
-class GetUserByIdTest extends BaseTestCase
+class GetUserByIdEndpointTest extends BaseTestCase
 {
     public function createApplication()
     {
-        $app = require __DIR__ . '/../../bootstrap/app.php';
+        $app = require __DIR__ . '/../../../bootstrap/app.php';
 
         $app->bind(DataBaseRepositoryInterface::class, FakeDataBaseRepository::class);
         $app->bind(TwitchApiRepositoryInterface::class, FakeTwitchApiRepository::class);
