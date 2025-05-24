@@ -11,7 +11,7 @@ use Mockery;
 use Tests\Fakes\FakeDataBaseRepository;
 use Tests\TestCase;
 
-class TokenManagerTest extends TestCase
+class TokenManagerUnitaryTest extends TestCase
 {
     protected function setUp(): void
     {
