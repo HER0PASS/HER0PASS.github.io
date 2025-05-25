@@ -25,14 +25,6 @@ class GetUserByIdService
             return response()->json($user->toArray(), 200);
         }
 
-        // Si no lo encontramos, consultamos a la API
-        $credentials = $this->obtenerToken();
-        if (isset($credentials['error'])) {
-            return response()->json([
-                "error" => "Internal server error."
-            ], 500);
-        }
-
         // Obtenemos el usuario desde la API
         $user = $this->apiRepository->getTwitchUserById($userId);
         if (!$user) {
@@ -45,12 +37,5 @@ class GetUserByIdService
         $this->dbRepository->saveTwitchUser($user);
 
         return response()->json($user->toArray(), 200);
-    }
-
-    // SOLUCIONAR ESTO: GESTIONAR TOKEN DE CONSULTAS A LA API DE TWITCH
-    public function obtenerToken(): array
-    {
-        require_once __DIR__ . '/../../public/endpoints/api/crearToken.php';
-        return obtenerToken();
     }
 }

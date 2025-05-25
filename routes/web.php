@@ -41,10 +41,12 @@ $router->get('/analytics/user', [
     'uses' => 'GetUserById\GetUserByIdController@getUser'
 ]);
 
-$router->get('/analytics/streams', function () {
-    require __DIR__ . '/../public/endpoints/analytics/streams.php';
-});
+$router->get('/analytics/streams', [
+    'middleware' => 'auth',
+    'uses' => 'GetStreams\GetStreamsController@getStreams'
+]);
 
-$router->get('/analytics/streams/enriched', function () {
-    require __DIR__ . '/../public/endpoints/analytics/streams/enriched.php';
-});
+$router->get('/analytics/streams/enriched', [
+    'middleware' => 'auth',
+    'uses' => 'GetEnrichedStreams\GetEnrichedStreamsController@getEnrichedStream'
+]);
