@@ -15,9 +15,9 @@ class GetEnrichedStreamsService
         $this->apiRepository = $apiRepository;
     }
 
-    public function getEnrichedStreamsData(): JsonResponse
+    public function getEnrichedStreamsData(string $limit): JsonResponse
     {
-        $streams = $this->apiRepository->getEnrichedStreams();
+        $streams = $this->apiRepository->getEnrichedStreams($limit);
         if (!$streams) {
             return response()->json([
                 "error" => "Enriched Streams not found."

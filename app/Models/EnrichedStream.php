@@ -29,4 +29,17 @@ class EnrichedStream
         $this->user_display_name = $user_display_name;
         $this->profile_image_url = $profile_image_url;
     }
+
+    public static function fromRawData(mixed $stream, mixed $user): EnrichedStream
+    {
+        return new self(
+            $stream['id'],
+            $stream['user_id'],
+            $stream['user_login'],
+            $stream['viewer_count'],
+            $stream['title'],
+            $user['display_name'],
+            $user['profile_image_url']
+        );
+    }
 }

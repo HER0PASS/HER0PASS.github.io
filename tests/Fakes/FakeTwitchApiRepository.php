@@ -34,4 +34,9 @@ class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
         $stream3 = new Stream('Las aventuras del peiro', 'dembele');
         return [$stream1, $stream2, $stream3];
     }
+
+    public function getEnrichedStreams(string $limit): ?array
+    {
+        // TODO: Implement getEnrichedStreams() method.
+    }
 }

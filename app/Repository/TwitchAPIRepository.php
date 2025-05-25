@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Exceptions\TwitchApiException;
 use App\Interfaces\TwitchApiRepositoryInterface;
+use App\Models\EnrichedStream;
 use App\Models\Stream;
 use App\Models\TwitchUser;
 
@@ -66,6 +67,51 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
         return $streams;
     }
 
+    public function getEnrichedStreams(string $limit): ?array
+    {
+        $streams = $this->getStreams();
+        if (!$streams) {
+            return null;
+        }
+
+        $streams = $this->sortStreams($streams);
+
+        $streams = array_slice($streams, 0, (int)$limit);
+
+        $user_ids = array_column($streams, 'user_id');
+        $user_ids_str = implode('&id=', $user_ids);
+
+        [$client_id, $access_token] = $this->getCredentials();
+        $users_api_url = "https://api.twitch.tv/helix/users?id=" . $user_ids_str;
+
+        [$users_response, $users_code] = $this->getApiResponse($client_id, $access_token, $users_api_url);
+
+        if ($users_code !== 200) {
+            return null;
+        }
+
+        $users_data = json_decode($users_response, true);
+        if (!isset($users_data['data'])) {
+            return null;
+        }
+
+        $user_map = [];
+        foreach ($users_data['data'] as $user) {
+            $user_map[$user['id']] = [
+                'user_display_name' => $user['display_name'],
+                'profile_image_url' => $user['profile_image_url'],
+            ];
+        }
+
+        $enriched = [];
+        foreach ($streams as $stream) {
+            $user = $user_map[$stream['user_id']] ?? ['user_display_name' => '', 'profile_image_url' => ''];
+            $enriched[] = EnrichedStream::fromRawData($stream, $user);
+        }
+
+        return $enriched;
+    }
+
     public function getApiResponse(mixed $client_id, mixed $access_token, string $api_url): array
     {
         $headers = [
@@ -90,5 +136,11 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
             $this->credentials['client_id'],
             $this->credentials['access_token'],
         ];
+    }
+
+    public function sortStreams(array $streams): array
+    {
+        usort($streams, fn ($streamA, $streamB) => $streamB['viewer_count'] <=> $streamA['viewer_count']);
+        return $streams;
     }
 }

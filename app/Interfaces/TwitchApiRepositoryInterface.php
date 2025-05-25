@@ -8,4 +8,5 @@ interface TwitchApiRepositoryInterface
 {
     public function getTwitchUserById(string $userId): ?TwitchUser;
     public function getStreams(): ?array;
+    public function getEnrichedStreams(string $limit): ?array;
 }
