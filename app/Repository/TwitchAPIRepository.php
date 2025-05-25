@@ -40,24 +40,13 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
 
     public function getStreams(): ?array
     {
-        [$client_id, $access_token] = $this->getCredentials();
-
-        $api_url = "https://api.twitch.tv/helix/streams?first=10";
-
-        [$response, $http_code] = $this->getApiResponse($client_id, $access_token, $api_url);
-
-        if ($http_code === 401) {
-            throw new TwitchApiException();
-        }
-
-        $data = json_decode($response, true);
-
-        if ($http_code !== 200 || !$response || !isset($data["data"])) {
+        $rawStreams = $this->getStreamsJson(10);
+        if (!$rawStreams) {
             return null;
         }
 
         $streams = [];
-        foreach ($data["data"] as $streamData) {
+        foreach ($rawStreams as $streamData) {
             $streams[] = new Stream(
                 $streamData["title"] ?? '',
                 $streamData["user_name"] ?? ''
@@ -69,28 +58,17 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
 
     public function getEnrichedStreams(string $limit): ?array
     {
-        [$client_id, $access_token] = $this->getCredentials();
-
-        $api_url = "https://api.twitch.tv/helix/streams?first=$limit";
-
-        [$response, $http_code] = $this->getApiResponse($client_id, $access_token, $api_url);
-
-        if ($http_code === 401) {
-            throw new TwitchApiException();
-        }
-
-        $data = json_decode($response, true);
-
-        if ($http_code !== 200 || !$response || !isset($data["data"])) {
+        $streams_raw = $this->getStreamsJson($limit);
+        if (!$streams_raw) {
             return null;
         }
 
-        $streams_raw = $data["data"];
-
-        usort($streams_raw, fn ($a, $b) => $b['viewer_count'] <=> $a['viewer_count']);
+        usort($streams_raw, fn ($streamA, $streamB) => $streamB['viewer_count'] <=> $streamA['viewer_count']);
 
         $user_ids = array_column($streams_raw, 'user_id');
         $user_ids_str = implode('&id=', $user_ids);
+
+        [$client_id, $access_token] = $this->getCredentials();
         $users_api_url = "https://api.twitch.tv/helix/users?id=" . $user_ids_str;
 
         [$users_response, $users_code] = $this->getApiResponse($client_id, $access_token, $users_api_url);
@@ -104,31 +82,8 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
             return null;
         }
 
-        // 4. Construir user_map
-        $user_map = [];
-        foreach ($users_data['data'] as $user) {
-            $user_map[$user['id']] = [
-                'user_display_name' => $user['display_name'],
-                'profile_image_url' => $user['profile_image_url']
-            ];
-        }
-
-        $enriched = [];
-        foreach ($streams_raw as $stream) {
-            $user = $user_map[$stream['user_id']] ?? ['user_display_name' => '', 'profile_image_url' => ''];
-
-            $enriched[] = [
-                'stream_id' => $stream['id'],
-                'user_id' => $stream['user_id'],
-                'user_name' => $stream['user_login'],
-                'viewer_count' => $stream['viewer_count'],
-                'title' => $stream['title'],
-                'user_display_name' => $user['user_display_name'],
-                'profile_image_url' => $user['profile_image_url'],
-            ];
-        }
-
-        return $enriched;
+        $user_map = EnrichedStream::buildUserMap($users_data['data']);
+        return EnrichedStream::enrichStreams($streams_raw, $user_map);
     }
 
     public function getApiResponse(mixed $client_id, mixed $access_token, string $api_url): array
@@ -157,9 +112,24 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
         ];
     }
 
-    private function sortStreams(array $streams): array
+    private function getStreamsJson(string $limit): ?array
     {
-        usort($streams, fn ($streamA, $streamB) => $streamB['viewer_count'] <=> $streamA['viewer_count']);
-        return $streams;
+        [$client_id, $access_token] = $this->getCredentials();
+
+        $api_url = "https://api.twitch.tv/helix/streams?first=$limit";
+
+        [$response, $http_code] = $this->getApiResponse($client_id, $access_token, $api_url);
+
+        if ($http_code === 401) {
+            throw new TwitchApiException();
+        }
+
+        $data = json_decode($response, true);
+
+        if ($http_code !== 200 || !$response || !isset($data["data"])) {
+            return null;
+        }
+
+        return $data["data"];
     }
 }
