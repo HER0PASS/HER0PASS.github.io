@@ -14,7 +14,7 @@ class GetEnrichedStreamsService
     {
         $this->apiRepository = $apiRepository;
     }
-    public function getStreamsData(): JsonResponse
+    public function getEnrichedStreamsData(): JsonResponse
     {
         $streams = $this->apiRepository->getStreams();
         if (!$streams) {

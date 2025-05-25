@@ -6,25 +6,26 @@ use Illuminate\Http\Request;
 
 class GetEnrichedStreamsValidator
 {
-    public function validate($id): bool
+    public function validate($limit): bool
     {
-        return is_numeric($id) && intval($id) >= 1;
+        return is_numeric($limit) && intval($limit) >= 1 && intval($limit) <= 10;
     }
 
     public function validateRequest(Request $request): array
     {
-        $id = $request->input('id');
-        if (!$id || !$this->validate($id)) {
+        $limit = $request->input('limit');
+
+        if (!$limit || !$this->validate($limit)) {
             return [
                 "isValid" => false,
-                "error" => "Invalid or missing 'id' parameter.",
+                "error" => "Invalid 'limit' parameter.",
                 "status" => 400
             ];
         }
 
         return [
             "isValid" => true,
-            "id" => $id
+            "limit" => $limit
         ];
     }
 }

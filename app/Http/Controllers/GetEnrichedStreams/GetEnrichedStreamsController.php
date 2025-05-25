@@ -31,7 +31,7 @@ class GetEnrichedStreamsController extends BaseController
                 return response()->json(["error" => $validation['error']], $validation['status']);
             }
 
-            return $this->getEnrichedStreamsService->getEnrichedStreamsData($validation['id']);
+            return $this->getEnrichedStreamsService->getEnrichedStreamsData($validation['limit']);
         } catch (\Exception $e) {
             return response()->json([
                 "error"   => "Internal Server Error",
