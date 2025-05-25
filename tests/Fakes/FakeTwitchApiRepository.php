@@ -31,7 +31,7 @@ class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
         return [
             TwitchGetTopsofthetops::fromArray([
                 'game_id' => '509658',
-                'game_name' => 'Just Chatting',
+                'game_name' => 'Dota',
                 'user_name' => 'LCK',
                 'total_videos' => 4,
                 'total_views' => 1000000000,
@@ -42,7 +42,7 @@ class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
             ]),
             TwitchGetTopsofthetops::fromArray([
                 'game_id' => '21779',
-                'game_name' => 'League of Legends',
+                'game_name' => 'Elden Ring',
                 'user_name' => 'Faker',
                 'total_videos' => 7,
                 'total_views' => 600000000,
@@ -53,7 +53,7 @@ class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
             ]),
             TwitchGetTopsofthetops::fromArray([
                 'game_id' => '33214',
-                'game_name' => 'Fortnite',
+                'game_name' => 'PUBG',
                 'user_name' => 'Ninja',
                 'total_videos' => 10,
                 'total_views' => 800000000,

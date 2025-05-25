@@ -27,7 +27,7 @@ class GetTopsofthetopsService
         if ($diff->days < 10 || $diff->s < $since) {
             $tops = [];
             for ($i = 1; $i <= 3; $i++) {
-                $tops[] = $this->dbRepository->getTopsofthetopsData($i);
+                $tops[] = $this->dbRepository->getTopsofthetops($i);
             }
 
             return response()->json(array_map(fn ($top) => $top->toArray(), $tops), 200);

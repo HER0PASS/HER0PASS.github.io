@@ -53,8 +53,8 @@ class GetTopsofthetopsControllerTest extends TestCase
         $this->assertIsArray($data);
         $this->assertCount(3, $data);
 
-        $this->assertEquals('Just Chatting', $data[0]['game_name']);
-        $this->assertEquals('League of Legends', $data[1]['game_name']);
-        $this->assertEquals('Fortnite', $data[2]['game_name']);
+        $this->assertEquals('Dota', $data[0]['game_name']);
+        $this->assertEquals('Elden Ring', $data[1]['game_name']);
+        $this->assertEquals('PUBG', $data[2]['game_name']);
     }
 }

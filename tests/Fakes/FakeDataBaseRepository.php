@@ -3,9 +3,9 @@
 namespace Tests\Fakes;
 
 use App\Interfaces\DataBaseRepositoryInterface;
-use App\Models\TwitchGetTopsofthetops;
 use App\Models\APISession;
 use App\Models\APIUser;
+use App\Models\TwitchGetTopsofthetops;
 use App\Models\TwitchUser;
 
 class FakeDataBaseRepository implements DataBaseRepositoryInterface
