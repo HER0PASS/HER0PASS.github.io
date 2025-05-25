@@ -9,7 +9,6 @@ use Tests\Fakes\FakeTwitchApiRepository;
 
 class GetEnrichedStreamsServiceTest extends TestCase
 {
-
     private GetEnrichedStreamsService $service;
 
     protected function setUp(): void
