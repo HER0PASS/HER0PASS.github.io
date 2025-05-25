@@ -37,6 +37,36 @@ class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
 
     public function getEnrichedStreams(string $limit): ?array
     {
-        // TODO: Implement getEnrichedStreams() method.
+        $streams = [
+            [
+                "stream_id" => "987654321",
+                "user_id" => "12345",
+                "user_name" => "ninja",
+                "viewer_count" => 34567,
+                "title" => "Epic Gaming Session",
+                "user_display_name" => "Ninja",
+                "profile_image_url" => "https://example.com/ninja.jpg"
+            ],
+            [
+                "stream_id" => "123456789",
+                "user_id" => "22222",
+                "user_name" => "pokimane",
+                "viewer_count" => 28900,
+                "title" => "Let’s Go!",
+                "user_display_name" => "Pokimane",
+                "profile_image_url" => "https://example.com/pokimane.jpg"
+            ],
+            [
+                "stream_id" => "555555555",
+                "user_id" => "33333",
+                "user_name" => "shroud",
+                "viewer_count" => 15000,
+                "title" => "Playing with viewers",
+                "user_display_name" => "Shroud",
+                "profile_image_url" => "https://example.com/shroud.jpg"
+            ]
+        ];
+
+        return array_slice($streams, 0, (int)$limit);
     }
 }

@@ -24,6 +24,6 @@ class GetEnrichedStreamsService
             ], 404);
         }
 
-        return response()->json(array_map(fn ($s) => $s->toArray(), $streams), 200);
+        return response()->json($streams, 200);
     }
 }
