@@ -3,8 +3,12 @@
 namespace Tests\Fakes;
 
 use App\Interfaces\TwitchApiRepositoryInterface;
+use App\Models\TwitchEnrichedStream;
 use App\Models\TwitchGetTopsofthetops;
+use App\Models\TwitchStream; // Asumiendo que esta clase existe
 use App\Models\TwitchUser;
+
+// Asumiendo que esta clase existe
 
 class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
 {
@@ -26,6 +30,7 @@ class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
         }
         return null;
     }
+
     public function getTopsofthetops(): array
     {
         return [
@@ -61,6 +66,38 @@ class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
                 'most_viewed_views' => 9000000,
                 'most_viewed_duration' => '2h47m32s',
                 'most_viewed_created_at' => '2018-03-14T21:00:00Z'
+            ])
+        ];
+    }
+
+    public function getStreams(): array
+    {
+        // Devuelve un array simulado de streams
+        return [
+            TwitchStream::fromArray([
+                'id' => '1',
+                'user_id' => '12345',
+                'user_name' => 'Ninja',
+                'game_id' => '21779',
+                'title' => 'Epic Stream',
+                'viewer_count' => 5000,
+                'started_at' => '2024-01-01T12:00:00Z'
+            ])
+        ];
+    }
+
+    public function getEnrichedStreams(): array
+    {
+        // Devuelve un array simulado de streams enriquecidos
+        return [
+            TwitchEnrichedStream::fromArray([
+                'stream_id' => '1',
+                'user_name' => 'Ninja',
+                'game_name' => 'Elden Ring',
+                'title' => 'Epic Stream',
+                'viewer_count' => 5000,
+                'started_at' => '2024-01-01T12:00:00Z',
+                'profile_image_url' => 'https://example.com/ninja.jpg'
             ])
         ];
     }
