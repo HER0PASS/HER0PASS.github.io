@@ -30,7 +30,32 @@ class EnrichedStream
         $this->profile_image_url = $profile_image_url;
     }
 
-    public static function fromRawData(mixed $stream, mixed $user): EnrichedStream
+    public function getStreamId(): string
+    {
+        return $this->stream_id;
+    }
+
+    public function getUserId(): string
+    {
+        return $this->user_id;
+    }
+
+    public function getUserName(): string
+    {
+        return $this->user_name;
+    }
+
+    public function getViewerCount(): int
+    {
+        return $this->viewer_count;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public static function fromRawData(array $stream, array $user): EnrichedStream
     {
         return new self(
             $stream['id'],
@@ -38,7 +63,7 @@ class EnrichedStream
             $stream['user_login'],
             $stream['viewer_count'],
             $stream['title'],
-            $user['display_name'],
+            $user['user_display_name'],
             $user['profile_image_url']
         );
     }
@@ -58,7 +83,8 @@ class EnrichedStream
     public static function enrichStreams(array $streams, array $userMap): array
     {
         return array_map(function ($stream) use ($userMap) {
-            $user = $userMap[$stream['user_id']] ?? ['user_display_name' => '', 'profile_image_url' => ''];
+            $userId = $stream['user_id'];
+            $user = $userMap[$userId] ?? ['user_display_name' => '', 'profile_image_url' => ''];
             return self::fromRawData($stream, $user);
         }, $streams);
     }

@@ -69,19 +69,28 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
 
     public function getEnrichedStreams(string $limit): ?array
     {
-        $streams = $this->getStreams();
-        if (!$streams) {
+        [$client_id, $access_token] = $this->getCredentials();
+
+        $api_url = "https://api.twitch.tv/helix/streams?first=$limit";
+
+        [$response, $http_code] = $this->getApiResponse($client_id, $access_token, $api_url);
+
+        if ($http_code === 401) {
+            throw new TwitchApiException();
+        }
+
+        $data = json_decode($response, true);
+
+        if ($http_code !== 200 || !$response || !isset($data["data"])) {
             return null;
         }
 
-        $streams = $this->sortStreams($streams);
+        $streams_raw = $data["data"];
 
-        $streams = array_slice($streams, 0, (int)$limit);
+        usort($streams_raw, fn ($a, $b) => $b['viewer_count'] <=> $a['viewer_count']);
 
-        $user_ids = array_column($streams, 'user_id');
+        $user_ids = array_column($streams_raw, 'user_id');
         $user_ids_str = implode('&id=', $user_ids);
-
-        [$client_id, $access_token] = $this->getCredentials();
         $users_api_url = "https://api.twitch.tv/helix/users?id=" . $user_ids_str;
 
         [$users_response, $users_code] = $this->getApiResponse($client_id, $access_token, $users_api_url);
@@ -95,8 +104,31 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
             return null;
         }
 
-        $userMap = EnrichedStream::buildUserMap($users_data['data']);
-        return EnrichedStream::enrichStreams($streams, $userMap);
+        // 4. Construir user_map
+        $user_map = [];
+        foreach ($users_data['data'] as $user) {
+            $user_map[$user['id']] = [
+                'user_display_name' => $user['display_name'],
+                'profile_image_url' => $user['profile_image_url']
+            ];
+        }
+
+        $enriched = [];
+        foreach ($streams_raw as $stream) {
+            $user = $user_map[$stream['user_id']] ?? ['user_display_name' => '', 'profile_image_url' => ''];
+
+            $enriched[] = [
+                'stream_id' => $stream['id'],
+                'user_id' => $stream['user_id'],
+                'user_name' => $stream['user_login'],
+                'viewer_count' => $stream['viewer_count'],
+                'title' => $stream['title'],
+                'user_display_name' => $user['user_display_name'],
+                'profile_image_url' => $user['profile_image_url'],
+            ];
+        }
+
+        return $enriched;
     }
 
     public function getApiResponse(mixed $client_id, mixed $access_token, string $api_url): array
