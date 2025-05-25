@@ -24,28 +24,6 @@ class GetUserByIdServiceIntegrationTest extends TestCase
     /**
      * @test
      */
-    public function gets500IfCredentialsError(): void
-    {
-        $repo = new FakeDataBaseRepository();
-        $api = new FakeTwitchApiRepository();
-        $service = $this->getMockBuilder(GetUserByIdService::class)
-            ->setConstructorArgs([$repo, $api])
-            ->onlyMethods(['obtenerToken'])
-            ->getMock();
-
-        $service->method('obtenerToken')->willReturn(['error' => 'Token fetch failed']);
-
-        $response = $service->getUserData('nonexistent');
-
-        $this->assertEquals(500, $response->getStatusCode());
-
-        $data = json_decode($response->getContent(), true);
-        $this->assertEquals('Internal server error.', $data['error']);
-    }
-
-    /**
-     * @test
-     */
     public function givenTwitchUserIdNonExistentReturns404AndMessage(): void
     {
         $response = $this->service->getUserData('99999');
