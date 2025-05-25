@@ -42,4 +42,24 @@ class EnrichedStream
             $user['profile_image_url']
         );
     }
+
+    public static function buildUserMap(array $users): array
+    {
+        $map = [];
+        foreach ($users as $user) {
+            $map[$user['id']] = [
+                'user_display_name' => $user['display_name'],
+                'profile_image_url' => $user['profile_image_url'],
+            ];
+        }
+        return $map;
+    }
+
+    public static function enrichStreams(array $streams, array $userMap): array
+    {
+        return array_map(function ($stream) use ($userMap) {
+            $user = $userMap[$stream['user_id']] ?? ['user_display_name' => '', 'profile_image_url' => ''];
+            return self::fromRawData($stream, $user);
+        }, $streams);
+    }
 }

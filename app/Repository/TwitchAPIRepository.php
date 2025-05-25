@@ -95,21 +95,8 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
             return null;
         }
 
-        $user_map = [];
-        foreach ($users_data['data'] as $user) {
-            $user_map[$user['id']] = [
-                'user_display_name' => $user['display_name'],
-                'profile_image_url' => $user['profile_image_url'],
-            ];
-        }
-
-        $enriched = [];
-        foreach ($streams as $stream) {
-            $user = $user_map[$stream['user_id']] ?? ['user_display_name' => '', 'profile_image_url' => ''];
-            $enriched[] = EnrichedStream::fromRawData($stream, $user);
-        }
-
-        return $enriched;
+        $userMap = EnrichedStream::buildUserMap($users_data['data']);
+        return EnrichedStream::enrichStreams($streams, $userMap);
     }
 
     public function getApiResponse(mixed $client_id, mixed $access_token, string $api_url): array
@@ -130,7 +117,7 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
         return [$response, $http_code];
     }
 
-    public function getCredentials(): array
+    private function getCredentials(): array
     {
         return [
             $this->credentials['client_id'],
@@ -138,7 +125,7 @@ class TwitchAPIRepository implements TwitchApiRepositoryInterface
         ];
     }
 
-    public function sortStreams(array $streams): array
+    private function sortStreams(array $streams): array
     {
         usort($streams, fn ($streamA, $streamB) => $streamB['viewer_count'] <=> $streamA['viewer_count']);
         return $streams;
