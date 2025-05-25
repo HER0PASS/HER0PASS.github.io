@@ -22,12 +22,13 @@ class GetTopsofthetopsService
         // Primero buscamos en la base de datos
         $now = new \DateTime();
         $timeStamp = $this->dbRepository->getTimestampCache();
-        if ($timeStamp->diff($now)->days < 10 | $timeStamp->diff($now)->seconds < $since) {
-            $top1 = $this->dbRepository->getTopsofthetopsData(1);
-            $top2 = $this->dbRepository->getTopsofthetopsData(2);
-            $top3 = $this->dbRepository->getTopsofthetopsData(3);
+        $diff = $timeStamp->diff($now);
 
-            $tops = [$top1, $top2, $top3];
+        if ($diff->days < 10 || $diff->s < $since) {
+            $tops = [];
+            for ($i = 1; $i <= 3; $i++) {
+                $tops[] = $this->dbRepository->getTopsofthetopsData($i);
+            }
 
             return response()->json(array_map(fn ($top) => $top->toArray(), $tops), 200);
         }
@@ -40,14 +41,14 @@ class GetTopsofthetopsService
             ], 500);
         }
 
-        // Obtenemos el usuario desde la API
-        $top1 = $this->apiRepository->getTopsofthetops(1);
-        $top2 = $this->apiRepository->getTopsofthetops(2);
-        $top3 = $this->apiRepository->getTopsofthetops(3);
-        $tops = [$top1, $top2, $top3];
-
         // Guardamos el usuario en la base de datos
-        $this->dbRepository->saveTopsofthetops($tops);
+        $tops = $this->apiRepository->getTopsofthetops();
+        $i = 1;
+        foreach ($tops as $top) {
+            // Asegúrate de que sea instancia de TwitchTopsofthetops. Si no, usa TwitchTopsofthetops::fromArray($top)
+            $this->dbRepository->saveTopsofthetops($top, $i);
+            $i++;
+        }
 
         return response()->json(array_map(fn ($top) => $top->toArray(), $tops), 200);
     }

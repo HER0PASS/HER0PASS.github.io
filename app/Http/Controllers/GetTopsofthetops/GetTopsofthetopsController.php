@@ -30,7 +30,7 @@ class GetTopsofthetopsController extends BaseController
             }
 
             // Obtener datos del usuario
-            return $this->getTopsofthetopsService->getTopsofthetopsData($validation['id']);
+            return $this->getTopsofthetopsService->getTopsofthetopsData($validation['since']);
         } catch (\Exception $e) {
             return response()->json([
                 "error"   => "Internal Server Error",

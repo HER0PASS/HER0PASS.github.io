@@ -16,6 +16,9 @@ class GetTopsofthetopsValidator
     {
         // Verificar que exista el parametro since y que sea valido
         $since = $request->input('since');
+        if (!$since) {
+            $since = 600;
+        }
         if (!$this->validate($since)) {
             return [
                 "isValid" => false,

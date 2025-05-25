@@ -3,6 +3,7 @@
 namespace Tests\Fakes;
 
 use App\Interfaces\DataBaseRepositoryInterface;
+use App\Models\TwitchGetTopsofthetops;
 use App\Models\APISession;
 use App\Models\APIUser;
 use App\Models\TwitchUser;
@@ -61,6 +62,45 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
             'offline_image_url' => 'https://example.com/pokimane-offline.jpg',
             'view_count' => 400000,
             'created_at' => '2013-03-15T00:00:00Z'
+        ]
+    ];
+
+    private array $fakeTopsofthetops = [
+        [
+            'top' => 1,
+            'game_id' => '1',
+            'game_name' => 'Just Chatting',
+            'user_name' => 'StreamerA',
+            'total_videos' => 20,
+            'total_views' => 50000,
+            'most_viewed_title' => 'Chill stream',
+            'most_viewed_views' => 30000,
+            'most_viewed_duration' => '1h20m',
+            'most_viewed_created_at' => '2025-05-01T10:00:00Z'
+        ],
+        [
+            'top' => 2,
+            'game_id' => '2',
+            'game_name' => 'League of Legends',
+            'user_name' => 'StreamerB',
+            'total_videos' => 15,
+            'total_views' => 60000,
+            'most_viewed_title' => 'Ranked grind',
+            'most_viewed_views' => 35000,
+            'most_viewed_duration' => '2h10m',
+            'most_viewed_created_at' => '2025-05-02T15:00:00Z'
+        ],
+        [
+            'top' => 3,
+            'game_id' => '3',
+            'game_name' => 'Fortnite',
+            'user_name' => 'StreamerC',
+            'total_videos' => 10,
+            'total_views' => 40000,
+            'most_viewed_title' => 'Victory Royale!',
+            'most_viewed_views' => 25000,
+            'most_viewed_duration' => '50m',
+            'most_viewed_created_at' => '2025-05-03T20:00:00Z'
         ]
     ];
 
@@ -164,5 +204,29 @@ class FakeDataBaseRepository implements DataBaseRepositoryInterface
     public function saveTwitchUser(TwitchUser $user): void
     {
         // Simulación sin guardar realmente, para cumplir la interfaz.
+    }
+    public function getTimestampCache(): ?\DateTime
+    {
+        // Puedes devolver una fecha de ejemplo antigua para forzar llamadas a la API
+        return new \DateTime('-15 days');
+    }
+
+    public function getTopsofthetops(int $top): ?\App\Models\TwitchGetTopsofthetops
+    {
+        foreach ($this->fakeTopsofthetops as $entry) {
+            if ($entry['top'] === $top) {
+                return \App\Models\TwitchGetTopsofthetops::fromArray($entry);
+            }
+        }
+
+        return null;
+    }
+
+    public function saveTopsofthetops(TwitchGetTopsofthetops $data, int $position): void
+    {
+        $this->fakeTopsofthetops[] = array_merge(
+            ['top' => $position],
+            $data->toArray()
+        );
     }
 }
