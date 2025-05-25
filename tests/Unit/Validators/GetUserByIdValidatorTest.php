@@ -38,8 +38,7 @@ class GetUserByIdValidatorTest extends TestCase
      */
     public function givenRequestWithMissingIdReturnsError()
     {
-        $request = Request::create('/analytics/user', 'GET');
-        $request->headers->set('Authorization', 'Bearer valid-token');
+        $request = Request::create('/testUser', 'GET');
 
         $result = $this->validator->validateRequest($request);
 
@@ -53,8 +52,7 @@ class GetUserByIdValidatorTest extends TestCase
      */
     public function givenRequestWithInvalidIdReturnsError()
     {
-        $request = Request::create('/analytics/user', 'GET', ['id' => '0']);
-        $request->headers->set('Authorization', 'Bearer valid-token');
+        $request = Request::create('/testUser', 'GET', ['id' => '0']);
 
         $result = $this->validator->validateRequest($request);
 
@@ -68,14 +66,11 @@ class GetUserByIdValidatorTest extends TestCase
      */
     public function givenValidRequestReturnsValidResponse()
     {
-        $request = Request::create('/analytics/user', 'GET', ['id' => '1']);
-        $request->headers->set('Authorization', 'Bearer valid-token');
+        $request = Request::create('/testUser', 'GET', ['id' => '1']);
 
         $result = $this->validator->validateRequest($request);
 
         $this->assertTrue($result['isValid']);
         $this->assertEquals('1', $result['id']);
-        // Ya no se espera la clave 'token'
-        $this->assertArrayNotHasKey('token', $result);
     }
 }

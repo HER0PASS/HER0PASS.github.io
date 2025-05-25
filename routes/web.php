@@ -45,6 +45,7 @@ $router->get('/analytics/streams', [
     'uses' => 'GetStreams\GetStreamsController@getStreams'
 ]);
 
-$router->get('/analytics/streams/enriched', function () {
-    require __DIR__ . '/../public/endpoints/analytics/streams/enriched.php';
-});
+$router->get('/analytics/streams/enriched', [
+    'middleware' => 'auth',
+    'uses' => 'GetEnrichedStreams\GetEnrichedStreamsController@getEnrichedStream'
+]);
