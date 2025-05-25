@@ -21,27 +21,6 @@ class GetTopsofthetopsServiceTest extends TestCase
         $this->service = new GetTopsofthetopsService($repo, $api);
     }
 
-    /**
-     * @test
-     */
-    public function gets500IfCredentialsError(): void
-    {
-        $repo = new FakeDataBaseRepository();
-        $api = new FakeTwitchApiRepository();
-        $service = $this->getMockBuilder(GetTopsofthetopsService::class)
-            ->setConstructorArgs([$repo, $api])
-            ->onlyMethods(['obtenerToken'])
-            ->getMock();
-
-        $service->method('obtenerToken')->willReturn(['error' => 'Token fetch failed']);
-
-        $response = $service->getTopsofthetopsData(-1);
-
-        $this->assertEquals(500, $response->getStatusCode());
-
-        $data = json_decode($response->getContent(), true);
-        $this->assertEquals('Internal server error.', $data['error']);
-    }
 
     /**
      * @test

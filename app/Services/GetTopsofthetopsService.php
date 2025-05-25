@@ -24,7 +24,6 @@ class GetTopsofthetopsService
 
         // Si no hay timestamp o si los datos son muy antiguos, ir a la API
         if (!$timeStamp || $timeStamp->diff($now)->days >= 10 && $timeStamp->diff($now)->s >= $since) {
-            $credentials = $this->obtenerToken();
             if (isset($credentials['error'])) {
                 return response()->json([
                     "error" => "Internal server error."
@@ -52,12 +51,5 @@ class GetTopsofthetopsService
         }
 
         return response()->json(array_map(fn ($top) => $top->toArray(), $tops), 200);
-    }
-
-    // SOLUCIONAR ESTO: GESTIONAR TOKEN DE CONSULTAS A LA API DE TWITCH
-    public function obtenerToken(): array
-    {
-        require_once __DIR__ . '/../../public/endpoints/api/crearToken.php';
-        return obtenerToken();
     }
 }
