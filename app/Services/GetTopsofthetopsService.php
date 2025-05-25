@@ -19,38 +19,39 @@ class GetTopsofthetopsService
 
     public function getTopsofthetopsData(int $since): JsonResponse
     {
-        // Primero buscamos en la base de datos
         $now = new \DateTime();
         $timeStamp = $this->dbRepository->getTimestampCache();
-        $diff = $timeStamp->diff($now);
 
-        if ($diff->days < 10 || $diff->s < $since) {
-            $tops = [];
-            for ($i = 1; $i <= 3; $i++) {
-                $tops[] = $this->dbRepository->getTopsofthetops($i);
+        // Si no hay timestamp o si los datos son muy antiguos, ir a la API
+        if (!$timeStamp || $timeStamp->diff($now)->days >= 10 && $timeStamp->diff($now)->s >= $since) {
+            $credentials = $this->obtenerToken();
+            if (isset($credentials['error'])) {
+                return response()->json([
+                    "error" => "Internal server error."
+                ], 500);
             }
 
-            return response()->json(array_map(fn ($top) => $top->toArray(), $tops), 200);
+            // Guardamos los tops obtenidos desde la API
+            $tops = $this->apiRepository->getTopsofthetops();
+            $i = 1;
+            foreach ($tops as $top) {
+                $this->dbRepository->saveTopsofthetops($top, $i);
+                $i++;
+            }
+
+            return response()->json(array_map(fn($top) => $top->toArray(), $tops), 200);
         }
 
-        // Si no lo encontramos, consultamos a la API
-        $credentials = $this->obtenerToken();
-        if (isset($credentials['error'])) {
-            return response()->json([
-                "error" => "Internal server error."
-            ], 500);
+        // Si la caché es reciente, usar los datos guardados
+        $tops = [];
+        for ($i = 1; $i <= 3; $i++) {
+            $top = $this->dbRepository->getTopsofthetops($i);
+            if ($top) {
+                $tops[] = $top;
+            }
         }
 
-        // Guardamos el usuario en la base de datos
-        $tops = $this->apiRepository->getTopsofthetops();
-        $i = 1;
-        foreach ($tops as $top) {
-            // Asegúrate de que sea instancia de TwitchTopsofthetops. Si no, usa TwitchTopsofthetops::fromArray($top)
-            $this->dbRepository->saveTopsofthetops($top, $i);
-            $i++;
-        }
-
-        return response()->json(array_map(fn ($top) => $top->toArray(), $tops), 200);
+        return response()->json(array_map(fn($top) => $top->toArray(), $tops), 200);
     }
 
     // SOLUCIONAR ESTO: GESTIONAR TOKEN DE CONSULTAS A LA API DE TWITCH

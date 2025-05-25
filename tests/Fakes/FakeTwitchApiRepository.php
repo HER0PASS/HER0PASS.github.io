@@ -13,24 +13,6 @@ use App\Models\TwitchUser;
 
 class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
 {
-    public function getTwitchUserById(string $userId): ?TwitchUser
-    {
-        if ($userId === '12345') {
-            return TwitchUser::fromArray([
-                'id' => '12345',
-                'login' => 'ninja',
-                'display_name' => 'Ninja',
-                'type' => '',
-                'broadcaster_type' => 'partner',
-                'description' => 'Professional Gamer and Streamer',
-                'profile_image_url' => 'https://example.com/ninja.jpg',
-                'offline_image_url' => 'https://example.com/ninja-offline.jpg',
-                'view_count' => 500000,
-                'created_at' => '2011-11-20T00:00:00Z'
-            ]);
-        }
-        return null;
-    }
 
     public function getTopsofthetops(): array
     {
@@ -70,37 +52,24 @@ class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
             ])
         ];
     }
-
-    public function getStreams(): array
+    public function getTwitchUserById(string $userId): ?TwitchUser
     {
-        // Devuelve un array simulado de streams
-        return [
-            TwitchStream::fromArray([
-                'id' => '1',
-                'user_id' => '12345',
-                'user_name' => 'Ninja',
-                'game_id' => '21779',
-                'title' => 'Epic Stream',
-                'viewer_count' => 5000,
-                'started_at' => '2024-01-01T12:00:00Z'
-            ])
-        ];
+        if ($userId === '12345') {
+            return TwitchUser::fromArray([
+                'id' => '12345',
+                'login' => 'ninja',
+                'display_name' => 'Ninja',
+                'type' => '',
+                'broadcaster_type' => 'partner',
+                'description' => 'Professional Gamer and Streamer',
+                'profile_image_url' => 'https://example.com/ninja.jpg',
+                'offline_image_url' => 'https://example.com/ninja-offline.jpg',
+                'view_count' => 500000,
+                'created_at' => '2011-11-20T00:00:00Z'
+            ]);
+        }
+        return null;
     }
-
-    public function getEnrichedStreams(): array
-    {
-        // Devuelve un array simulado de streams enriquecidos
-        return [
-            TwitchEnrichedStream::fromArray([
-                'stream_id' => '1',
-                'user_name' => 'Ninja',
-                'game_name' => 'Elden Ring',
-                'title' => 'Epic Stream',
-                'viewer_count' => 5000,
-                'started_at' => '2024-01-01T12:00:00Z',
-                'profile_image_url' => 'https://example.com/ninja.jpg'
-            ])
-        ];
 
     public function getStreams(): ?array
     {

@@ -148,12 +148,13 @@ class DataBaseRepository implements DataBaseRepositoryInterface
         return TwitchGetTopsofthetops::fromArray($data);
     }
 
-    public function saveTopsofthetops(TwitchTopsofthetops $top, int $position): void
+
+    public function saveTopsofthetops(TwitchGetTopsofthetops $top, int $position): void
     {
         DB::table('cache')->insert([
             'top' => $position,
             'data' => json_encode($top->toArray()),
-            'timestamp' => now(), // opcional, MySQL puede autogenerarlo
+            'timestamp' => (new \DateTime())->format('Y-m-d H:i:s'),
         ]);
     }
 }
