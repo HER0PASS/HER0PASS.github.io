@@ -28,20 +28,49 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `cache`
 --
 
-CREATE TABLE IF NOT EXISTS `cache` (
-  `id` int NOT NULL,
-  `endpoint` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `data` text COLLATE utf8mb4_general_ci NOT NULL,
-  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `cache`;
+CREATE TABLE `cache` (
+                         `id` int NOT NULL AUTO_INCREMENT,
+                         `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+                         `top` int DEFAULT NULL,
+                         `data` text,
+                         PRIMARY KEY (`id`)
+);
 
---
--- Volcado de datos para la tabla `cache`
---
-
-INSERT INTO `cache` (`id`, `endpoint`, `data`, `timestamp`) VALUES
-(13, 'topsofthetops', '[\n    {\n        \"game_id\": \"509658\",\n        \"game_name\": \"Just Chatting\",\n        \"user_name\": \"KaiCenat\",\n        \"total_videos\": 36,\n        \"total_views\": 414852488,\n        \"most_viewed_title\": \"\\ud83e\\udd83 MAFIATHON 2 \\ud83e\\udd83 KAI X KEVIN HART X DRUSKI \\ud83e\\udd83 DAY 27 \\ud83e\\udd83 20% OF REVENUE GOING TO SCHOOL IN NIGERIA \\ud83e\\udd83 ALL MONTH \\ud83e\\udd83 CLICK HERE \\ud83e\\udd83 !Subathon\",\n        \"most_viewed_views\": 24867713,\n        \"most_viewed_duration\": \"22h5m32s\",\n        \"most_viewed_created_at\": \"2024-11-28T02:06:07Z\"\n    },\n    {\n        \"game_id\": \"21779\",\n        \"game_name\": \"League of Legends\",\n        \"user_name\": \"Riot Games\",\n        \"total_videos\": 26,\n        \"total_views\": 124973786,\n        \"most_viewed_title\": \"WORLDS 22 FINALS COUNTDOWN\",\n        \"most_viewed_views\": 11620692,\n        \"most_viewed_duration\": \"9h25m12s\",\n        \"most_viewed_created_at\": \"2022-11-05T21:00:23Z\"\n    },\n    {\n        \"game_id\": \"32399\",\n        \"game_name\": \"Counter-Strike\",\n        \"user_name\": \"ESLCS\",\n        \"total_videos\": 26,\n        \"total_views\": 108484321,\n        \"most_viewed_title\": \"LIVE: Team Spirit vs Heroic - IEM Rio 2022 - Champions Stage Quaterfinal\",\n        \"most_viewed_views\": 5925091,\n        \"most_viewed_duration\": \"9h30m2s\",\n        \"most_viewed_created_at\": \"2022-11-11T15:40:22Z\"\n    }\n]', '2025-02-18 11:23:50');
-
+INSERT INTO `cache` (`top`, `data`, `timestamp`) VALUES
+                                                     (1, '{
+  "game_id": "509658",
+  "game_name": "Just Chatting",
+  "user_name": "KaiCenat",
+  "total_videos": 36,
+  "total_views": 414852488,
+  "most_viewed_title": "MAFIATHON 2 KAI X KEVIN HART X DRUSKI",
+  "most_viewed_views": 24867713,
+  "most_viewed_duration": "22h5m32s",
+  "most_viewed_created_at": "2024-11-28T02:06:07Z"
+}', '2025-02-18 11:23:50'),
+                                                     (2, '{
+  "game_id": "21779",
+  "game_name": "League of Legends",
+  "user_name": "Riot Games",
+  "total_videos": 26,
+  "total_views": 124973786,
+  "most_viewed_title": "WORLDS 22 FINALS COUNTDOWN",
+  "most_viewed_views": 11620692,
+  "most_viewed_duration": "9h25m12s",
+  "most_viewed_created_at": "2022-11-05T21:00:23Z"
+}', '2025-02-18 11:23:50'),
+                                                     (3, '{
+  "game_id": "32399",
+  "game_name": "Counter-Strike",
+  "user_name": "ESLCS",
+  "total_videos": 26,
+  "total_views": 108484321,
+  "most_viewed_title": "LIVE: Team Spirit vs Heroic - IEM Rio 2022",
+  "most_viewed_views": 5925091,
+  "most_viewed_duration": "9h30m2s",
+  "most_viewed_created_at": "2022-11-11T15:40:22Z"
+}', '2025-02-18 11:23:50');
 -- --------------------------------------------------------
 
 --

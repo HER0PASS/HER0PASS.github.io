@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Interfaces\DataBaseRepositoryInterface;
 use App\Models\APISession;
 use App\Models\APIUser;
+use App\Models\TwitchGetTopsofthetops;
 use App\Models\TwitchUser;
 use Illuminate\Support\Facades\DB;
 
@@ -113,5 +114,47 @@ class DataBaseRepository implements DataBaseRepositoryInterface
         DB::table('sessions')
             ->where('user_id', $apiSession->getUserId())
             ->update(['token' => $apiSession->getToken(), 'expires_at' => $apiSession->getExpiresAt()]);
+    }
+
+    public function getTimestampCache(): ?\DateTime
+    {
+        $row = DB::table('cache')
+            ->orderByDesc('timestamp')
+            ->first();
+
+        if (!$row || !$row->timestamp) {
+            return null;
+        }
+
+        return new \DateTime($row->timestamp);
+    }
+
+    public function getTopsofthetops(int $top): ?TwitchGetTopsofthetops
+    {
+        $row = DB::table('cache')
+            ->where('top', $top)
+            ->first();
+
+        if (!$row || empty($row->data)) {
+            return null;
+        }
+
+        $data = json_decode($row->data, true);
+
+        if (!is_array($data)) {
+            return null;
+        }
+
+        return TwitchGetTopsofthetops::fromArray($data);
+    }
+
+
+    public function saveTopsofthetops(TwitchGetTopsofthetops $top, int $position): void
+    {
+        DB::table('cache')->insert([
+            'top' => $position,
+            'data' => json_encode($top->toArray()),
+            'timestamp' => (new \DateTime())->format('Y-m-d H:i:s'),
+        ]);
     }
 }

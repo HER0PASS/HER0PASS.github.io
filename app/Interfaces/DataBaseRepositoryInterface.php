@@ -4,6 +4,7 @@ namespace App\Interfaces;
 
 use App\Models\APISession;
 use App\Models\APIUser;
+use App\Models\TwitchGetTopsofthetops;
 use App\Models\TwitchUser;
 
 interface DataBaseRepositoryInterface
@@ -25,4 +26,8 @@ interface DataBaseRepositoryInterface
     public function registerSession(APISession $apiSession): void;
 
     public function updateSession(APISession $apiSession): void;
+
+    public function getTimestampCache(): ?\DateTime;
+
+    public function getTopsofthetops(int $top): ?TwitchGetTopsofthetops;
 }

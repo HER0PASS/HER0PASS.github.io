@@ -31,9 +31,10 @@ $router->post('/register', 'Register\RegisterController@register');
 
 $router->post('/token', 'Token\TokenController@token');
 
-$router->get('/analytics/topsofthetops', function () {
-    require __DIR__ . '/../public/endpoints/analytics/topsofthetops.php';
-});
+$router->get('/analytics/topsofthetops', [
+    'middleware' => 'auth',
+    'uses' => 'GetTopsofthetops\GetTopsofthetopsController@getTopsofthetops'
+]);
 
 $router->get('/analytics/user', [
     'middleware' => 'auth',
