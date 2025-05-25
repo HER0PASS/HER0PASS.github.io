@@ -39,7 +39,7 @@ class GetTopsofthetopsService
                 $i++;
             }
 
-            return response()->json(array_map(fn($top) => $top->toArray(), $tops), 200);
+            return response()->json(array_map(fn ($top) => $top->toArray(), $tops), 200);
         }
 
         // Si la caché es reciente, usar los datos guardados
@@ -51,7 +51,7 @@ class GetTopsofthetopsService
             }
         }
 
-        return response()->json(array_map(fn($top) => $top->toArray(), $tops), 200);
+        return response()->json(array_map(fn ($top) => $top->toArray(), $tops), 200);
     }
 
     // SOLUCIONAR ESTO: GESTIONAR TOKEN DE CONSULTAS A LA API DE TWITCH

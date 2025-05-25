@@ -4,8 +4,8 @@ namespace Http\Controllers\GetTopsofthetops;
 
 use App\Http\Controllers\GetTopsofthetops\GetTopsofthetopsValidator;
 use Illuminate\Http\Request;
-use PHPUnit\Framework\TestCase;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
 class GetTopsofthetopsValidatorTest extends TestCase
 {

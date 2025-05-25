@@ -4,9 +4,9 @@ namespace App\Repository;
 
 use App\Exceptions\TwitchApiException;
 use App\Interfaces\TwitchApiRepositoryInterface;
-use App\Models\TwitchGetTopsofthetops;
 use App\Models\EnrichedStream;
 use App\Models\Stream;
+use App\Models\TwitchGetTopsofthetops;
 use App\Models\TwitchUser;
 
 class TwitchAPIRepository implements TwitchApiRepositoryInterface
