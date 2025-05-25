@@ -1,14 +1,20 @@
 # TWITCH ANALYTICS
 
-Tercera entrega de la asignatura Verificación y Validación del Software.  
-API pública programada en PHP, capaz de hacer consultas a la API de Twitch para obtener información sobre streamers, usuarios y streams.  
+---
 
-**Alumnos:** Asier Muñoz, Iñigo Aznárez, Miguel Vallés y Alejandro Molina
+Entrega Final de la asignatura Verificación y Validación del Software.  
+API pública desarrollada en PHP con el micro-framework Lumen (Laravel). Permite realizar consultas a la API de Twitch para obtener información sobre streamers, usuarios y transmisiones en vivo.
+
+**Autores:**
+- Asier Muñoz
+- Iñigo Aznárez
+- Miguel Vallés
+- Alejandro Molina
 
 ## Índice
 - [Ejecutar el proyecto](#ejecutar-el-proyecto)
-  - [En línea](#en-línea)
-  - [Localmente](#localmente)
+    - [En línea](#en-línea)
+    - [Localmente](#localmente)
 - [ENTREGA 2: Nuevos Endpoints](#entrega-2-nuevos-endpoints)
 - [ENTREGA 1: Endpoints iniciales](#entrega-1-endpoints-iniciales)
 
@@ -28,19 +34,19 @@ Utilizamos Docker para levantar el servidor PHP y la base de datos MySQL ya conf
 Pasos para levantar el entorno:
 
 ```bash
-# Situarse en la raíz del proyecto Lumen
-cd heropass-lumen
-
 # Instalar dependencias PHP
 composer install
 
 # Construir e iniciar el entorno completo
 docker-compose up --build
+
+# Copiar el archivo environment
+cp .env.example .env
 ````
 De esta manera se iniciará el servidor en local, creará automáticamente la base de datos lumen con los datos necesarios y generará el archivo .env si no existe.
 
 ```bash
-{base_url} = http://localhost:8000
+{base_url} = http://localhost:8080
 ```
 
 ---

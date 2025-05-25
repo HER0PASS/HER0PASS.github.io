@@ -706,7 +706,7 @@
 									"\r",
 									"pm.test(\"Error message is for invalid or expired token\", function () {\r",
 									"    const json = pm.response.json();\r",
-									"    pm.expect(json.error).to.equal(\"Unauthorized. Twitch access token is invalid or has expired.\");\r",
+									"    pm.expect(json.error).to.equal(\"Unauthorized. Token is invalid or expired.\");\r",
 									"});\r",
 									""
 								],
@@ -871,7 +871,7 @@
 									"\r",
 									"pm.test(\"Error message is for invalid or expired token\", function () {\r",
 									"    const json = pm.response.json();\r",
-									"    pm.expect(json.error).to.equal(\"Unauthorized. Twitch access token is invalid or has expired.\");\r",
+									"    pm.expect(json.error).to.equal(\"Unauthorized. Token is invalid or expired.\");\r",
 									"});\r",
 									""
 								],
@@ -1025,7 +1025,7 @@
 									"\r",
 									"pm.test(\"Error message is for invalid or expired token\", function () {\r",
 									"    const json = pm.response.json();\r",
-									"    pm.expect(json.error).to.equal(\"Unauthorized. Twitch access token is invalid or has expired.\");\r",
+									"    pm.expect(json.error).to.equal(\"Unauthorized. Token is invalid or expired.\");\r",
 									"});\r",
 									""
 								],
@@ -1098,7 +1098,7 @@
 	"variable": [
 		{
 			"key": "base_url",
-			"value": "http://localhost:8000",
+			"value": "http://localhost:8080",
 			"type": "string"
 		},
 		{
