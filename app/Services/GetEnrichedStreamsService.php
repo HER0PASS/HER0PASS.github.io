@@ -14,12 +14,13 @@ class GetEnrichedStreamsService
     {
         $this->apiRepository = $apiRepository;
     }
+
     public function getEnrichedStreamsData(): JsonResponse
     {
-        $streams = $this->apiRepository->getStreams();
+        $streams = $this->apiRepository->getEnrichedStreams();
         if (!$streams) {
             return response()->json([
-                "error" => "Streams not found."
+                "error" => "Enriched Streams not found."
             ], 404);
         }
 
