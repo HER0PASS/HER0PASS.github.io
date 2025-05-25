@@ -3,17 +3,16 @@
 namespace Tests\Fakes;
 
 use App\Interfaces\TwitchApiRepositoryInterface;
-use App\Models\TwitchEnrichedStream;
-use App\Models\TwitchGetTopsofthetops;
-use App\Models\TwitchStream; // Asumiendo que esta clase existe
 use App\Models\Stream;
+use App\Models\TwitchEnrichedStream;
+use App\Models\TwitchGetTopsofthetops; // Asumiendo que esta clase existe
+use App\Models\TwitchStream;
 use App\Models\TwitchUser;
 
 // Asumiendo que esta clase existe
 
 class FakeTwitchApiRepository implements TwitchApiRepositoryInterface
 {
-
     public function getTopsofthetops(): array
     {
         return [
